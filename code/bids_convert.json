@@ -1,0 +1,46 @@
+{
+  "descriptions": [
+    {
+      "dataType": "dwi",
+      "modalityLabel": "dwi",
+      "criteria": {
+        "SidecarFilename": "*dMRI*",
+        "ImageComments": "*Unaliased*"
+      }
+    },
+    {
+      "dataType": "dwi",
+      "modalityLabel": "sbref",
+      "criteria": {
+        "SidecarFilename": "*dMRI*",
+        "SeriesDescription": "*SBRef*"
+      }
+    },
+    {
+      "dataType": "anat",
+      "modalityLabel": "T1w",
+      "criteria": {
+        "SidecarFilename": "*T1w_MPR*",
+        "ImageType": [
+          "ORIGINAL",
+          "PRIMARY",
+          "M",
+          "ND"
+        ]
+      }
+    },
+    {
+      "dataType": "anat",
+      "modalityLabel": "T2w",
+      "criteria": {
+        "SidecarFilename": "*T2w_SPC*",
+        "ImageType": [
+          "ORIGINAL",
+          "PRIMARY",
+          "M",
+          "ND"
+        ]
+      }
+    }
+  ]
+}
