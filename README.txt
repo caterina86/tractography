@@ -3,3 +3,5 @@ Organization of the folders:
 - rawdata: images converted to nifti (anatomical and functional images). 
 - derivatives: results of the preprocessing and tractography. This folder is organized in subfolders, each one containing the output of a specific step of the analysis.
 - code: Matlab code
+
+The folders containing the sourcedata, the rawdata and the derivatives are located in your local PC. Instead, here in the GitHub folder we will keep only the code as we will work on it.

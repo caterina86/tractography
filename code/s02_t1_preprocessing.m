@@ -13,7 +13,7 @@ t1Dir = 'anat/';
 
 % path to the derivatives:
 anat_prep = 'derivatives/anat_prep/';
-fsDir = 'derivatives/freesurfer/'; %% ADD THIS PATH HERE!!
+fsDir = 'derivatives/freesurfer/'; 
 
 % IMPORTANT: Set the path for the freesurfer subjects, in the bash_profile
 % fsLicense = '/Applications/freesurfer/license.txt'; %% COMMENT THIS LINE
