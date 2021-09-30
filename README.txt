@@ -5,3 +5,6 @@ Organization of the folders:
 - code: Matlab code
 
 The folders containing the sourcedata, the rawdata and the derivatives are located in your local PC. Instead, here in the GitHub folder we will keep only the code as we will work on it.
+
+
+:)
