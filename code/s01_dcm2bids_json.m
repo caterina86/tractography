@@ -5,7 +5,7 @@ setenv('PATH', [getenv('PATH') ':/usr/local/bin:~/opt/anaconda3/bin']);
 
 baseDir = '/Users/cp3488/Documents/tractography/Sample_dMRI/'; % Update with path to clinical data
 subIDs = {'0201'}; % change the name of identification number of the subject
-ses = {'01'}; % ID of the session
+% ses = {'01'}; % ID of the session
 % num_runs = 1; % of functional scans
 
 
