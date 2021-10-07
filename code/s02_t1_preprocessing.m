@@ -1,4 +1,8 @@
 
+
+% Open matlab from the terminal with the following line (adapted to the version of matlab you have):
+% /Applications/MATLAB_R2020a.app/bin/matlab
+
 clear all;
 
 % Define paths
@@ -30,7 +34,7 @@ path(path, freesurferpath);
 setenv ('SUBJECTS_DIR', fsDir); 
 
 % FSL
-setenv( 'FSLDIR', '/usr/local/fsl' );
+setenv( 'FSLDIR', '/usr/local/fsl/' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl outputs
 fsldir = getenv('FSLDIR');
 fsldirmpath = sprintf('%s/etc/matlab',fsldir);
@@ -55,8 +59,15 @@ system(['fast -B ' baseDir anat_prep ['sub-' subIDs{ii}] filesep 'ses-01/' ['sub
 % Step 2. 
 % Freesurfer -> Note: $SUBJECTS_DIR must be set to fsDir defined above
 % fsDir = 'derivatives/freesurfer/' -> change it in the bash_profile.
+% go to the folder of your user and press command+shift+dot to see the hidden files
+% open the bash_profile and set the path of the $SUBJECTS_DIR to the
+% derivatives/freesurfer directory
 
 mkdir(fullfile(baseDir, fsDir)) % create the folder for the output of freesurfer
 system(['recon-all -i ' baseDir anat_prep ['sub-' subIDs{ii}] filesep 'ses-01/' ['sub-' subIDs{ii} '_ses-01_t1_crop_restore.nii.gz'] ' -subjid ' ['sub-' subIDs{ii}] ' -all'])
 
 
+
+% Step 3: subcortical segmentation
+% Segment thalamic nuclei (requires that subject has already been processed with recon-all);
+system(['segmentThalamicNuclei.sh ' subIDs{ii} ' ' fsDir]);
