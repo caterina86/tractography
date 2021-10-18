@@ -1,6 +1,42 @@
 {
   "descriptions": [
     {
+      "dataType": "func",
+      "modalityLabel": "bold",
+      "customLabels": "task-prf",
+      "criteria": {
+        "SidecarFilename": "*task-prf*",
+        "MultibandAccelerationFactor": "[1-9]"
+      }
+    },
+    {
+      "dataType": "func",
+      "modalityLabel": "sbref",
+      "customLabels": "task-prf",
+      "criteria": {
+        "SidecarFilename": "*task-prf*",
+        "ImageComments": "Single-band reference"
+      }
+    },
+    {
+      "dataType": "fmap",
+      "modalityLabel": "epi",
+      "customLabels": "dir-AP",
+      "IntendedFor": [0,1],
+      "criteria": {
+        "SidecarFilename": "*DISTORTION_AP*"
+      }
+    },
+    {
+      "dataType": "fmap",
+      "modalityLabel": "epi",
+      "customLabels": "dir-PA",
+      "IntendedFor": [0,1],
+      "criteria": {
+        "SidecarFilename": "*DISTORTION_PA*"
+      }
+    },
+    {
       "dataType": "dwi",
       "modalityLabel": "dwi",
       "criteria": {
