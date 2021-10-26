@@ -42,7 +42,7 @@ path(path, fsldirmpath);
 
 sub_i = length(sub);
 
-for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*')))
+for ses_i = 1:numel(dir(fullfile(projectDir, rawDir, sub{ii}, 'ses-*'))) % for each scan session
 
     mkdir([topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep unprocessed]); % Make "unprocessed" directory to backup raw dti volumes before processing (susbequent steps will overwrite)
 
@@ -99,54 +99,29 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*')))
         topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi_b0.nii.gz '] ...
         topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi_b0.nii.gz ']]);
         
-    % merge raw dwi_AP and dwi_PA in one single image
-    system(['fslmerge -t ' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi.nii.gz '] ...
-        projectDir filesep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        projectDir filesep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']]);   
-    
     % run topup
     system(['topup --imain='  topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi_b0.nii.gz '] ...
         ' --datain=acqparams.txt  --config=b02b0.cnf --out=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_topup_results  ' ...
         '--iout=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0'])
 
     
-    %% Prepare data for the eddy correction
-   
+    % merge dti_AP and dti_PA in one single image
+    system(['fslmerge -t ' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi.nii.gz '] ...
+        topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
+        topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']]);
+
+    
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file. 
     % Combine bval and bvec files from the two dMRI scans
-    nDirs = (197);
+    nDirs = 197;
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
-    writematrix(index, fullfile(topup, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'index.txt'), 'Delimiter', 'space');
+    writematrx(index, fullfile(topup, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'index.txt'), 'Delimiter', 'space');
         
     % Combine bvac and bvec files from the two dMRI scans
-    bvals = horzcat(load(fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.bval'])), ...
-        load(fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.bval'])));
-    writematrix(bvals, fullfile(topup, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'bval_combined.txt'), 'Delimiter', 'space');
-
-    bvecs = horzcat(load(fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.bvec'])), ...
-        load(fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], ['dwi/sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.bvec'])));
-    writematrix(bvecs, fullfile(topup, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'bvec_combined.txt'), 'Delimiter', 'space');
+    bvals = horzcat(load(fullfile(rawDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], '_AP_dwi.bval')), ...
+        load(fullfile(rawDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], '_PA_dwi.bval')));
+    bvals = horzcat(load(fullfile(rawDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], '_AP_dwi.bvec')), ...
+        load(fullfile(rawDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], '_PA_dwi.bvec')));
+    writematrx(index, fullfile(topup, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'index.txt'), 'Delimiter', 'space');
     
-
-    % Generate a brain mask using the corrected b0 image
-    system(['fslmaths ' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0.nii.gz ' ...
-        '-Tmean ' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0_mean.nii.gz '])
-    
-    % BET the averaged b0 image
-    system(['bet ' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0_mean.nii.gz ' ...
-        topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0_mean_brain.nii.gz -m -f 0.2'])
-
-
-    
-    %% eddy correction:
-    system(['eddy --imain=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi.nii.gz '] ...
-        '--mask=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0_mean_brain_mask.nii.gz ' ...
-        '--acqp=acqparams.txt --index=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'index.txt ' ...
-        '--bvecs=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'bvec_combined.txt ' ...
-        '--bvals=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'bval_combined.txt ' ...
-        '--topup=' topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_topup_results ' ...
-        '--out=' eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data --repol --verbose'])
-
-
-
 end
