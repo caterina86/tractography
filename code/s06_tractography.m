@@ -12,20 +12,14 @@ switch user
 end
 
 sub = {'201'}; % initials of the subject
-ses = {'01'}; % ID of the subject
+ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
-
-% rawdata
-rawDir = [projectDir '/rawdata/'];
-dwiDir = 'dwi/';
-t1Dir = 'anat/';
 
 % derivatives:
 eddyDir = [projectDir '/derivatives/eddy/'];
 topup = [projectDir '/derivatives/topup/'];
 roiDir = [projectDir '/derivatives/ROIs/'];
 fmriprep = [projectDir '/derivatives/fmriprep/'];
-fsDir = [projectDir '/derivatives/freesurfer/'];
 fibDir = [projectDir '/derivatives/mrtrix3/'];
 
 % Add paths
@@ -62,7 +56,7 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
     eddy = [eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data.nii.gz '];
     bvec = [eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data.eddy_rotated_bvecs'];
     bval = [topup ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/bval_combined.txt'];
-    mask = [eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data_b0_brain_mask.nii.gz ']; % brain mask aligned to ACPC
+    mask = [eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data_b0_brain_mask.nii.gz ']; % brain mask 
 
     % Generate normal orientation response function estimates
     system(['dwi2response dhollander ' eddy ' -fslgrad ' bvec ' ' bval ' ' ...
@@ -105,8 +99,8 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
 
         maxLength = 150;
         outFile = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/dti_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers(1)/1000) 'k.tck'];
-        roi1 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_' hemi{jj} '_lgn_diffspace.nii.gz']; % FreeSurfer LGN
-        roi2 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_' hemi{jj} '_V1_diffspace.nii.gz']; % FreeSurfer V1
+        roi1 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']; % FreeSurfer LGN
+        roi2 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']; % FreeSurfer V1
         
         % Run tractography
         system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
@@ -119,8 +113,8 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
     end
 end
 
-% Optic Tract - less number of fibers
-numFibers = [1e3; 1e3];
+% Optic Tract - less number of fibers for a matter of time
+numFibers = [1e2; 1e2];
 
 for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*')))
 
@@ -133,16 +127,16 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*')))
         act = [fmriprep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'anat/' ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']]; 
         wmfod = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/wmfod.mif ']; % extracted from eddy_corrected_data.nii.gz aligned to T1-acpc space
 
-        maxLength = 150;
+        maxLength = 50; % to avoid having long fibers
         outFile = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/dti_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers(1)/1000) 'k.tck'];
-        roi1 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_' hemi{jj} '_lgn_diffspace.nii.gz']; % FreeSurfer LGN
-        roi2 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_diffspace_3dilM.nii.gz']; % Freesurfer Optic Chiasm expanded -> 3dil
+        roi1 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']; % FreeSurfer LGN
+        roi2 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_3dilM.nii.gz']; % Freesurfer Optic Chiasm expanded -> 3dil
        
         % Run tractography
         system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
         
         % Convert fibers to DSIStudio format
-        outFileImage = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/dti_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers(1)/1000) 'k_acpc_DSIStudio.tck'];
+        outFileImage = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/dti_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers(1)/1000) 'k_DSIStudio.tck'];
         % Convert to DSIStudio format
         system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
     

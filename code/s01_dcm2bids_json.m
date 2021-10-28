@@ -2,8 +2,7 @@
 % data in the sourcedata
 % Step 2 -> Fix fmap/ .json files for the functional images
 % Step 3 -> Run fmriprep
-% Step 4 -> Convert diffusion data to nifti with the parameters information
-% saved in the diffusion name (phase encoding direction and number of
+% Step 4 -> Convert diffusion data to nifti with the parameters information saved in the diffusion name (phase encoding direction and number of
 % diffusion gradients)
 
 clear all;
@@ -27,6 +26,8 @@ num_runs = 2;
 
 
 %% Step 1. Run dcm2bids in the shell wrapped in matlab and modify the .json in the fmap folder
+
+% Run dcm2bids of the anat, func and fmap
 
 for ses_i = 1:length(ses) % for each session
     
@@ -119,6 +120,7 @@ end
 
 
 %% dwi convertion with acquisition parameters
+% Run dcm2bids of the diffusion images
 
 for ses_i = 1:length(ses) % for each session 
     

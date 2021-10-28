@@ -12,13 +12,8 @@ switch user
 end
 
 sub = {'201'}; % initials of the subject
-ses = {'01'}; % ID of the subject
+ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
-
-% rawdata
-rawDir = [projectDir '/rawdata/'];
-dwiDir = 'dwi/';
-t1Dir = 'anat/';
 
 % derivatives:
 eddyDir = [projectDir '/derivatives/eddy/'];
@@ -68,7 +63,7 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
     % Verify the resolution
     system(['fslinfo ' eddyDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'dti1_eddy_corrected_data_b0_brain_Opt8.nii.gz'])
 
-    % Skip the nexk from the T1
+    % Skip the neck from the T1
     system(['robustfov -i ' fmriprep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['anat/sub-' sub{sub_i} '_ses-' ses{ses_i} '_desc-preproc_T1w.nii.gz'] ' -r ' ...  
         fmriprep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['anat/sub-' sub{sub_i} '_ses-' ses{ses_i} '_desc-preproc_T1w_crop.nii.gz']]);
 
@@ -84,9 +79,8 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
 
     
     %% extract ROIs
+    
     % LGN
-    % Segment thalamic nuclei (requires that subject has already been processed with recon-all);
-    % system(['segmentThalamicNuclei.sh ' sub{ii} ' ' fsDir])
     % Convert segmented atlas to volume
     system(['mri_label2vol --seg ' fsDir 'sub-' sub{sub_i} '/mri/ThalamicNuclei.v12.T1.mgz --temp ' fsDir 'sub-' sub{sub_i} '/mri/orig.mgz --o ' fsDir 'sub-' sub{sub_i} '/mri/ThalSegNativeVol.nii.gz --regheader ' fsDir 'sub-' sub{sub_i} '/mri/ThalamicNuclei.v12.T1.mgz'])    
     % Extract left and right LGN from volume
@@ -110,6 +104,7 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
             '-out ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz ' ...
             '-init ' fmriprep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'anat/t1_2_dwi_xfm.mat -applyxfm']);
         
+        % Binarize the ROI
         system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz -bin ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']); % save in ROI folder
    
     end
@@ -167,10 +162,10 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
         ' -init ' fmriprep ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'anat/t1_2_dwi_xfm.mat -applyxfm']);
 
     % Expand the Optic Chiasm:
-    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_dilM.nii.gz'])          
-    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_dilM.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_2dilM.nii.gz'])          
-    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_2dilM.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_3dilM.nii.gz'])          
-    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_3dilM.nii.gz -bin ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/T1w_fs_oc_T1Reslice_diffspace_3dilM.nii.gz']) % binarize the mask
+    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_dilM.nii.gz'])          
+    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_dilM.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_2dilM.nii.gz'])          
+    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_2dilM.nii.gz -dilM ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_3dilM.nii.gz'])          
+    system(['fslmaths ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_3dilM.nii.gz -bin ' roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_oc_T1Reslice_diffspace_3dilM.nii.gz']) % binarize the mask
     
     
     
