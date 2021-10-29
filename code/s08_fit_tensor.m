@@ -22,12 +22,15 @@ eddyDir = [projectDir '/derivatives/eddy/'];
 topup = [projectDir '/derivatives/topup/'];
 fibDir = [projectDir '/derivatives/mrtrix3/'];
 
-% Add paths
+% Add paths - update the location of vistasoft and AFQ according to your PC
 addpath(genpath('~/Data/GitHub/Prakash/Toolbox/vistasoft')); % vistasoft location
 addpath(genpath('~/Data/GitHub/Prakash/Toolbox/AFQ')); % afq location
+
+% add the path of the code
 addpath(genpath(fullfile(projectDir, 'code/'))); % afq location
 
-% FSL
+% FSL - remember to update the location of freesurfer according to
+% the location on your PC
 setenv( 'FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); %added to tell where to save the fsl outputs
 fsldir = getenv('FSLDIR');
@@ -35,7 +38,7 @@ fsldirmpath = sprintf('%s/etc/matlab',fsldir);
 path(path, fsldirmpath);
 
 
-%%
+%% Fit the Tensor
 
 numFibers_OR = (1e4);
 numFibers_OT = (1e2);

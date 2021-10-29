@@ -2,6 +2,9 @@
 
 clear all;
 user = 'caterina'; % name of the user
+% choose 'server' if you are working on the server
+% add your name if you are working on your local PC. In this case you
+% should add your files locations in the following 'switch user'
 
 % Set the path
 switch user
@@ -22,12 +25,15 @@ roiDir = [projectDir '/derivatives/ROIs/'];
 fmriprep = [projectDir '/derivatives/fmriprep/'];
 fsDir = [projectDir '/derivatives/freesurfer/'];
 
-% Add paths
+% Add paths - update the location of vistasoft and AFQ according to your PC
 addpath(genpath('~/Data/GitHub/Prakash/Toolbox/vistasoft')); % vistasoft location
 addpath(genpath('~/Data/GitHub/Prakash/Toolbox/AFQ')); % afq location
+
+% add the path of the code
 addpath(genpath(fullfile(projectDir, 'code/'))); % afq location
 
-% FSL
+% FSL - remember to update the location of freesurfer according to
+% the location on your PC
 setenv( 'FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); %added to tell where to save the fsl outputs
 fsldir = getenv('FSLDIR');
@@ -35,7 +41,10 @@ fsldirmpath = sprintf('%s/etc/matlab',fsldir);
 path(path, fsldirmpath);
 
 
-%% 
+
+
+
+%% Extract Regions of Interest
 
 sub_i = length(sub);
 

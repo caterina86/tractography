@@ -7,6 +7,9 @@
 
 clear all;
 user = 'caterina'; % name of the user
+% choose 'server' if you are working on the server
+% add your name if you are working on your local PC. In this case you
+% should add your files locations in the following 'switch user'
 
 % Set the path
 switch user
@@ -98,7 +101,7 @@ end
 % system(['find . -name ".*" -exec rm -rf {} \;'])
 
 
-%% Step 3. Run fmri_prep
+%% Step 3. Run fmri_prep - you need docker and fmriprep installed to run this step
 % create a scratch folder outside the project directory, where you can save
 % all the outputs of fmriprep while it is running it, so that you can start
 % from there if a process stop and the working directory is constructed outside the Docker image, 

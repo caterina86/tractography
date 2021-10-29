@@ -6,6 +6,9 @@
 
 clear all;
 user = 'caterina'; % name of the user
+% choose 'server' if you are working on the server
+% add your name if you are working on your local PC. In this case you
+% should add your files locations in the following 'switch user'
 
 % Set the path
 switch user
@@ -15,43 +18,21 @@ switch user
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
 end
 
-sub = {'229'}; % ID of the subject
+sub = {'201'}; % ID of the subject
 ses = {'01'}; % ID of the session
 hemi = {'lh','rh'};
 
 % Add paths
-addpath(genpath(fullfile(baseDir, 'code/'))); % code folder location
+addpath(genpath(fullfile(projectDir, 'code/'))); % code folder location
 
-% Freesurfer
+% Freesurfer - remember to update the location of freesurfer according to
+% the location on your PC
 setenv( 'FREESURFER_HOME', '/Applications/freesurfer');
 freesurferdir = getenv('FREESURFER_HOME');
 freesurferpath = sprintf('%s/matlab',freesurferdir);
 path(path, freesurferpath);
 setenv ('SUBJECTS_DIR', fsDir); 
 
-
-%% T1 preprocessing
-
-% Step 1. 
-% T1 FAST only for the T1 acquired in the first session
-% mkdir(fullfile(baseDir, anat_prep, ['sub-' subIDs{ii}], '/ses-01/'))
-
-% extract the FOV only showing the brain (cutting the neck)
-% system(['robustfov -i ' baseDir, rawDir, ['sub-' subIDs{ii}], '/ses-01/', t1Dir, ['sub-' subIDs{ii} '_ses-01_T1w.nii.gz'] ' -r ' ...  
-%    baseDir anat_prep ['sub-' subIDs{ii}] filesep 'ses-01/' ['sub-' subIDs{ii} '_ses-01_t1_crop.nii.gz']]);
-
-% system(['fast -B ' baseDir anat_prep ['sub-' subIDs{ii}] filesep 'ses-01/' ['sub-' subIDs{ii} '_ses-01_t1_crop.nii.gz']]);
-
-
-% Step 2. 
-% Freesurfer -> Note: $SUBJECTS_DIR must be set to fsDir defined above
-% fsDir = 'derivatives/freesurfer/' -> change it in the bash_profile.
-% go to the folder of your user and press command+shift+dot to see the hidden files
-% open the bash_profile and set the path of the $SUBJECTS_DIR to the
-% derivatives/freesurfer directory
-
-% mkdir(fullfile(baseDir, fsDir)) % create the folder for the output of freesurfer
-% system(['recon-all -i ' baseDir anat_prep ['sub-' subIDs{ii}] filesep 'ses-01/' ['sub-' subIDs{ii} '_ses-01_t1_crop_restore.nii.gz'] ' -subjid ' ['sub-' subIDs{ii}] ' -all'])
 
 
 %% Subcortical segmentation
