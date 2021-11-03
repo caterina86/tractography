@@ -5,7 +5,7 @@
 % /Applications/MATLAB_R2020a.app/bin/matlab
 
 clear all;
-user = 'caterina'; % name of the user
+user = 'server'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -27,16 +27,14 @@ addpath(genpath(fullfile(projectDir, 'code/'))); % code folder location
 
 % Freesurfer - remember to update the location of freesurfer according to
 % the location on your PC
-setenv( 'FREESURFER_HOME', '/Applications/freesurfer');
+setenv('FREESURFER_HOME', '/Applications/freesurfer');
 freesurferdir = getenv('FREESURFER_HOME');
 freesurferpath = sprintf('%s/matlab',freesurferdir);
 path(path, freesurferpath);
+fsDir = [projectDir '/derivatives/freesurfer']; % define the location of the output of freesurfer
 setenv ('SUBJECTS_DIR', fsDir); 
 
-
-
 %% Subcortical segmentation
-fsDir = [projectDir '/derivatives/freesurfer']; % define the location of the output of freesurfer
 
 % Segment thalamic nuclei (requires that subject has already been processed with recon-all);
 % fs_install_mcr R2014b
