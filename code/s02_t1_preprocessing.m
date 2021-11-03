@@ -34,6 +34,8 @@ path(path, freesurferpath);
 fsDir = [projectDir '/derivatives/freesurfer']; % define the location of the output of freesurfer
 setenv ('SUBJECTS_DIR', fsDir); 
 
+PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/Applications/freesurfer:' PATH]); % 
+
 %% Subcortical segmentation
 
 % Segment thalamic nuclei (requires that subject has already been processed with recon-all);
