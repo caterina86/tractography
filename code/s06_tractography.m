@@ -32,10 +32,10 @@ addpath(genpath('~/Data/GitHub/Prakash/Toolbox/AFQ')); % afq location
 % add the path of the code
 addpath(genpath(fullfile(projectDir, 'code/'))); % afq location
 
-% FSL - remember to update the location of FSL according to the location on your PC
+% FSL and mrtrix3 - remember to update the location of FSL and mrtrix3 according to the location on your PC
 setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); %added to tell where to save the fsl outputs
-PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 
 %% Probabilistic Tractography
