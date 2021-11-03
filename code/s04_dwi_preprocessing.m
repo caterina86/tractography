@@ -39,12 +39,7 @@ addpath(genpath(fullfile(projectDir, 'code/'))); % afq location
 % the location on your PC
 setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); %added to tell where to save the fsl outputs
-fsldir = getenv('FSLDIR');
-fsldirmpath = sprintf('%s/etc/matlab',fsldir);
-path(path, fsldirmpath);
-
-
-
+PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 %% dwi preprocessing
 
