@@ -37,7 +37,7 @@ addpath(genpath(fullfile(projectDir, 'code/'))); % afq location
 
 % FSL - remember to update the location of freesurfer according to
 % the location on your PC
-setenv( 'FSLDIR', '/usr/local/fsl' );
+setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); %added to tell where to save the fsl outputs
 fsldir = getenv('FSLDIR');
 fsldirmpath = sprintf('%s/etc/matlab',fsldir);
