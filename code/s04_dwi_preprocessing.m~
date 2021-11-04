@@ -57,12 +57,14 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     mkdir(unprocessedTopupDir); % Make "unprocessed" directory to backup raw dti volumes before processing (susbequent steps will overwrite)
 
     % copy the original AP and PA dwi images to derivatives/topup
-    dwiDir = fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi');
+    dwiDir = fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi')
     apFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz'];
     paFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz'];
-    
-    copyfile(fullfile(dwiDir, apFile), fullfile(unprocessedTopupDir, apFile));
-    copyfile(fullfile(dwiDir, paFile), fullfile(unprocessedTopupDir, paFile));
+    copyfile(fullfile(dwiDir, apFile), ...
+        fullfile(topupDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], unprocessed, ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz']));
+    copyfile(fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], dwiDir, ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']), ...
+        fullfile(topupDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], unprocessed, ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']));
+   
     
     % Denoise the data - Correct for warping artifacts due to the phase encoding direction
     % input -> topup/unprocesses/sub-_ses-_AP_dwi.nii.gz
