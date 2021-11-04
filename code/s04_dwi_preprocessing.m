@@ -1,6 +1,6 @@
 
 clear all;
-user = 'Omnia'; % name of the user
+user = 'server'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -8,11 +8,11 @@ user = 'Omnia'; % name of the user
 % Set the path
 switch user
     case {'caterina'}
-        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
+        projectDir = '~/Documents/tractography/Sample_dMRI'; % location output    
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'Omnia'}
-        projectDir = '/Users/omniahassanin/Documents/GitHub/tractography/code'; % location output
+        projectDir = '~/Documents/GitHub/tractography/code'; % location output
 end
 
 sub = {'201'}; % initials of the subject
