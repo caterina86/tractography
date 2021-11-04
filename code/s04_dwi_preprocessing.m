@@ -13,6 +13,8 @@ switch user
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
+    case {'bas'}
+        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
 end
 
 sub = {'201'}; % initials of the subject
