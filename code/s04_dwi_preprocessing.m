@@ -11,7 +11,7 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % specify fsl output format
 PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -43,7 +43,6 @@ t1Dir = 'anat/';
 
 % derivatives:
 eddyDir = fullfile(projectDir, 'derivatives/eddy');
-topupDir = fullfile(projectDir, 'derivatives/topup');
 
 %% dwi preprocessing
 
@@ -53,7 +52,8 @@ sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
 
 for ses_i = 1:numel(sub_ses) % for each scan session
     
-    unprocessedTopupDir = fullfile(topupDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'unprocessed');
+    topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
+    unprocessedTopupDir = fullfile(topupDir, 'unprocessed');
     mkdir(unprocessedTopupDir); % Make "unprocessed" directory to backup raw dti volumes before processing (susbequent steps will overwrite)
 
     % copy the original AP and PA dwi images to derivatives/topup
@@ -68,42 +68,31 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % input -> topup/unprocesses/sub-_ses-_AP_dwi.nii.gz
     % output -> topup/sub-_ses-_AP_dwi.nii.gz
     
-    system(['dwidenoise -force ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep unprocessed ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz']])
-    
-    system(['dwidenoise -force ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep unprocessed ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']])
-     
-    
+    system(['dwidenoise -force ' fullfile(unprocessedTopupDir, apFile) ' ' fullfile(topupDir, apFile)]);
+    system(['dwidenoise -force ' fullfile(unprocessedTopupDir, paFile) ' ' fullfile(topupDir, paFile)]);
+                
     % Calculate and check the residuals.
     % The lack of anatomy in the residual maps is a marker of accuracy and signal-preservation during denoising
     % original dwi - denoised dwi = residuals
+    apResFile = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_res_AP.nii.gz'];
+    paResFile = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_res_PA.nii.gz'];
     
-    system(['mrcalc ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep unprocessed ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        ' -subtract ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_res_AP.nii.gz ']]) 
-
-    system(['mrcalc ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep unprocessed ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz '] ...
-        ' -subtract ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_res_PA.nii.gz ']]) 
-    
+    system(['mrcalc ' fullfile(unprocessedTopupDir, apFile) ' '  fullfile(topupDir, apFile) ' -subtract ' fullfile(topupDir, apResFile)]);
+    system(['mrcalc ' fullfile(unprocessedTopupDir, paFile) ' '  fullfile(topupDir, paFile) ' -subtract ' fullfile(topupDir, paResFile)]);
     
     % correct for Gibbs’ Ringing Artifacts
-    system(['mrdegibbs -force ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz']])
-
-    system(['mrdegibbs -force ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz']])
+    system(['mrdegibbs -force ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apFile)]);
+    system(['mrdegibbs -force ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile)]);
 
     
     
     %% Topup correction
     % extract the b0 from the AP and PA dwi image
-    system(['fslroi ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi_b0.nii.gz 0 1']]);
+    apB0File = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi_b0.nii.gz'];
+    paB0File = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi_b0.nii.gz'];
     
-    system(['fslroi ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz '] ...
-        topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi_b0.nii.gz 0 1']]);
+    system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
+    system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
     
     % merge the b0 images with PA and AP phase encoding directions
     system(['fslmerge -t ' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi_b0.nii.gz '] ...
@@ -118,7 +107,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % run topup
     system(['topup --imain='  topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi_b0.nii.gz '] ...
         ' --datain=acqparams.txt  --config=b02b0.cnf --out=' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_topup_results  ' ...
-        '--iout=' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0'])
+        '--iout=' topupDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] filesep 'my_hifi_b0']);
 
     
     %% Prepare data for the eddy correction
