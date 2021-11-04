@@ -1,6 +1,6 @@
 
 clear all;
-user = 'server'; % name of the user
+user = 'Dalia'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -15,6 +15,8 @@ switch user
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
+    case {'Dalia'}
+        projectDir = '~/Desktop/Sample_dMRI'; % location output
 end
 
 sub = {'201'}; % initials of the subject
