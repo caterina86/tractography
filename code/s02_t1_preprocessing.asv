@@ -4,8 +4,8 @@
 % Open matlab from the terminal with the following line (adapted to the version of matlab you have):
 % /Applications/MATLAB_R2020a.app/bin/matlab
 
-clear all; clc
-user = 'omnia'; % name of the user
+clear all;
+user = 'server'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -16,9 +16,6 @@ switch user
         projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
-        
-   case {'omnia'}
-        projectDir = '/Users/omniahassanin/Documents/GitHub/tractography/code'; % location output
 end
 
 sub = {'201'}; % ID of the subject
@@ -37,8 +34,8 @@ path(path, freesurferpath);
 fsDir = [projectDir '/derivatives/freesurfer']; % define the location of the output of freesurfer
 setenv ('SUBJECTS_DIR', fsDir); 
 
-PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/Applications/freesurfer/7.2.0/bin:' PATH]); % 
-% PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/Applications/freesurfer:' PATH]); % 
+PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
 
 
 
