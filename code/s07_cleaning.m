@@ -7,8 +7,6 @@ setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl outputs
 setenv('FREESURFER_HOME', '/Applications/freesurfer'); 
 % setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
-freesurferdir = getenv('FREESURFER_HOME');
-freesurferpath = sprintf('%s/matlab',freesurferdir);
 PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 %PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
 
