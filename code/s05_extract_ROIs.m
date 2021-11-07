@@ -40,11 +40,6 @@ ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
 
-
-setenv ('SUBJECTS_DIR', fsDir);  
-
-
-
 %% Extract Regions of Interest
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
