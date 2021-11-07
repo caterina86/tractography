@@ -53,12 +53,10 @@ sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
 for ses_i = 1:numel(sub_ses) % for each scan session
     
     % create names for input and output files:
-    % folders:
     topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     eddyDir = fullfile(projectDir, 'derivatives/eddy', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     unprocessedTopupDir = fullfile(topupDir, 'unprocessed');
     dwiDir = fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi');
-    % files:
     apFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz'];
     paFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz'];
     apFileBval =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.bval'];
@@ -73,12 +71,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     appaB0File = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi_b0.nii.gz'];
     eddyFile = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data'];
     
-    
-    
-    % Create 'unprocessed' directory to backup raw dti volumes before processing (susbequent steps will overwrite)
+    % Make "unprocessed" directory to backup raw dti volumes before processing (susbequent steps will overwrite)
     mkdir(unprocessedTopupDir); 
-    % Create folder for the results of the eddy correction
-    mkdir(eddyDir); 
 
     % copy the original AP and PA dwi images to derivatives/topup
     copyfile(fullfile(dwiDir, apFile), fullfile(unprocessedTopupDir, apFile));
@@ -101,7 +95,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['mrdegibbs -force ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile)]);
 
     
-    %% topup correction
+    %% Topup correction
     % extract the b0 from the AP and PA dwi image
     system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
     system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
@@ -112,12 +106,14 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % merge raw dwi_AP and dwi_PA in one single image
     system(['fslmerge -t ' fullfile(topupDir, appaFile) ' ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, paFile)]);
     
-    % Topup correction
+    % run topup
     system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=acqparams.txt --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ... 
         ' --iout=' fullfile(topupDir, 'my_hifi_b0')]);
 
+ 
+    
+    %% Prepare data for the eddy correction
    
-    %% Eddy correction
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file. 
     % Combine bval and bvec files from the two dMRI scans
     nDirs = (197);
@@ -136,8 +132,12 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
     % BET the averaged b0 image
     system(['bet ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz') ' '  fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ' -m -f 0.2'])
+
     
-    % run eddy correction
+    %% eddy correction:
+    
+    mkdir(eddyDir); 
+    
     system(['eddy --imain=' fullfile(topupDir, appaFile) ' --mask=' fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ...
         ' --acqp=' fullfile(projectDir, 'acqparams.txt') ' --index=' fullfile(topupDir, 'index.txt') ...
         ' --bvecs=' fullfile(topupDir, 'bvec_combined.txt') ...
