@@ -1,7 +1,7 @@
 % extract LGN, V1 and Optic Chiasm, to perform the OR and OT tractography
 
 clear all; clc
-user = 'omnia'; % name of the user
+user = 'caterina'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'

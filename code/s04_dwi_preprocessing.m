@@ -36,13 +36,6 @@ addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 sub = {'201'}; % initials of the subject
 ses = {'01'}; % ID of the subject
 
-% rawdata
-rawDir = [projectDir '/rawdata/'];
-dwiDir = 'dwi/';
-t1Dir = 'anat/';
-
-% derivatives:
-eddyDir = fullfile(projectDir, 'derivatives/eddy');
 
 %% dwi preprocessing
 
