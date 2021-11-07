@@ -65,7 +65,6 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     eddyDir = fullfile(projectDir, 'derivatives/eddy', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
-    roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
 
     t1FileCropBrain = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz'];
     ttFile = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt'];
@@ -119,18 +118,17 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     for jj = 1:length(hemi)
 
         maxLength = 150;
-        outFile = fullfile(fibDir, ['dti_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR(1)/1000) 'k.tck']);
-        roi1 = fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']); % FreeSurfer LGN
-        roi2 = fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']); % FreeSurfer V1
+        outFile = fullfile(fibDir, 'dti_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR(1)/1000) 'k.tck'];
+        roi1 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']; % FreeSurfer LGN
+        roi2 = [roiDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}] '/fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']; % FreeSurfer V1
         
         % Run tractography
-        system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' ...
-            roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers_OR(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
+        system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
         
         % Convert fibers to DSIStudio format
-        outFileImage = fullfile(fibDir, ['dti_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR(1)/1000) 'k_DSIStudio.tck'];
+        outFileImage = [fibDir ['sub-' sub{sub_i}] filesep ['ses-' ses{ses_i}]  '/dti_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers(1)/1000) 'k_DSIStudio.tck'];
         % Convert to DSIStudio format
-        system(['tckconvert -scanner2image ' fullfile(eddyDir, eddyFile) ' ' outFile ' ' outFileImage])
+        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
 
     end
 end
