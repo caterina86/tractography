@@ -11,7 +11,7 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % specify fsl output format
 PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'hannah'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -30,7 +30,7 @@ switch user
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
-        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
+        projectDir = '/Users/NETID/Documents/MRI/Sample_dMRI'; % change the NETID with yours
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
