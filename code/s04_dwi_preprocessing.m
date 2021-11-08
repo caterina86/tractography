@@ -22,7 +22,7 @@ switch user
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'caterina'}
-        projectDir = '~/Documents/tractography/Sample_dMRI'; % location output    
+        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
@@ -66,8 +66,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     appaB0File = ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_PA_dwi_b0.nii.gz'];
     eddyFile = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data'];
     
-    
-    
+    %% Start the preprocessing
     % Create 'unprocessed' directory to backup raw dti volumes before processing (susbequent steps will overwrite)
     mkdir(unprocessedTopupDir); 
     % Create folder for the results of the eddy correction
