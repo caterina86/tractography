@@ -119,10 +119,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
         
     % Combine bvac and bvec files from the two dMRI scans
-    bvals = horzcat(load(fullfile(dwiDir, apFileBval), (fullfile(dwiDir, paFileBval))));
+    bvals = horzcat(load(fullfile(dwiDir, apFileBval)), load(fullfile(dwiDir, paFileBval)));
     writematrix(bvals, fullfile(topupDir, 'bval_combined.txt'), 'Delimiter', 'space');
 
-    bvecs = horzcat(load(fullfile(dwiDir, apFileBvec), (fullfile(dwiDir, paFileBvec))));
+    bvecs = horzcat(load(fullfile(dwiDir, apFileBvec)), load(fullfile(dwiDir, paFileBvec)));
     writematrix(bvecs, fullfile(topupDir, 'bvec_combined.txt'), 'Delimiter', 'space');
 
     % Generate a brain mask using the corrected b0 image
