@@ -30,7 +30,7 @@ switch user
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
-        projectDir = '/Users/NETID/Documents/MRI/Sample_dMRI'; % change the NETID with yours
+        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % 
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
@@ -118,13 +118,13 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
         
-    % Combine bvac and bvec files from the two dMRI scans
+   % Combine bvac and bvec files from the two dMRI scans
     bvals = horzcat(load(fullfile(dwiDir, apFileBval)), load(fullfile(dwiDir, paFileBval)));
     writematrix(bvals, fullfile(topupDir, 'bval_combined.txt'), 'Delimiter', 'space');
 
     bvecs = horzcat(load(fullfile(dwiDir, apFileBvec)), load(fullfile(dwiDir, paFileBvec)));
     writematrix(bvecs, fullfile(topupDir, 'bvec_combined.txt'), 'Delimiter', 'space');
-
+    
     % Generate a brain mask using the corrected b0 image
     system(['fslmaths ' fullfile(topupDir, 'my_hifi_b0.nii.gz') ' -Tmean ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz')])
     
