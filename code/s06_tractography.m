@@ -24,7 +24,7 @@ switch user
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'caterina'}
-        projectDir = '~/Documents/tractography/Sample_dMRI'; % location output    
+        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
@@ -53,9 +53,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
 
-    eddyFile = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data'];
+    eddyFile = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data.nii.gz'];
     t1FileCropBrain = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz'];
-    ttFile = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt'];
+    ttFile = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz'];
     eddyB0FileBrain = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data_b0_brain'];    
     t1FileCropBrainDiffSpace = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz'];
 
@@ -65,14 +65,14 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     end
     
     % Generate 5tt mask (aligned with T1 volume)
-    system(['5ttgen fsl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrainDiffSpace)  ...
+    system(['5ttgen fsl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrainDiffSpace) ' ' ...
         fullfile(fmriprepDir, 'anat/', ttFile) ' -premasked']);
 
     
     %% Whole brain tractography
     % Define paths (convenience for commands below)
     eddy = fullfile(eddyDir, eddyFile);
-    bvec = [eddy '.eddy_rotated_bvecs']; 
+    bvec = fullfile(eddyDir, [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data.eddy_rotated_bvecs']); 
     bval = fullfile(topupDir, 'bval_combined.txt');
     mask = fullfile(eddyDir, [eddyB0FileBrain '_mask.nii.gz ']); % brain mask 
     
