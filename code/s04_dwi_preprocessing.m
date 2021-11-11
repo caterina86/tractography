@@ -90,7 +90,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['mrcalc ' fullfile(unprocessedTopupDir, apFile) ' '  fullfile(topupDir, apFile) ' -subtract ' fullfile(topupDir, apResFile)]);
     system(['mrcalc ' fullfile(unprocessedTopupDir, paFile) ' '  fullfile(topupDir, paFile) ' -subtract ' fullfile(topupDir, paResFile)]);
     
-    % correct for Gibbs’ Ringing Artifacts
+    % correct for Gibbs Ringing Artifacts
     system(['mrdegibbs -force ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apFile)]);
     system(['mrdegibbs -force ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile)]);
 
