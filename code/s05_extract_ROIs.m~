@@ -44,9 +44,7 @@ sub_i = 1:length(sub); % loop over subjects (eventually)
 
 sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
 if length(sub_ses) == 0
-    error(['No files found in ' projectDir]);
-end
-
+    error('No files found
 for ses_i = 1:numel(sub_ses) % for each scan session
     
     roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
