@@ -13,7 +13,7 @@ PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/l
 
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'hannah'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -31,6 +31,8 @@ switch user
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
+    case {'hannah'}
+        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
@@ -97,9 +99,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Run tractography
     system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' act  ' -select ' num2str(numFibers_WB) ' -seeds 0']);
 
-    
-
+end
     %% Optic Radiations Tractography
+for ses_i = 1:numel(sub_ses) % for each scan session  
 
     numFibers_OR = [1e4; 1e4];
     
@@ -132,7 +134,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         roi2 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz'); % Freesurfer Optic Chiasm expanded -> 3dil
        
         % Run tractography
-        system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
+        system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers_OT(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
         
         % Convert fibers to DSIStudio format
         outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OR(1)/1000) 'k_DSIStudio.tck']);
