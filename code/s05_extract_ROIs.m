@@ -6,13 +6,13 @@ clear all;
 % FSL - remember to update the location of FSL according to the location on your PC
 setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl outputs
-%setenv('FREESURFER_HOME', '/Applications/freesurfer');
-setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
-%PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
-PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+setenv('FREESURFER_HOME', '/Applications/freesurfer');
+%setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
+PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+%PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
 
 % Specify user variable
-user = 'hannah'; % name of the user
+user = 'caterina'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -112,7 +112,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
         % Reslice to the T1
         system(['mri_convert -rt nearest -rl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrain) ' ' ...
-            fullfile(roiDir, 'fs_lh_lgn.nii.gz ') ....
+            fullfile(roiDir, ['fs_' hemi{jj} '_lgn.nii.gz ']) ....
             fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz'])])
 
         % Binarize ROI
@@ -174,12 +174,12 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Reslice to the T1
     system(['mri_convert -rt nearest -rl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrain) ' ' ...
         fullfile(roiDir, 'fs_oc.nii.gz ') ....
-        fullfile(roiDir, ['fs_oc_T1Reslice.nii.gz'])]);
+        fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz')]);
 
 
     % Binarize
-    system(['fslmaths ' fullfile(roiDir, ['fs_oc_T1Reslice.nii.gz']) ' -bin ' ...
-        fullfile(roiDir, ['fs_oc_T1Reslice.nii.gz'])]);
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz') ' -bin ' ...
+        fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz')]);
 
     % Coregister the OC to diffusion space
     system(['flirt -in ' fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz') ...
@@ -208,10 +208,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Reslice to the T1
     system(['mri_convert -rt nearest -rl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrain) ' ' ...
         fullfile(roiDir, 'fs_thalamus.nii.gz ') ....
-        fullfile(roiDir, ['fs_thalamus_T1Reslice.nii.gz'])]);
+        fullfile(roiDir, 'fs_thalamus_T1Reslice.nii.gz')]);
 
     % Binarize
-    system(['fslmaths ' fullfile(roiDir, ['fs_thalamus_T1Reslice.nii.gz']) ' -bin ' fullfile(roiDir, ['fs_thalamus_T1Reslice.nii.gz'])]); % save in ROI folder
+    system(['fslmaths ' fullfile(roiDir, 'fs_thalamus_T1Reslice.nii.gz') ' -bin ' fullfile(roiDir, ['fs_thalamus_T1Reslice.nii.gz'])]); % save in ROI folder
 
     % Coregister the OC to diffusion space
     system(['flirt -in ' fullfile(roiDir, 'fs_thalamus_T1Reslice.nii.gz') ...
