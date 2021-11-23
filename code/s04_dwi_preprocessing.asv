@@ -26,7 +26,7 @@ switch user
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
-        projectDir = '/Users/rokers/Documents/MRI/Sample_dMRI'; % location output
+        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
@@ -115,7 +115,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     %% Eddy correction
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file. 
     % Combine bval and bvec files from the two dMRI scans
-    nDirs = 197; % total # directions
+    nDirs = 197; % ti
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
         

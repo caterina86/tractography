@@ -1,3 +1,5 @@
+% dMRI processing pipeline - step 2
+%
 % As we are running fmriprep, we are not going to run the t1_preprocessing
 % as it is performed by fmriprep
 

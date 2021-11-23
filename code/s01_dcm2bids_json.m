@@ -1,17 +1,26 @@
+% dMRI processing pipeline - step 1
+%
 % Step 1 -> From dicoms to nifti - anatomical, functional and diffusion
 % data in the sourcedata
 % Step 2 -> Fix fmap/ .json files for the functional images
 % Step 3 -> Run fmriprep
 % Step 4 -> Convert diffusion data to nifti with the parameters information saved in the diffusion name (phase encoding direction and number of
 % diffusion gradients)
+% 
+% Dependencies: dcm2bids, docker
 
 clear all;
 user = 'caterina'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
-% should add your files locations in the following 'switch user'
+% should add your files locations in 'switch user' below
 
-% Set the path
+% set these variables
+sub = {'201'}; % ID of the subject
+ses = {'01'}; % ID of the session
+num_runs = 2;
+
+% define locations
 switch user
     case {'caterina'}
         baseDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location sourcedata
@@ -22,10 +31,6 @@ switch user
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
         work_dir = '/Volumes/Vision/MRI/scratch'; % location of the working directory created by fmriprep
 end
-
-sub = {'201'}; % ID of the subject
-ses = {'01'}; % ID of the session
-num_runs = 2;
 
 
 %% Step 1. Run dcm2bids in the shell wrapped in matlab and modify the .json in the fmap folder
@@ -117,12 +122,10 @@ for sub_i = 1:length(sub) % for each subject
         ' ' projectDir '/derivatives' ...
         ' participant --participant-label ' sub{sub_i} ...
         ' --fs-license-file /Applications/freesurfer/license.txt' ...
-        ' --output-spaces T1w fsaverage MNI152NLin2009cAsym']);
-    
+        ' --output-spaces T1w MNI152NLin2009cAsym fsnative fsaverage6']);
 end
 
-
-%% dwi convertion with acquisition parameters
+%% dwi conversion with acquisition parameters
 % Run dcm2bids of the diffusion images
 
 for ses_i = 1:length(ses) % for each session 

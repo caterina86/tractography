@@ -1,4 +1,5 @@
-
+% dMRI processing pipeline - step 3
+%
 % Set the paths
 clear all;
 user = 'server'; % name of the user
