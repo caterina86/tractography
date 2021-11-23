@@ -76,6 +76,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
     myFiles = {apFile, paFile};
     myResFiles = {apResFile, paResFile};
+    
     for ii = length(myFiles)
         % copy the original AP and PA dwi images to derivatives/topup
         copyfile(fullfile(dwiDir, apFile), fullfile(unprocessedTopupDir, myFiles{ii}));

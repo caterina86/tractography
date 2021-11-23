@@ -99,6 +99,15 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
 
     %% extract ROIs
+    
+    % Subcortical segmentation
+    % Segment thalamic nuclei (requires that subject has already been processed with recon-all);
+    % fs_install_mcr R2014b
+    % download the runtime for FS version 7: fs_install_mcr R2014b
+    % If the fs_install_mcr script is not available in your freesurfer distribution, it can be downloaded by running the following command:
+    % cd $FREESURFER_HOME/bin && curl https://raw.githubusercontent.com/freesurfer/freesurfer/dev/scripts/fs_install_mcr -o fs_install_mcr && chmod +x fs_install_mcrsystem(['segmentThalamicNuclei.sh ' sub{ii} ' ' fsDir]);
+    % Run without any problem on Mac Catalina (problems with BigSur)
+    system(['segmentThalamicNuclei.sh sub-' sub{sub_i} ' ' fsDir]);
 
     % LGN
     % Convert segmented atlas to volume

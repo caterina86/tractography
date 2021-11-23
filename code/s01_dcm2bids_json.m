@@ -4,8 +4,6 @@
 % data in the sourcedata
 % Step 2 -> Fix fmap/ .json files for the functional images
 % Step 3 -> Run fmriprep
-% Step 4 -> Convert diffusion data to nifti with the parameters information saved in the diffusion name (phase encoding direction and number of
-% diffusion gradients)
 % 
 % Dependencies: dcm2bids, docker
 
@@ -124,31 +122,4 @@ for sub_i = 1:length(sub) % for each subject
         ' --fs-license-file /Applications/freesurfer/license.txt' ...
         ' --output-spaces T1w MNI152NLin2009cAsym fsnative fsaverage6']);
 end
-
-%% dwi conversion with acquisition parameters
-% Run dcm2bids of the diffusion images
-
-for ses_i = 1:length(ses) % for each session 
-    
-    switch user
-        case {'caterina'}
-            dcmDir = [baseDir '/sourcedata/sub-' sub{ses_i} '_ses-' ses{ses_i} '_Br_Prf/S' sub{ses_i} '_Br_Prf_Dicom/']; % load the directory of the dicoms
-            config = [projectDir '/code/bids_convert_dwi.json'];
-        case {'server'}
-            dcmDir = [baseDir '/sub-' sub{ses_i} '/sub-' sub{ses_i} '_ses-' ses{ses_i} '_Br_Prf/']; % path on the server
-            config = [projectDir '/code/update_github/bids_convert_dwi.json'];
-    end
-    
-    % remove the dwi folder
-    system(['rm -r ' projectDir '/sub-' sub{ses_i} '/ses-' ses{ses_i} '/dwi/' ]);
-    
-    tic
-    system(['dcm2bids -d ' dcmDir ...
-        ' -o ' projectDir ...
-        ' -p ' sub{ses_i} ' -s ' ses{ses_i} ...
-        ' -c ' config ' --forceDcm2niix --clobber']);
-    toc
-    
-end
-
 
