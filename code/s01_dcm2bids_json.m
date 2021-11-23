@@ -43,7 +43,7 @@ for ses_i = 1:length(ses) % for each session
             config = [projectDir '/code/bids_convert.json'];
         case {'server'}
             dcmDir = [baseDir '/sub-' sub{ses_i} '/sub-' sub{ses_i} '_ses-' ses{ses_i} '_Br_Prf/']; % path on the server
-            config = [projectDir '/code/update_github/bids_convert.json'];
+            config = [projectDir '/code/bids_convert.json'];
     end    
     
     tic
