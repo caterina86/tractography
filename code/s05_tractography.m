@@ -100,7 +100,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' act  ' -select ' num2str(numFibers_WB) ' -seeds 0']);
 
 end
-    %% Optic Radiations Tractography
+
+
+%% Optic Radiations Tractography
 for ses_i = 1:numel(sub_ses) % for each scan session  
 
     numFibers_OR = [1e4; 1e4];

@@ -1,8 +1,7 @@
 
-
 % Fit tensors to the diffusion volume and quantify (mean diffusivity and fractional anisotropy)
 
-% Probabilistic tractography (mrtirx3)
+% Probabilistic tractography (mrtrix3)
 clear all;
 
 % Setup the environment
@@ -14,13 +13,8 @@ setenv('FREESURFER_HOME', '/Applications/freesurfer');
 PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 %PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
 
-
 % Specify user variable
 user = 'caterina'; % name of the user
-
-% choose 'server' if you are working on the server
-% add your name if you are working on your local PC. In this case you
-% should add your files locations in the following 'switch user'
 
 % Set the path
 switch user
@@ -60,52 +54,52 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
     bval = fullfile(topupDir, 'bval_combined.txt');
     
     % Fit tensors to the diffusion volume
-    system(['dwi2tensor ' fullfile(eddyDir, eddyFile)  ' -fslgrad ' bvec ' ' bval ' ' fullfile(fibDir, 'tensor.mif')])
+    system(['dwi2tensor ' fullfile(eddyDir, [eddyFile '.nii.gz'])  ' -fslgrad ' bvec ' ' bval ' ' fullfile(fibDir, 'tensor.mif')])
 
     % Extract MD and FA values from tensors
     system(['tensor2metric ' fullfile(fibDir, 'tensor.mif') ' -fa ' fullfile(fibDir, 'tensor_fa.mif')]);
     system(['tensor2metric ' fullfile(fibDir, 'tensor.mif') ' -adc ' fullfile(fibDir, 'tensor_md.mif')]);
 
     % Resample the Optic Radiations
-    system(['tckresample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
-        fullfile(fibDir,['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
-    system(['tckresample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
-        fullfile(fibDir,['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
+    system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
+        fullfile(fibDir,['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
+    system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
+        fullfile(fibDir,['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
 
 
     % Resample the Optic Tracts
-    system(['tckresample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck ']) ...
-        fullfile(fibDir,['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
-    system(['tckresample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck ']) ...
-        fullfile(fibDir,['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
+    system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck ']) ...
+        fullfile(fibDir,['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
+    system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck ']) ...
+        fullfile(fibDir,['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
 
     
     % Sample FA measures from the optic radiations
-    system(['tcksample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'lh_OR_FA_100sample.txt')])
-    system(['tcksample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'rh_OR_FA_100sample.txt')])
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'lh_OR_FA_100sample.txt')]);
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'rh_OR_FA_100sample.txt')]);
 
     % Sample FA measures from the optic tracts
-    system(['tcksample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'lh_OT_FA_100sample.txt')])
-    system(['tcksample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'rh_OT_FA_100sample.txt')])
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'lh_OT_FA_100sample.txt')]);
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_fa.mif') ' ' fullfile(fibDir, 'rh_OT_FA_100sample.txt')]);
     
     
     
     % Sample MD measures from the optic radiations
-    system(['tcksample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'lh_OR_MD_100sample.txt')])
-    system(['tcksample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'rh_OR_MD_100sample.txt')])
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'lh_OR_MD_100sample.txt')]);
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'rh_OR_MD_100sample.txt')]);
 
 
     % Sample MD measures from the optic tracts
-    system(['tcksample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'lh_OT_MD_100sample.txt')])
-    system(['tcksample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
-        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'rh_OT_MD_100sample.txt')])
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'lh_OT_MD_100sample.txt')]);
+    system(['tcksample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_100sample.tck ']) ...
+        fullfile(fibDir, 'tensor_md.mif') ' ' fullfile(fibDir, 'rh_OT_MD_100sample.txt')]);
 
     
 end
