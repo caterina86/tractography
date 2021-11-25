@@ -4,7 +4,7 @@ Organization of the folders:
 - derivatives: results of the preprocessing and tractography. This folder is organized in subfolders, each one containing the output of a specific step of the analysis.
 - code: Matlab code
 
-The folders containing the sourcedata, the nifty images and the derivatives are located in your local PC. Instead, here in the GitHub folder we will keep only the code as we will work on it.
+Copy the folders containing the sourcedata, the nifti images and the derivatives from smb://it-nfs.abudhabi.nyu.edu/Vision/MRI/Sample_dMRI to your local PC from . Instead, here in the GitHub folder we will keep only the code as we will work on it.
 
 
 :)
