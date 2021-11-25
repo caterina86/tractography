@@ -28,6 +28,8 @@ switch user
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
+    case {'hannah'}
+        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
