@@ -60,7 +60,8 @@ for ses_i = 1:numel(dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'))) % f
     system(['tensor2metric ' fullfile(fibDir, 'tensor.mif') ' -fa ' fullfile(fibDir, 'tensor_fa.mif')]);
     system(['tensor2metric ' fullfile(fibDir, 'tensor.mif') ' -adc ' fullfile(fibDir, 'tensor_md.mif')]);
 
-    % Resample the Optic Radiations
+    % Resample the Optic Radiations 
+    % resample the tract so that diffusion measures can be extracted from 100 evenly spaced points for all fibers
     system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
         fullfile(fibDir,['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
     system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
