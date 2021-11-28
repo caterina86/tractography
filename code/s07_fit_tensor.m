@@ -14,7 +14,7 @@ PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/l
 %PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'hannah'; % name of the user
 
 % Set the path
 switch user
@@ -28,6 +28,8 @@ switch user
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
+    case {'hannah'}
+        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output    
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
@@ -39,7 +41,7 @@ hemi = {'lh', 'rh'};
 %% Fit the Tensor
 
 numFibers_OR = (1e4);
-numFibers_OT = (1e2);
+numFibers_OT = (1e4);
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
 
