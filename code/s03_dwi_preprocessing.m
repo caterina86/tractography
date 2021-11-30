@@ -116,24 +116,36 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
     system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
     
+    % Check number of slices in the image -> dim3 in the output    
+    system(['fslinfo ' fullfile(topupDir, apB0File) ' >> ' fullfile(topupDir, 'fslinfo.txt')])
+    info = importdata(fullfile(topupDir, 'fslinfo.txt'));
+    dim3 = info.data(3,1);
+        
+    if mod(dim3, 2) == 0 % even number
+    else % odd number
+        % In case of odd number of slices, we have to remove one slice to be able to run topup 
+        system(['fslroi ' fullfile(topupDir, apB0File) ' ' fullfile(topupDir, apB0File) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
+        system(['fslroi ' fullfile(topupDir, paB0File) ' ' fullfile(topupDir, paB0File) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
+    end
+        
     % merge the b0 images with PA and AP phase encoding directions
     system(['fslmerge -t ' fullfile(topupDir, appaB0File) ' ' fullfile(topupDir, apB0File) ' ' fullfile(topupDir, paB0File)]);
         
     % merge raw dwi_AP and dwi_PA in one single image
     system(['fslmerge -t ' fullfile(topupDir, appaFile) ' ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, paFile)]);
     
-    
-    %system(['fslroi ' fullfile(topupDir, apB0File) fullfile(topupDir, 'test.nii.gz') ' 0 -1 0 -1 1 55'])
-    
     % Topup correction
-    system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=acqparams.txt --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ... 
+    system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=' fullfile(projectDir, 'acqparams.txt') ' --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ... 
         ' --iout=' fullfile(topupDir, 'my_hifi_b0')]);
 
    
     %% Eddy correction
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file. 
     % Combine bval and bvec files from the two dMRI scans
-    nDirs = 197; % total # directions
+    nDir = load(fullfile(dwiDir, apFileBval)); % extract the number of directions
+    nDirs = length(nDir); % total # directions
+    
+    % create the index
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
         
