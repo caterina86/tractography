@@ -116,7 +116,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
     system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
     
-    % Check number of slices in the image -> dim3 in the output    
+    % Check number of slices in the image -> dim3 in the output 
+    % If the number is odd topup will crash -> https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=fsl;67dcb45c.1209
     system(['fslinfo ' fullfile(topupDir, apB0File) ' >> ' fullfile(topupDir, 'fslinfo.txt')])
     info = importdata(fullfile(topupDir, 'fslinfo.txt'));
     dim3 = info.data(3,1);
