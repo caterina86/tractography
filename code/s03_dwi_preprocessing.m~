@@ -123,7 +123,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['fslmerge -t ' fullfile(topupDir, appaFile) ' ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, paFile)]);
     
     
-    %system(['fslroi ' fullfile(topupDir, apB0File) fullfile(topupDir, 'test.nii.gz') ' 0 -1 0 -1 1 55'])
+    system(['fslroi ' fullfile(topupDir, apB0File) fullfile(topupDir, 'test.nii.gz') ' 0 -1 0 -1 1 55'])
     
     % Topup correction
     system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=acqparams.txt --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ... 
