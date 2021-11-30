@@ -112,23 +112,25 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
 
     %% topup correction
-    % extract the b0 from the AP and PA dwi image
-    system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
-    system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
     
     % Check number of slices in the image -> dim3 in the output 
     % If the number is odd topup will crash -> https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=fsl;67dcb45c.1209
-    system(['fslinfo ' fullfile(topupDir, apB0File) ' >> ' fullfile(topupDir, 'fslinfo.txt')])
+    system(['fslinfo ' fullfile(topupDir, apFile) ' >> ' fullfile(topupDir, 'fslinfo.txt')])
     info = importdata(fullfile(topupDir, 'fslinfo.txt'));
     dim3 = info.data(3,1);
         
     if mod(dim3, 2) == 0 % even number
     else % odd number
-        % In case of odd number of slices, we have to remove one slice to be able to run topup 
-        system(['fslroi ' fullfile(topupDir, apB0File) ' ' fullfile(topupDir, apB0File) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
-        system(['fslroi ' fullfile(topupDir, paB0File) ' ' fullfile(topupDir, paB0File) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
+        % In case of odd number of slices, we have to remove one slice to
+        % be able to run topup - we will keep the originals in the rawdata folder
+        system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
+        system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
     end
-        
+    
+    % extract the b0 from the AP and PA dwi image
+    system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
+    system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);        
+    
     % merge the b0 images with PA and AP phase encoding directions
     system(['fslmerge -t ' fullfile(topupDir, appaB0File) ' ' fullfile(topupDir, apB0File) ' ' fullfile(topupDir, paB0File)]);
         
@@ -141,8 +143,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
    
     %% Eddy correction
+    % Prelimiary steps:
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file. 
     % Combine bval and bvec files from the two dMRI scans
+    
     nDir = load(fullfile(dwiDir, apFileBval)); % extract the number of directions
     nDirs = length(nDir); % total # directions
     
