@@ -13,7 +13,7 @@ PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Appli
 
 % Specify user variable
 user = 'caterina'; % name of the user
-fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
+fmriprep = 0; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -65,17 +65,17 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
     if fmriprep == 1 % if fmriprep was performed
         fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
-        t1File = fullfile(fmriprepDir, 'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w.nii.gz']);
-        t1FileCrop = fullfile(fmriprepDir,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop.nii.gz']);
-        t1FileCropBrain = fullfile(fmriprepDir,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz']);
-        t1FileCropBrainDiffSpace = fullfile(fmriprepDir,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
+        t1File = fullfile(fmriprep, 'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w.nii.gz']);
+        t1FileCrop = fullfile(fmriprep,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop.nii.gz']);
+        t1FileCropBrain = fullfile(fmriprep,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz']);
+        t1FileCropBrainDiffSpace = fullfile(fmriprep,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
         t12dwi = fullfile(fmriprepDir, 'anat/t1_2_dwi_xfm.mat');
-    else % if fmriprep was not performed
-        t1File = fullfile(anatDir, 't1.nii.gz');
-        t1FileCrop = fullfile(anatPrepDir, 't1_crop.nii.gz');
-        t1FileCropBrain = fullfile(anatPrepDir, 't1_crop_brain.nii.gz');
-        t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
-        t12dwi = fullfile(anatPrepDir, 't1_2_dwi_xfm.mat');
+    else
+        t1File = dir(fullfile(anatDir, 't1.nii.gz'));
+        t1FileCrop = dir(fullfile(anatPrepDir, 't1_crop.nii.gz'));
+        t1FileCropBrain = dir(fullfile(anatPrepDir, 't1_crop_brain.nii.gz'));
+        t1FileCropBrainDiffSpace = dir(fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz'));
+        t12dwi = fullfile(anatPrepDir, 'anat/t1_2_dwi_xfm.mat');
     end  
 
     % create the folder for the ROIs
@@ -88,22 +88,24 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['bet ' fullfile(eddyDir, eddyB0File) ' ' fullfile(eddyDir, eddyB0FileBrain) ' -m -f 0.25'])
 
     
+    
     % TODO: change the script for the CCAD data -> T1
     % Check the resolution of the T1 -> 0.8 isotropic
     system(['fslinfo ' t1File ' >> ' fullfile(anatDir, 't1_info.txt')])
-    info = importdata(fullfile(anatDir, 't1_info.txt'));
-    res = 0.8;
+    info = importdata(fullfile(topupDir, 't1_info.txt'));
+    dim3 = info.data(3,1);
     
     % Upsample the skull-stripped b0 DWI volume to the T1
     system(['flirt -in ' fullfile(eddyDir, eddyB0FileBrain) ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
-       ' -out ' fullfile(eddyDir, eddyB0FileBrainOpt8) ' -applyisoxfm ' num2str(res)])
+       ' -out ' fullfile(eddyDir, eddyB0FileBrainOpt8) ' -applyisoxfm ' dim3])
 
-    % Verify the resolution of the diffusion data
+    % Verify the resolution
     system(['fslinfo ' fullfile(eddyDir, eddyB0FileBrainOpt8)])
     
     
+
+    % Skip the neck from the T1
     if fmriprep == 1
-        % Skip the neck from the T1
         system(['robustfov -i ' t1File ' -r ' t1FileCrop])
     else
     end
@@ -114,7 +116,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Coregistration of the T1 to dwi space and extraction of the coregistration matrix
     system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
         ' -out ' t1FileCropBrainDiffSpace ...
-        ' -omat ' t12dwi ' -dof 6']);
+        ' -omat ' t1_2_dwi ' -dof 6']);
 
 
 
