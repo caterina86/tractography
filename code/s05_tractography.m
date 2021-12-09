@@ -142,7 +142,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     for jj = 1:length(hemi)
         
         maxLength = 50; % to avoid having long fibers
-        outFile = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OR(1)/1000) 'k.tck']);
+        outFile = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT(1)/1000) 'k.tck']);
         roi1 = fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']); % FreeSurfer LGN
         roi2 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz'); % Freesurfer Optic Chiasm expanded -> 3dil
        
@@ -150,7 +150,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers_OT(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
         
         % Convert fibers to DSIStudio format
-        outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OR(1)/1000) 'k_DSIStudio.tck']);
+        outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT(1)/1000) 'k_DSIStudio.tck']);
         % Convert to DSIStudio format
         system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
     
