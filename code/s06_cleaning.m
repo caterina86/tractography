@@ -5,13 +5,18 @@ clear all;
 % FSL - remember to update the location of FSL according to the location on your PC
 setenv('FSLDIR', '/usr/local/fsl' );
 setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl outputs
-setenv('FREESURFER_HOME', '/Applications/freesurfer'); 
-% setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
-PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
-%PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+if isfolder('/Applications/freesurfer/bin')
+    setenv('FREESURFER_HOME', '/Applications/freesurfer');
+    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+elseif isfolder('/Applications/freesurfer/7.2.0/bin')
+    setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
+    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+else
+    error('Cannot find freesurfer binary in or near /Applications/freesurfer')
+end
 
 % Specify user variable
-user = 'hannah'; % name of the user
+user = 'caterina'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -33,7 +38,7 @@ switch user
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
-sub = {'201'}; % initials of the subject
+sub = {'ccad0202'}; % initials of the subject
 ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
