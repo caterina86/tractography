@@ -1,4 +1,0 @@
-mrconvert /Users/cp3488/Documents/tractography/Sample_dMRI/derivatives/anat_prep/sub-202/ses-01/t1_crop_brain_diffspace.nii.gz /Users/cp3488/Data/GitHub/tractography/code/5ttgen-tmp-97EB4Y/input.mif
-mrconvert input.mif T1.nii -strides -1,+2,+3
-fast T1.nii
-run_first_all -m none -s L_Accu,R_Accu,L_Caud,R_Caud,L_Pall,R_Pall,L_Puta,R_Puta,L_Thal,R_Thal -i T1.nii -o first -b
