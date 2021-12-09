@@ -11,7 +11,7 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % specify fsl output format
 PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 % Specify user 
-user = 'caterina'; % name of the user
+user = 'bas'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -35,7 +35,7 @@ end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
 % Project variables
-sub = {'202'}; % initials of the subject
+sub = {'ccad0202'}; % initials of the subject
 ses = {'01'}; % ID of the subject
 
 
@@ -115,7 +115,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
     % Check number of slices in the image -> dim3 in the output 
     % If the number is odd topup will crash -> https://www.jiscmail.ac.uk/cgi-bin/webadmin?A2=fsl;67dcb45c.1209
-    system(['fslinfo ' fullfile(topupDir, apFile) ' >> ' fullfile(topupDir, 'fslinfo.txt')])
+    system(['fslinfo ' fullfile(topupDir, apFile) ' >> ' fullfile(topupDir, 'fslinfo.txt')]);
     info = importdata(fullfile(topupDir, 'fslinfo.txt'));
     dim3 = info.data(3,1);
         
@@ -123,8 +123,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     else % odd number
         % In case of odd number of slices, we have to remove one slice to
         % be able to run topup - we will keep the originals in the rawdata folder
-        system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
-        system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))])
+        system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))]);
+        system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paFile) ' 0 -1 0 -1 0 ' num2str((dim3-1))]);
     end
     
     % extract the b0 from the AP and PA dwi image
