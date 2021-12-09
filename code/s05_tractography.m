@@ -13,7 +13,8 @@ PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/l
 
 
 % Specify user variable
-user = 'hannah'; % name of the user
+user = 'caterina'; % name of the user
+fmriprep = 0; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -36,7 +37,7 @@ switch user
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
-sub = {'201'}; % initials of the subject
+sub = {'202'}; % initials of the subject
 ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -54,21 +55,31 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     eddyDir = fullfile(projectDir, 'derivatives/eddy', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
     roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
+    anatPrepDir = fullfile(projectDir, 'derivatives/anat_prep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
 
     eddyFile = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data.nii.gz'];
     t1FileCropBrain = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz'];
-    ttFile = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz'];
     eddyB0FileBrain = [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data_b0_brain'];    
-    t1FileCropBrainDiffSpace = ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz'];
+    
+    
+    if fmriprep == 1
+        t1FileCropBrainDiffSpace = fullfile(fmriprep, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
+        ttFile = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
+    else
+        t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
+        ttFile = fullfile(anatPrepDir, ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
+        
+    end
+    
 
     if ~exist(fibDir) % Check if fiber directory exists
         mkdir(fibDir) % If not, create it
     else
     end
     
-    % Generate 5tt mask (aligned with T1 volume)
-    system(['5ttgen fsl ' fullfile(fmriprepDir, 'anat/', t1FileCropBrainDiffSpace) ' ' ...
-        fullfile(fmriprepDir, 'anat/', ttFile) ' -premasked']);
+    % Generate 5tt mask (aligned with T1 volume)    
+    system(['5ttgen fsl ' t1FileCropBrainDiffSpace ' ' ...
+        ttFile ' -premasked']);        
 
     
     %% Whole brain tractography
@@ -91,7 +102,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         fibDir  '/responseEstimate_csf.txt ' fibDir '/csffod.mif '])
 
     % Whole brain tractography (mrtrix3)
-    act = fullfile(fmriprepDir, 'anat/', ttFile); % anatomically-constrain tractography
+    act = ttFile; % anatomically-constrain tractography
     wmfod = fullfile(fibDir, 'wmfod.mif'); % extracted from eddy_corrected_data.nii.gz aligned to T1-acpc space
     numFibers_WB = 5000000;
     outFile = fullfile(fibDir, ['dti' ses{ses_i} '_wholeBrain_ACT_' num2str(numFibers_WB/1000000) 'M.tck']);       
@@ -126,7 +137,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     end
     
     % Optic Tract - less number of fibers for a matter of time
-    numFibers_OT = [1e2; 1e2];
+    numFibers_OT = [1e4; 1e4];
 
     for jj = 1:length(hemi)
         

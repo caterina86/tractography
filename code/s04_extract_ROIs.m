@@ -13,7 +13,7 @@ PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Appli
 
 % Specify user variable
 user = 'caterina'; % name of the user
-fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
+fmriprep = 0; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -86,7 +86,6 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     % Skull-strip the resulting b0 volume and generate a brain mask using bet
     system(['bet ' fullfile(eddyDir, eddyB0File) ' ' fullfile(eddyDir, eddyB0FileBrain) ' -m -f 0.25'])
-
     
     % TODO: change the script for the CCAD data -> T1
     % Check the resolution of the T1 -> 0.8 isotropic
@@ -108,8 +107,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     else
     end
     
-    % Skull-stripped the T1    
-    system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25'])
+    % Skull-stripped the T1 -> work on this threshold for the CCAD images   
+    %system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25'])
+    system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.1'])
 
     % Coregistration of the T1 to dwi space and extraction of the coregistration matrix
     system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
@@ -152,7 +152,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         system(['flirt -in ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz']) ...
             ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
             ' -out ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']) ...
-            ' -init ' t1_2_dwi_xfm ' -applyxfm']);
+            ' -init ' t12dwi ' -applyxfm']);
 
         % Binarize the ROI
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']) ' -bin ' ...
@@ -165,7 +165,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     for jj = 1:length(hemi)
 
         % mri_label2vol for xh.V1.label file
-        system(['mri_label2vol --label ' fsDir '/label/' hemi{jj} '.V1_exvivo.label --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/label/' hemi{jj} '_V1.nii.gz --identity --fillthresh .3 --proj frac 0 1 .1 --hemi ' hemi{jj} ' --subject ' fsDir])
+        system(['mri_label2vol --label ' fsDir '/label/' hemi{jj} '.V1_exvivo.label --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/label/' hemi{jj} '_V1.nii.gz --identity --fillthresh .3 --proj frac 0 1 .1 --hemi ' hemi{jj} ' --subject sub-202'])
 
         % Smooth nifti V1 ROI using -fmedian flag
         system(['fslmaths ' fsDir '/label/' hemi{jj} '_V1.nii.gz -fmedian ' fsDir '/label/' hemi{jj} '_V1.nii.gz'])
@@ -183,7 +183,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         system(['flirt -in ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz']) ...
             ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
             ' -out ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']) ...
-            ' -init ' t1_2_dwi ' -applyxfm']);
+            ' -init ' t12dwi ' -applyxfm']);
 
         % Binarize
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']) ' -bin ' ...
@@ -214,7 +214,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['flirt -in ' fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz') ...
         ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
         ' -out ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace.nii.gz') ...
-        ' -init ' t1_2_dwi_xfm ' -applyxfm']);
+        ' -init ' t12dwi ' -applyxfm']);
 
     % Expand the Optic Chiasm:
     system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz')]);
@@ -246,7 +246,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['flirt -in ' fullfile(roiDir, 'fs_thalamus_T1Reslice.nii.gz') ...
         ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
         ' -out ' fullfile(roiDir, 'fs_thalamus_T1Reslice_diffspace.nii.gz') ...
-        ' -init ' t1_2_dwi ' -applyxfm']);
+        ' -init ' t12dwi ' -applyxfm']);
 
     % Binarize
     system(['fslmaths ' fullfile(roiDir, 'fs_thalamus_T1Reslice_diffspace.nii.gz') ' -bin ' ...

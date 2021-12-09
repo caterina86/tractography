@@ -1,0 +1,1 @@
+/usr/local/bin/5ttgen fsl /Users/cp3488/Documents/tractography/Sample_dMRI/derivatives/anat_prep/sub-202/ses-01/t1_crop_brain_diffspace.nii.gz /Users/cp3488/Documents/tractography/Sample_dMRI/derivatives/anat_prep/sub-202/ses-01/sub-202_ses-01_5tt.nii.gz -premasked

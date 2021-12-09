@@ -1,5 +1,5 @@
 
-% dMRI preprocessing pipeline: denoise, de-ring, topup, eddy correction
+% T1 preprocessing pipeline: robustfov, fast and recon-all
 % 
 % Written by Caterina Pedersini
 
@@ -67,8 +67,14 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % FAST 
     system(['fast -B ' fullfile(anatPrepDir, 't1_crop.nii.gz')]);
 
+    % RECON-ALL
     % Freesurfer -> Note: $SUBJECTS_DIR must be set to fsDir defined above
     setenv ('SUBJECTS_DIR', fsDir); 
-    system(['recon-all -i ' fullfile(anatPrepDir, 't1_crop_restore.nii.gz') ' -subjid sub-' sub{sub_i} ' -all'])
-
+    
+    if exist(fullfile(projectDir, 'derivatives/freesurfer', ['sub-' sub{sub_i}]), 'dir') % if the directory already exists
+        system(['recon-all -subjid sub-' sub{sub_i} ' -all'])
+    else % if it's the first time we run recon-all for this subject
+        system(['recon-all -i ' fullfile(anatPrepDir, 't1_crop_restore.nii.gz') ' -subjid sub-' sub{sub_i} ' -all'])
+    end
 end
+
