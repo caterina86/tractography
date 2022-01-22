@@ -20,10 +20,12 @@ end
 
 % Specify user
 user = 'server'; % name of the user
-
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
+
+% Specify sequence (NYUAD or CCAD)
+sequence = 1; % 1-> NYUAD; 2-> CCAD
 
 % Set the path
 switch user
@@ -45,7 +47,6 @@ addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 % Project variables
 sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the subject
-sequence = 1; % 1-> NYUAD; 2-> CCAD - add in the wiki document!
 
 %% dwi preprocessing
 
