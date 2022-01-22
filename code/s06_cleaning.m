@@ -16,7 +16,7 @@ else
 end
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'server'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -26,7 +26,7 @@ switch user
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'caterina'}
-        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
+        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
@@ -38,7 +38,7 @@ switch user
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
-sub = {'ccad0202'}; % initials of the subject
+sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -47,22 +47,22 @@ hemi = {'lh', 'rh'};
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
 
-sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
+sub_ses = dir(fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], 'ses-*'));
 
 for ses_i = 1:numel(sub_ses) % for each scan session
-    
+
     roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
     fibDir = fullfile(projectDir, '/derivatives/mrtrix3', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
 
     for jj = 1:length(hemi)
-       
+
        % Run tckedit, excluding fibers terminating in thalamus outside of LGNs
        % Optic Radiations:
        numFibers_OR = (1e4);
        roi1 = fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']);
        roi2 = fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']);
        roi3 = fullfile(roiDir, 'fs_thalamus_sub_LGNs_diffspace.nii.gz');
-       
+
        system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi2 ' -ends_only ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k.tck ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_thalFiltered.tck'])
@@ -70,26 +70,22 @@ for ses_i = 1:numel(sub_ses) % for each scan session
        system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi2 ' ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_thalFiltered.tck ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck'])
-       
+
 
        % Optic Tract:
-       numFibers_OT = (1e4);
-       roi4 = fullfile(roiDir, ['fs_oc_T1Reslice_diffspace_3dilM.nii.gz']);
-       
+       numFibers_OT = (1e2); % indicate the correct number of fibers created
+       roi4 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz');
+
        system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi4 ' -ends_only ' ...
-           fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k.tck ' ...
+           fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k.tck -maxlength 50 '...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_thalFiltered.tck'])
 
        system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi4 ' ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_thalFiltered.tck ' ...
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck'])
 
-       
+
     end
 
 
 end
-
-
-
-

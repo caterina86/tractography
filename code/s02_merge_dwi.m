@@ -10,12 +10,12 @@ user = 'server'; % name of the user
 % Set the path
 switch user
     case {'caterina'}
-        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
+        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
 end
 
-sub = {'201'}; % initials of the subject
+sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the subject
 
 % FSL - remember to update the location of freesurfer according to
@@ -33,9 +33,9 @@ num_dir = {'97' '98'}; % number of diffusion gradient directions
 sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
 
 for ses_i = 1:numel(sub_ses) % for each scan session
-    
+
     % folders:
-    dwiDir = fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi');
+    dwiDir = fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi');
     % files:
     apFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi'];
     paFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi'];
@@ -63,10 +63,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
        ' >> ' fullfile(dwiDir, [apFile '.bval '])]);
 
     system(['paste ' fullfile(dwiDir, [rawpaFile97 '.bval ']) fullfile(dwiDir, [rawpaFile98 '.bval ']) ...
-       ' >> ' fullfile(dwiDir, [paFile '.bval '])]);       
+       ' >> ' fullfile(dwiDir, [paFile '.bval '])]);
 
 
     disp('All done!')
-        
-end
 
+end

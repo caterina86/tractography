@@ -1,0 +1,130 @@
+{
+  "descriptions": [
+    {
+      "dataType": "func",
+      "modalityLabel": "bold",
+      "customLabels": "task-prf",
+      "criteria": {
+        "SidecarFilename": "*task-prf*",
+        "MultibandAccelerationFactor": "[1-9]"
+      }
+    },
+    {
+      "dataType": "func",
+      "modalityLabel": "sbref",
+      "customLabels": "task-prf",
+      "criteria": {
+        "SidecarFilename": "*task-prf*",
+        "ImageComments": "Single-band reference"
+      }
+    },
+    {
+      "dataType": "fmap",
+      "modalityLabel": "epi",
+      "customLabels": "dir-AP",
+      "IntendedFor": [0,1],
+      "criteria": {
+        "SidecarFilename": "*DISTORTION_AP*"
+      }
+    },
+    {
+      "dataType": "fmap",
+      "modalityLabel": "epi",
+      "customLabels": "dir-PA",
+      "IntendedFor": [0,1],
+      "criteria": {
+        "SidecarFilename": "*DISTORTION_PA*"
+      }
+    },
+    {
+       "dataType": "dwi",
+       "modalityLabel": "dir-APacq97vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir97_AP*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-APacq97vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir97_AP*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq97vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir97_PA*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq97vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir97_PA*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-APacq98vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir98_AP*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-APacq98vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir98_AP*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq98vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir98_PA*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq98vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dMRI_dir98_PA*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+    {
+      "dataType": "anat",
+      "modalityLabel": "T1w",
+      "criteria": {
+        "SidecarFilename": "*T1w_MPR*",
+        "ImageType": [
+          "ORIGINAL",
+          "PRIMARY",
+          "M",
+          "ND"
+        ]
+      }
+    },
+    {
+      "dataType": "anat",
+      "modalityLabel": "T2w",
+      "criteria": {
+        "SidecarFilename": "*T2w_SPC*",
+        "ImageType": [
+          "ORIGINAL",
+          "PRIMARY",
+          "M",
+          "ND"
+        ]
+      }
+    }
+  ]
+}

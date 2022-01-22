@@ -20,7 +20,7 @@ else
 end
 
 % Specify user 
-user = 'caerina'; % name of the user
+user = 'caterina'; % name of the user
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -44,7 +44,7 @@ end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
 % Project variables
-sub = {'ccad0202'}; % initials of the subject
+sub = {'ccad0203'}; % initials of the subject
 ses = {'01'}; % ID of the subject
 
 
