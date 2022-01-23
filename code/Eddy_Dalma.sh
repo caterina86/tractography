@@ -5,7 +5,9 @@
 
 # *** load modules ***
 module load NYUAD/4.0 singularity braimcore
-braimcore -e hcp_cuda10.0 shell
+# braimcore -e hcp_cuda10.0 shell
+
+export BRAIMCORE_ENGINE=hcp_cuda10.0
 
 # *** Set tmp working dir ***
 sub=$1
@@ -21,9 +23,8 @@ EDDYDIR=/scratch/cp3488/MRI/Sample_dMRI/derivatives/eddy/${sub}/${ses}
 
 echo ${sub} ${ses}
 
-
-eddy_cuda --imain=${TOPUPDIR}/dwi_AP_PA_merge.nii.gz \
-          --mask=${TOPUPDIR}/my_hifi_b0_brain_mask.nii.gz \
+braimcore eddy_cuda --imain=${TOPUPDIR}/${sub}_${ses}_AP_PA_dwi.nii.gz \
+          --mask=${TOPUPDIR}/my_hifi_b0_mean_brain_mask.nii.gz \
           --acqp=${PROJECTDIR}/acqparams.txt --index=${TOPUPDIR}/index.txt \
           --bvecs=${TOPUPDIR}/bvec_combined.txt --bvals=${TOPUPDIR}/bval_combined.txt \
           --topup=${TOPUPDIR}/my_topup_results --out=${EDDYDIR}/eddy_corrected_data --repol –verbose
