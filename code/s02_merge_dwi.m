@@ -11,7 +11,7 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell how to save fsl outputs
 PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 % Set paths
-user = 'caterina'; % name of the user
+user = 'bas'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -54,33 +54,22 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     rawpaFile98 = [subses '_dir-PAacq' num2str(num_dir{2}) 'vols_dwi'];
 
     % nifti image
-    if exist(fullfile(dwiDir, [apFile '.nii.gz']), 'file') % if the file already exist
-        system(['rm -r ' fullfile(dwiDir, [apFile '.nii.gz'])]); % remove it
-    else
-    end
     system(['fslmerge -t ' fullfile(dwiDir, [apFile '.nii.gz ']) fullfile(dwiDir, [rawapFile97 '.nii.gz ']) ...
         fullfile(dwiDir, [rawapFile98 '.nii.gz '])]);
 
-
-    if exist(fullfile(dwiDir, [paFile '.nii.gz']), 'file') % if the file already exists
-        system(['rm -r ' fullfile(dwiDir, [paFile '.nii.gz'])]); % remove it 
-    else % if the file does not exist
-    end
     system(['fslmerge -t ' fullfile(dwiDir, [paFile '.nii.gz ']) fullfile(dwiDir, [rawpaFile97 '.nii.gz ']) ...
         fullfile(dwiDir, [rawpaFile98 '.nii.gz '])]);
 
-
+    
     % bvec
     if exist(fullfile(dwiDir, [apFile '.bvec']), 'file') % if it exists
         system(['rm -r ' fullfile(dwiDir, [apFile '.bvec'])]); % remove it
-    else
     end
     system(['paste ' fullfile(dwiDir, [rawapFile97 '.bvec ']) fullfile(dwiDir, [rawapFile98 '.bvec ']) ...
         ' >> ' fullfile(dwiDir, [apFile '.bvec'])]);
 
     if exist(fullfile(dwiDir, [paFile '.bvec']), 'file') % if it exists
         system(['rm -r ' fullfile(dwiDir, [paFile '.bvec '])]); % remove it
-    else
     end
     system(['paste ' fullfile(dwiDir, [rawpaFile97 '.bvec ']) fullfile(dwiDir, [rawpaFile98 '.bvec ']) ...
          ' >> ' fullfile(dwiDir, [paFile '.bvec'])]);
@@ -89,14 +78,12 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % bval
     if exist(fullfile(dwiDir, [apFile '.bval']), 'file')  % if it exists
       system(['rm -r ' fullfile(dwiDir, [apFile '.bval '])]); % remove it
-    else
     end
     system(['paste ' fullfile(dwiDir, [rawapFile97 '.bval ']) fullfile(dwiDir, [rawapFile98 '.bval ']) ...
         ' >> ' fullfile(dwiDir, [apFile '.bval '])]);
 
     if exist(fullfile(dwiDir, [paFile '.bval']), 'file')  % if it exists
         system(['rm -r ' fullfile(dwiDir, [paFile '.bval '])]); % remove it
-    else
     end
     system(['paste ' fullfile(dwiDir, [rawpaFile97 '.bval ']) fullfile(dwiDir, [rawpaFile98 '.bval ']) ...
         ' >> ' fullfile(dwiDir, [paFile '.bval '])]);
