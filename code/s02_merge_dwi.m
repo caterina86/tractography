@@ -11,7 +11,7 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell how to save fsl outputs
 PATH = getenv('PATH'); setenv('PATH', ['/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
 
 % Set paths
-user = 'bas'; % name of the user
+user = 'hannah'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -21,6 +21,8 @@ switch user
         projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
     case {'bas'}
         projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI/'; % location output
+    case {'hannah'}
+projectDir = '/Users/hannah/Documents/MRI'; % location output
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
 end
