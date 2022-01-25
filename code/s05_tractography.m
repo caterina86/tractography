@@ -17,7 +17,7 @@ else
 end
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
@@ -69,7 +69,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     if fmriprep == 1
         t1FileCropBrain = fullfile(fmriprepDir,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz']);
-        t1FileCropBrainDiffSpace = fullfile(fmriprep, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
+        t1FileCropBrainDiffSpace = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
         ttFile = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
         t12dwi = fullfile(fmriprepDir, 'anat/t1_2_dwi_xfm.mat');
     else

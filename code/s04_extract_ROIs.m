@@ -17,7 +17,7 @@ else
 end
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
@@ -133,7 +133,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     % LGN
     % Convert segmented atlas to volume
-    % system(['mri_label2vol --seg ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/mri/ThalSegNativeVol.nii.gz --regheader ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz'])
+    system(['mri_label2vol --seg ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/mri/ThalSegNativeVol.nii.gz --regheader ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz'])
     % Extract left and right LGN from volume
     system(['fslmaths ' fsDir '/mri/ThalSegNativeVol.nii.gz -thr 8109 -uthr 8109 ' roiDir '/fs_lh_lgn.nii.gz']);
     system(['fslmaths ' fsDir '/mri/ThalSegNativeVol.nii.gz -thr 8209 -uthr 8209 ' roiDir '/fs_rh_lgn.nii.gz']);
