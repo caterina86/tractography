@@ -1,5 +1,5 @@
 % Cleaning Probabilistic tracts (mrtirx3)
-clear all;
+clearvars;
 
 % Setup the environment
 % FSL - remember to update the location of FSL according to the location on your PC
@@ -73,7 +73,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
 
        % Optic Tract:
-       numFibers_OT = (1e2); % indicate the correct number of fibers created
+       numFibers_OT = (1e3); % indicate the correct number of fibers created
        roi4 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz');
 
        system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi4 ' -ends_only ' ...

@@ -2,7 +2,7 @@
 % Fit tensors to the diffusion volume and quantify (mean diffusivity and fractional anisotropy)
 
 % Probabilistic tractography (mrtrix3)
-clear all;
+clearvars
 
 % Setup the environment
 % FSL - remember to update the location of FSL according to the location on your PC
@@ -46,7 +46,7 @@ hemi = {'lh', 'rh'};
 %% Fit the Tensor
 % Change the number of fibers extracted
 numFibers_OR = (1e4);
-numFibers_OT = (1e4); 
+numFibers_OT = (1e3); 
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
 

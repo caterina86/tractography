@@ -41,10 +41,18 @@ end
 
 
 % Plot the data
-plot(lh_FA_OR.data(1:200,:)');
+plot(lh_FA_OR.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Left OR');
 
-plot(rh_FA_OR.data(1:200,:)');
+plot(rh_FA_OR.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Right OR')
+
+plot(lh_FA_OT.data(:,10:90)');
+xlabel('position along tract'); ylabel('FA');
+title('FA Left OT');
+
+plot(rh_FA_OT.data(1:200,10:90)');
+xlabel('position along tract'); ylabel('FA');
+title('FA Right OT')

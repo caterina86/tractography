@@ -1,6 +1,6 @@
 
 % Probabilistic tractography (mrtirx3)
-clear all;
+clearvars
 
 % Setup the environment
 % FSL - remember to update the location of FSL according to the location on your PC
@@ -9,9 +9,11 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl output
 if isfolder('/Applications/freesurfer/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '')
 elseif isfolder('/Applications/freesurfer/7.2.0/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '')
 else
     error('Cannot find freesurfer binary in or near /Applications/freesurfer')
 end
