@@ -9,15 +9,17 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl output
 if isfolder('/Applications/freesurfer/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '/Applications/freesurfer/subjects')
 elseif isfolder('/Applications/freesurfer/7.2.0/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '/Applications/freesurfer/7.2.0/subjects')
 else
     error('Cannot find freesurfer binary in or near /Applications/freesurfer')
 end
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'hannah'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
@@ -36,7 +38,7 @@ switch user
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
-        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI';
+        projectDir = '/Users/hannah/Documents/MRI';
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
