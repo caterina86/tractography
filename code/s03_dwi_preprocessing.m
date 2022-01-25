@@ -19,7 +19,7 @@ else
 end
 
 % Specify user
-user = 'caterina'; % name of the user
+user = 'bas'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -36,7 +36,7 @@ switch user
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
-        projectDir = '/Users/rokers/Documents/MRI/Sample_dMRI'; % location output
+        projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
@@ -63,6 +63,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     dwiDir = fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'dwi');
 
     % load name files:
+    % TODO: Define these with full pathnames, i.e. fullfile(Dir, file)
     apFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.nii.gz'];
     paFile =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_PA_dwi.nii.gz'];
     apFileBval =  ['sub-' sub{sub_i} '_ses-' ses{ses_i} '_AP_dwi.bval'];
@@ -150,12 +151,12 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['fslmerge -t ' fullfile(topupDir, appaFile) ' ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, paFile)]);
 
     % Topup correction
-    system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=' fullfile(projectDir, 'acqparams.txt') ' --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ...
+    system(['topup --imain='  fullfile(topupDir, appaB0File) ' --datain=' fullfile(projectDir, 'rawdata', 'acqparams.txt') ' --config=b02b0.cnf --out=' fullfile(topupDir, 'my_topup_results') ...
         ' --iout=' fullfile(topupDir, 'my_hifi_b0')]);
 
 
     %% Eddy correction
-    % Prelimiary steps:
+    % Preliminary steps:
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file.
     % Combine bval and bvec files from the two dMRI scans
 
@@ -166,7 +167,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
 
-   % Combine bvac and bvec files from the two dMRI scans
+   % Combine bval and bvec files from the two dMRI scans
     bvals = horzcat(load(fullfile(dwiDir, apFileBval)), load(fullfile(dwiDir, paFileBval)));
     writematrix(bvals, fullfile(topupDir, 'bval_combined.txt'), 'Delimiter', 'space');
 
