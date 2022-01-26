@@ -20,7 +20,7 @@ end
 
 % Specify user variable
 user = 'caterina'; % name of the user
-fmriprep = 0; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
+fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
@@ -42,7 +42,7 @@ switch user
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
-sub = {'ccad0203'}; % initials of the subject
+sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -94,20 +94,6 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Skull-strip the resulting b0 volume and generate a brain mask using bet
     system(['bet ' fullfile(eddyDir, eddyB0File) ' ' fullfile(eddyDir, eddyB0FileBrain) ' -m -f 0.25'])
 
-    
-%     % Check the resolution of the T1 -> 0.8 isotropic
-%     system(['fslinfo ' t1File ' >> ' fullfile(anatDir, 't1_info.txt')])
-%     info = importdata(fullfile(anatDir, 't1_info.txt'));
-%     res = 0.8;
-% 
-%     % Upsample the skull-stripped b0 DWI volume to the T1
-%     system(['flirt -in ' fullfile(eddyDir, eddyB0FileBrain) ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
-%        ' -out ' fullfile(eddyDir, eddyB0FileBrainOpt8) ' -applyisoxfm ' num2str(res)])
-% 
-%     % Verify the resolution of the diffusion data
-%     system(['fslinfo ' fullfile(eddyDir, eddyB0FileBrainOpt8)])
-% 
-
     if fmriprep == 1
         % Skip the neck from the T1
         system(['robustfov -i ' t1File ' -r ' t1FileCrop])
@@ -117,7 +103,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Skull-stripped the T1:
     system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25'])
 
-    % Coregistration of the T1 to dwi space (dwi spatial resolution) and extraction of the coregistration matrix
+    % Coregistration of the T1 to dwi space (dwi spatial resolution) 
+    % and extraction of the coregistration matrix
     system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' t1FileCropBrainDiffSpace ...
         ' -omat ' t12dwi ' -dof 6']);
