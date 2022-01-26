@@ -2,8 +2,10 @@
 % Representation of FA and MD values
 % Import FA values of the Optic Radiations
 
+clearvars;
+
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 
 % Set the path
 switch user
@@ -20,6 +22,12 @@ switch user
     case {'hannah'}
         projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output
 end
+
+
+%% Plot the FA/MD values extracted from the tract
+
+sub = {'sub-0228'}; % initials of the subject
+ses = {'01'}; % ID of the session
 
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
@@ -49,10 +57,12 @@ plot(rh_FA_OR.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Right OR')
 
-plot(lh_FA_OT.data(:,10:90)');
+plot(lh_FA_OT.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Left OT');
 
 plot(rh_FA_OT.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Right OT')
+
+% mean(rh_FA_OR.data,1) % if we want to extract the average FA values along the tract

@@ -51,12 +51,12 @@ ses = {'01'}; % ID of the subject
 %% T1 preprocessing
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
-sub_ses = dir(fullfile(projectDir, ['sub-' sub{sub_i}], 'ses-*'));
+sub_ses = dir(fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], 'ses-*'));
 
 for ses_i = 1:numel(sub_ses) % for each scan session
 
     anatPrepDir = fullfile(projectDir, 'derivatives/anat_prep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
-    anatDir = fullfile(projectDir, ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'anat');
+    anatDir = fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'anat');
     fsDir = fullfile(projectDir, 'derivatives/freesurfer/');
 
     fileName = dir(fullfile(anatDir, '*_MPR1.nii.gz'));
