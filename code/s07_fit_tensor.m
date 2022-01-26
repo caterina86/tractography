@@ -69,6 +69,7 @@ for ses_i = 1:numel(dir(fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], 'se
 
     % Resample the Optic Radiations
     % resample the tract so that diffusion measures can be extracted from 100 evenly spaced points for all fibers
+    % TODO: if we will add the AFQ cleaning, change the name of the tracts (2thalFiltered_AFQ.tck)
     system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
         fullfile(fibDir,['dti' ses{ses_i} '_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
     system(['tckresample ' fullfile(fibDir, ['dti' ses{ses_i} '_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck ']) ...
