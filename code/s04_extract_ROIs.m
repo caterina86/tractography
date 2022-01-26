@@ -17,7 +17,7 @@ else
 end
 
 % Specify user variable
-user = 'bas'; % name of the user
+user = 'caterina'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server

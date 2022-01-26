@@ -19,7 +19,7 @@ else
 end
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 
 % Set the path
 switch user
@@ -46,7 +46,7 @@ hemi = {'lh', 'rh'};
 %% Fit the Tensor
 % Change the number of fibers extracted
 numFibers_OR = (1e4);
-numFibers_OT = (1e3); 
+numFibers_OT = (1e4); 
 
 sub_i = 1:length(sub); % loop over subjects (eventually)
 

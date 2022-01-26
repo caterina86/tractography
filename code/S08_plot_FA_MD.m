@@ -26,7 +26,7 @@ end
 
 %% Plot the FA/MD values extracted from the tract
 
-sub = {'sub-0228'}; % initials of the subject
+sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
 
 

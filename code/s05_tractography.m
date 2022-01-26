@@ -19,7 +19,7 @@ else
 end
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
@@ -72,16 +72,15 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     if fmriprep == 1
         t1FileCropBrain = fullfile(fmriprepDir,'anat/',['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain.nii.gz']);
         t1FileCropBrainDiffSpace = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
-        ttFile = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
-        t12dwi = fullfile(fmriprepDir, 'anat/t1_2_dwi_xfm.mat');
+        ttFile = fullfile(fmriprepDir, 'anat/', ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']); 
+        t12dwi = fullfile(fmriprepDir, 'anat/t1_2_dwi_xfm.mat'); 
     else
         t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
         ttFile = fullfile(anatPrepDir, ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
         t1FileCropBrain = fullfile(anatPrepDir, 't1_crop_brain.nii.gz');
-        t12dwi = fullfile(anatPrepDir, 't1_2_dwi_xfm.mat');
+        t12dwi = fullfile(anatPrepDir, 't1_2_dwi_xfm.mat'); 
 
     end
-
 
     if ~exist(fibDir) % Check if fiber directory exists
         mkdir(fibDir) % If not, create it
@@ -99,13 +98,15 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     bval = fullfile(topupDir, 'bval_combined.txt');
     mask = fullfile(eddyDir, [eddyB0FileBrain '_mask.nii.gz ']); % brain mask
 
-    % Generate normal orientation response function estimates
+    % Generate normal orientation response function estimates - dhollander
+    % algorithm
     system(['dwi2response dhollander ' eddy ' -fslgrad ' bvec ' ' bval ' ' ...
         fibDir '/responseEstimate_sfwm.txt ' ...
         fibDir '/responseEstimate_gm.txt ' ...
         fibDir '/responseEstimate_csf.txt -mask ' mask])
 
-    % Generate normal fiber orientation distribution estimates (FOD)
+    % Generate normal fiber orientation distribution estimates (FOD) -
+    % mdmt_csd algorithm
     system(['dwi2fod msmt_csd -mask ' mask ' ' eddy ' -fslgrad ' bvec ' ' bval ' ' ...
         fibDir '/responseEstimate_sfwm.txt ' fibDir '/wmfod.mif ' ...
         fibDir '/responseEstimate_gm.txt ' fibDir '/gmfod.mif ' ...
