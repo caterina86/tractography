@@ -9,9 +9,11 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl output
 if isfolder('/Applications/freesurfer/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '')
 elseif isfolder('/Applications/freesurfer/7.2.0/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+    setenv('SUBJECTS_DIR', '')
 else
     error('Cannot find freesurfer binary in or near /Applications/freesurfer')
 end
@@ -32,15 +34,13 @@ switch user
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
-        projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
+        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
         projectDir = '/Users/hannah/Documents/MRI';
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
-% setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer'])
-setenv('SUBJECTS_DIR', '') % This works but is a hack, need to fix proper path
 
 sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
@@ -89,37 +89,27 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     mkdir(roiDir)
 
     % extract the b0 from the eddy corrected image
-    system(['fslroi ' fullfile(eddyDir, eddyFile) ' ' fullfile(eddyDir, eddyB0File) ' 0 1']);
+    system(['fslroi ' fullfile(eddyDir, eddyFile) ' ' fullfile(eddyDir, eddyB0File) ' 0 1'])
 
     % Skull-strip the resulting b0 volume and generate a brain mask using bet
-    system(['bet ' fullfile(eddyDir, eddyB0File) ' ' fullfile(eddyDir, eddyB0FileBrain) ' -m -f 0.25']);
-
-    % Check the resolution of the T1 -> 0.8 isotropic
-    system(['fslinfo ' t1File ' >> ' fullfile(anatDir, 't1_info.txt')]);
-    info = importdata(fullfile(anatDir, 't1_info.txt'));
-    res = 0.8;
-
-    % Upsample the skull-stripped b0 DWI volume to the T1
-    system(['flirt -in ' fullfile(eddyDir, eddyB0FileBrain) ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
-       ' -out ' fullfile(eddyDir, eddyB0FileBrainOpt8) ' -applyisoxfm ' num2str(res)]);
-
-    % Verify the resolution of the diffusion data
-    system(['fslinfo ' fullfile(eddyDir, eddyB0FileBrainOpt8)]);
+    system(['bet ' fullfile(eddyDir, eddyB0File) ' ' fullfile(eddyDir, eddyB0FileBrain) ' -m -f 0.25'])
 
     if fmriprep == 1
         % Skip the neck from the T1
-        system(['robustfov -i ' t1File ' -r ' t1FileCrop]);
+        system(['robustfov -i ' t1File ' -r ' t1FileCrop])
+    else
     end
 
     % Skull-stripped the T1:
-    system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25']);
+    system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25'])
 
-    % Coregistration of the T1 to dwi space and extraction of the coregistration matrix
-    system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
+    % Coregistration of the T1 to dwi space (dwi spatial resolution) 
+    % and extraction of the coregistration matrix
+    system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' t1FileCropBrainDiffSpace ...
         ' -omat ' t12dwi ' -dof 6']);
 
-
+      
     %% extract ROIs
 
     % Subcortical segmentation
@@ -133,7 +123,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     % LGN
     % Convert segmented atlas to volume
-    system(['mri_label2vol --seg ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/mri/ThalSegNativeVol.nii.gz --regheader ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz']);
+    system(['mri_label2vol --seg ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/mri/ThalSegNativeVol.nii.gz --regheader ' fsDir '/mri/ThalamicNuclei.v12.T1.mgz'])
     % Extract left and right LGN from volume
     system(['fslmaths ' fsDir '/mri/ThalSegNativeVol.nii.gz -thr 8109 -uthr 8109 ' roiDir '/fs_lh_lgn.nii.gz']);
     system(['fslmaths ' fsDir '/mri/ThalSegNativeVol.nii.gz -thr 8209 -uthr 8209 ' roiDir '/fs_rh_lgn.nii.gz']);
@@ -144,7 +134,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         % Reslice to the T1
         system(['mri_convert -rt nearest -rl ' t1FileCropBrain ' ' ...
             fullfile(roiDir, ['fs_' hemi{jj} '_lgn.nii.gz ']) ....
-            fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz'])]);
+            fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz'])])
 
         % Binarize ROI
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz']) ' -bin ' ...
@@ -152,10 +142,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
         % Coregister the LGN to diffusion space
         system(['flirt -in ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice.nii.gz']) ...
-            ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
+            ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
             ' -out ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']) ...
             ' -init ' t12dwi ' -applyxfm']);
-
+        
         % Binarize the ROI
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']) ' -bin ' ...
             fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz'])]);
@@ -167,28 +157,26 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     for jj = 1:length(hemi)
 
         % mri_label2vol for xh.V1.label file
-        system(['mri_label2vol --label ' fsDir '/label/' hemi{jj} '.V1_exvivo.label --temp ' ...
-            fsDir '/mri/orig.mgz --o ' fsDir '/label/' hemi{jj} '_V1.nii.gz --identity --fillthresh .3 --proj frac 0 1 .1 --hemi ' ...
-            hemi{jj} ' --subject ' fsDir]);
+        system(['mri_label2vol --label ' fsDir '/label/' hemi{jj} '.V1_exvivo.label --temp ' fsDir '/mri/orig.mgz --o ' fsDir '/label/' hemi{jj} '_V1.nii.gz --identity --fillthresh .3 --proj frac 0 1 .1 --hemi ' hemi{jj} ' --subject ' fsDir])
 
         % Smooth nifti V1 ROI using -fmedian flag
-        system(['fslmaths ' fsDir '/label/' hemi{jj} '_V1.nii.gz -fmedian ' fsDir '/label/' hemi{jj} '_V1.nii.gz']);
+        system(['fslmaths ' fsDir '/label/' hemi{jj} '_V1.nii.gz -fmedian ' fsDir '/label/' hemi{jj} '_V1.nii.gz'])
 
         % Reslice to the T1
         system(['mri_convert -rt nearest -rl ' t1FileCropBrain ' ' ...
             fullfile(fsDir, ['label/' hemi{jj} '_V1.nii.gz ']) ....
-            fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz'])]);
+            fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz'])])
 
         % Binarize smoothed output
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz']) ' -bin ' ...
-            fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz'])]);
+            fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz'])])
 
         % Coregister the V1 to diffusion space
         system(['flirt -in ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice.nii.gz']) ...
-            ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
+            ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
             ' -out ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']) ...
             ' -init ' t12dwi ' -applyxfm']);
-
+        
         % Binarize
         system(['fslmaths ' fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']) ' -bin ' ...
             fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz'])]);
@@ -200,7 +188,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Convert aparc+aseg.mgz to nifti
     system(['mri_convert ' fsDir '/mri/aparc+aseg.mgz ' fsDir '/mri/aparc+aseg.nii.gz']) % Reslice aparc+aseg to t1 resolution and save to t1 directory
 
-    % Extract Optic Chiasm from freesurfer (85), smooth the ROI and reslice to the T1
+    % Extract Optic Chiams from freesurfer (85), smooth the ROI and reslice to the T1
     system(['fslmaths ' fsDir '/mri/aparc+aseg.nii.gz ' ...
         '-thr 85 -uthr 85 ' fullfile(roiDir, 'fs_oc.nii.gz')]);
 
@@ -215,15 +203,17 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     % Coregister the OC to diffusion space
     system(['flirt -in ' fullfile(roiDir, 'fs_oc_T1Reslice.nii.gz') ...
-        ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
+        ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace.nii.gz') ...
         ' -init ' t12dwi ' -applyxfm']);
 
     % Expand the Optic Chiasm:
     system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz')]);
-    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz')]);
-    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz')]);
-    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz') ' -bin ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz')]); % binarize the mask
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz')])
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz') ' -dilM ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz')])
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz') ' -bin ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz')]) % binarize the mask
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz') ' -bin ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz')]) % binarize the mask
+    system(['fslmaths ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz') ' -bin ' fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_dilM.nii.gz')]) % binarize the mask
 
 
 
@@ -247,10 +237,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     % Coregister the OC to diffusion space
     system(['flirt -in ' fullfile(roiDir, 'fs_thalamus_T1Reslice.nii.gz') ...
-        ' -ref ' fullfile(eddyDir, eddyB0FileBrainOpt8) ...
+        ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' fullfile(roiDir, 'fs_thalamus_T1Reslice_diffspace.nii.gz') ...
         ' -init ' t12dwi ' -applyxfm']);
-
+    
     % Binarize
     system(['fslmaths ' fullfile(roiDir, 'fs_thalamus_T1Reslice_diffspace.nii.gz') ' -bin ' ...
         fullfile(roiDir, 'fs_thalamus_T1Reslice_diffspace.nii.gz')]); % save in ROI folder
@@ -265,8 +255,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     system(['fslmaths '  fullfile(roiDir, 'fs_thalamus_sub_LGNs_diffspace.nii.gz') ' -bin ' ...
          fullfile(roiDir, 'fs_thalamus_sub_LGNs_diffspace.nii.gz')]);
 
+
 end
 
 % IMPORTANT: Check always the FOV, resolution and location of the ROIs over the
 % diffusion image and the T1 coregistered to the diffusion.
-disp('All done!')
