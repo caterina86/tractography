@@ -1,4 +1,3 @@
-
 % Probabilistic tractography (mrtirx3)
 clearvars
 
@@ -9,17 +8,15 @@ setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl output
 if isfolder('/Applications/freesurfer/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
-    setenv('SUBJECTS_DIR', '')
 elseif isfolder('/Applications/freesurfer/7.2.0/bin')
     setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
     PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
-    setenv('SUBJECTS_DIR', '')
 else
     error('Cannot find freesurfer binary in or near /Applications/freesurfer')
 end
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'bas'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
 
 % choose 'server' if you are working on the server
@@ -35,12 +32,13 @@ switch user
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
-        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
+        projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
         projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output
 end
+setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); 
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
 sub = {'0228'}; % initials of the subject
@@ -82,10 +80,10 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     end
 
-    if ~exist(fibDir) % Check if fiber directory exists
-        mkdir(fibDir) % If not, create it
-    else
+    if isfolder(fibDir) % Assume an aborted run
+        delete(fullfile(fibDir, '*'))
     end
+    mkdir(fibDir);
 
     % Generate 5tt mask (aligned with T1 volume) -> ACT
     system(['5ttgen fsl ' t1FileCropBrainDiffSpace ' ' ttFile ' -premasked']);
@@ -144,7 +142,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         % Convert fibers to DSIStudio format
         outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR(1)/1000) 'k_DSIStudio.tck']);
         % Convert to DSIStudio format
-        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
+        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage]);
 
     end
 
@@ -164,13 +162,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         % Convert fibers to DSIStudio format
         outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT(1)/1000) 'k_DSIStudio.tck']);
         % Convert to DSIStudio format
-        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
+        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage]);
 
     end
-
-
-
 end
-
-
-
