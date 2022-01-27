@@ -90,7 +90,8 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
 
         % Optic Tract:
-        numFibers_OT = (1e4); % indicate the correct number of fibers created
+        % numFibers_OT = (1e4); % indicate the correct number of fibers created
+        numFibers_OT = (1e3); % indicate the correct number of fibers created
         roi4 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz');
 
         system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi4 ' -ends_only ' ...
@@ -115,8 +116,6 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 %         write_mrtrix_tracks(fgdump, afq_cleaned_out_file); 
 
     end
-
-
 end
-
+disp('All done!')
           
