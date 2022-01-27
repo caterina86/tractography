@@ -37,7 +37,7 @@ switch user
         projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % location output
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
-% addpath(genpath(fullfile(projectDir, 'toolbox'))); % add vistasoft toolbox -> for AFQ cleaning
+addpath(genpath('/Volumes/Vision/Matlab/Toolbox/vistasoft')); % add vistasoft toolbox -> for AFQ cleaning
 
 sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
@@ -56,7 +56,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     fibDir = fullfile(projectDir, '/derivatives/mrtrix3', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
 
     % parametes for the AFQ cleaning
-    % maxDist = 4; maxLen = 4; numNodes = 25; M = 'mean'; count = 1; show = 1;
+    maxDist = 4; maxLen = 4; numNodes = 25; M = 'mean'; count = 1; show = 1;
     
     for jj = 1:length(hemi)
 
@@ -76,17 +76,17 @@ for ses_i = 1:numel(sub_ses) % for each scan session
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck'])
 
        
-%         tckedit_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck'];
-%         afq_cleaned_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'];
-%         fgdump = read_mrtrix_tracks(tckedit_out_file);  
-%         fg = fgRead(tckedit_out_file);
-%         [~, keep]=AFQ_removeFiberOutliers(fg,maxDist,maxLen,numNodes,M,count,show);
-%         ind = find(keep==0); %find removed fibers
-%         fgdump.data(ind)=[]; % delete removed fibers
-%         numel(ind); % removed fibers
-%         fgdump.total_count=numel(fgdump.data);
-%         fgdump.count=numel(fgdump.data);
-%         write_mrtrix_tracks(fgdump, afq_cleaned_out_file); % save the output as .tck 
+        tckedit_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered.tck'];
+        afq_cleaned_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'];
+        fgdump = read_mrtrix_tracks(tckedit_out_file);  
+        fg = fgRead(tckedit_out_file);
+        [~, keep]=AFQ_removeFiberOutliers(fg,maxDist,maxLen,numNodes,M,count,show);
+        ind = find(keep==0); %find removed fibers
+        fgdump.data(ind)=[]; % delete removed fibers
+        numel(ind); % removed fibers
+        fgdump.total_count=numel(fgdump.data);
+        fgdump.count=numel(fgdump.data);
+        write_mrtrix_tracks(fgdump, afq_cleaned_out_file); % save the output as .tck 
 
 
         % Optic Tract:
@@ -102,17 +102,17 @@ for ses_i = 1:numel(sub_ses) % for each scan session
            fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck'])
 
 
-%         tckedit_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck'];
-%         afq_cleaned_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'];
-%         fgdump = read_mrtrix_tracks(tckedit_out_file);  
-%         fg = fgRead(tckedit_out_file);
-%         [~, keep]=AFQ_removeFiberOutliers(fg,maxDist,maxLen,numNodes,M,count,show);
-%         ind = find(keep==0); %find removed fibers
-%         fgdump.data(ind)=[]; % delete removed fibers
-%         numel(ind); % removed fibers
-%         fgdump.total_count=numel(fgdump.data);
-%         fgdump.count=numel(fgdump.data);
-%         write_mrtrix_tracks(fgdump, afq_cleaned_out_file); 
+        tckedit_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered.tck'];
+        afq_cleaned_out_file = [fibDir '/dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'];
+        fgdump = read_mrtrix_tracks(tckedit_out_file);  
+        fg = fgRead(tckedit_out_file);
+        [~, keep]=AFQ_removeFiberOutliers(fg,maxDist,maxLen,numNodes,M,count,show);
+        ind = find(keep==0); %find removed fibers
+        fgdump.data(ind)=[]; % delete removed fibers
+        numel(ind); % removed fibers
+        fgdump.total_count=numel(fgdump.data);
+        fgdump.count=numel(fgdump.data);
+        write_mrtrix_tracks(fgdump, afq_cleaned_out_file); 
 
     end
 
