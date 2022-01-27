@@ -1,3 +1,0 @@
-mrconvert /Users/rokers/Dropbox/MRI/Sample_dMRI/derivatives/eddy/sub-0228/ses-01/sub-0228_ses-01_dti01_eddy_corrected_data.nii.gz /Users/rokers/Documents/GitHub/tractography/code/dwi2response-tmp-MJI56C/dwi.mif -strides 0,0,0,1 -fslgrad /Users/rokers/Dropbox/MRI/Sample_dMRI/derivatives/eddy/sub-0228/ses-01/sub-0228_ses-01_dti01_eddy_corrected_data.eddy_rotated_bvecs /Users/rokers/Dropbox/MRI/Sample_dMRI/derivatives/topup/sub-0228/ses-01/bval_combined.txt
-mrconvert /Users/rokers/Dropbox/MRI/Sample_dMRI/derivatives/eddy/sub-0228/ses-01/sub-0228_ses-01_dti01_eddy_corrected_data_b0_brain_mask.nii.gz /Users/rokers/Documents/GitHub/tractography/code/dwi2response-tmp-MJI56C/mask.mif -datatype bit
-maskfilter mask.mif erode eroded_mask.mif -npass 3

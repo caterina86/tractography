@@ -77,7 +77,6 @@ for ses_i = 1:numel(sub_ses) % for each scan session
         ttFile = fullfile(anatPrepDir, ['sub-' sub{sub_i} '_' 'ses-' ses{ses_i} '_5tt.nii.gz']);
         t1FileCropBrain = fullfile(anatPrepDir, 't1_crop_brain.nii.gz');
         t12dwi = fullfile(anatPrepDir, 't1_2_dwi_xfm.mat'); 
-
     end
 
     if isfolder(fibDir) % Assume an aborted run
@@ -146,7 +145,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     end
 
-    % Optic Tract - less number of fibers for a matter of time
+    % Optic Tract - larger number of fibers take more time
     numFibers_OT = [1e4; 1e4];
 
     for jj = 1:length(hemi)
