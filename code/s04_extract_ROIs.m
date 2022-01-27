@@ -258,3 +258,4 @@ end
 
 % IMPORTANT: Check always the FOV, resolution and location of the ROIs over the
 % diffusion image and the T1 coregistered to the diffusion.
+disp('All done!')

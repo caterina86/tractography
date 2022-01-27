@@ -38,6 +38,8 @@ switch user
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 addpath(genpath('/Volumes/Vision/Matlab/Toolbox/vistasoft')); % add vistasoft toolbox -> for AFQ cleaning
+addpath(genpath('/Volumes/Vision/Matlab/Toolbox/AFQ')); % add vistasoft toolbox -> for AFQ cleaning
+
 
 sub = {'0228'}; % initials of the subject
 ses = {'01'}; % ID of the session
