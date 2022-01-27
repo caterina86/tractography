@@ -19,7 +19,7 @@ else
 end
 
 % Specify user variable
-user = 'caterina'; % name of the user
+user = 'bas'; % name of the user
 
 % Set the path
 switch user
@@ -30,7 +30,7 @@ switch user
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}
-        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
+        projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
     case {'Dalia'}
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
@@ -112,3 +112,4 @@ for ses_i = 1:numel(dir(fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], 'se
 
 
 end
+disp('All done!')

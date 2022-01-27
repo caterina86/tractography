@@ -147,7 +147,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     end
 
     % Optic Tract - less number of fibers for a matter of time
-    numFibers_OT = [1e3; 1e3];
+    numFibers_OT = [1e4; 1e4];
 
     for jj = 1:length(hemi)
 
