@@ -64,7 +64,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
         % Run tckedit, excluding fibers terminating in thalamus outside of LGNs
         % Optic Radiations:
+        % TODO: Get #fibers from filename
         numFibers_OR = (1e4);
+        
         roi1 = fullfile(roiDir, ['fs_' hemi{jj} '_lgn_T1Reslice_diffspace.nii.gz']);
         roi2 = fullfile(roiDir, ['fs_' hemi{jj} '_V1_T1Reslice_diffspace.nii.gz']);
         roi3 = fullfile(roiDir, 'fs_thalamus_sub_LGNs_diffspace.nii.gz');
@@ -92,8 +94,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
 
         % Optic Tract:
-        % numFibers_OT = (1e4); % indicate the correct number of fibers created
-        numFibers_OT = (1e3); % indicate the correct number of fibers created
+        % TODO: Get #fibers from filename
+        numFibers_OT = (1e4); % indicate the number of fibers created
+
         roi4 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz');
 
         system(['tckedit -exclude ' roi3 ' -include ' roi1 ' -include ' roi4 ' -ends_only ' ...
