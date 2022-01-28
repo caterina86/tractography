@@ -27,8 +27,8 @@ function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, 
 
     % Generate 5tt mask (aligned with T1 volume) -> ACT
     system(['5ttgen fsl ' t1FileCropBrainDiffSpace ' ' ttFile ' -premasked']);
-
-
+        
+    
     %% Whole brain tractography
     % Define paths (convenience for commands below)
     eddy = fullfile(eddyDir, eddyFile);

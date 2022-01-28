@@ -31,13 +31,12 @@ function [projectDir] = define_paths(user)
         case {'hannah'}
             projectDir = '/Users/hannah/Documents/MRI';
     end
-    
+
     setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); % subject directory for freesurfer
     addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
-    % addpath(genpath('/Volumes/Vision/Matlab/Toolbox/vistasoft')); % add vistasoft toolbox -> for AFQ cleaning
-    % addpath(genpath('/Volumes/Vision/Matlab/Toolbox/AFQ')); % add AFQ toolbox -> for AFQ cleaning
-    addpath(genpath('/Users/cp3488/Data/GitHub/Prakash/Toolbox/vistasoft')); % add vistasoft toolbox -> for AFQ cleaning
-    addpath(genpath('/Users/cp3488/Data/GitHub/Prakash/Toolbox/AFQ')); % add AFQ toolbox -> for AFQ cleaning
+    addpath(genpath('/Volumes/Vision/Matlab/Toolbox/vistasoft')); % add vistasoft toolbox -> for AFQ cleaning
+    addpath(genpath('/Volumes/Vision/Matlab/Toolbox/AFQ')); % add AFQ toolbox -> for AFQ cleaning
+
 
 end
