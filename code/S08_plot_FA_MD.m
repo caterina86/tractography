@@ -57,6 +57,7 @@ plot(lh_MD_OR.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('MD Left OR');
 
+figure;
 plot(rh_FA_OR.data(1:200,10:90)');
 xlabel('position along tract'); ylabel('FA');
 title('FA Right OR')
