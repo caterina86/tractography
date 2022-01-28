@@ -57,7 +57,7 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     roiDir = fullfile(projectDir, '/derivatives/ROIs', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
     fibDir = fullfile(projectDir, '/derivatives/mrtrix3', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
 
-    % parametes for the AFQ cleaning
+    % parameters for the AFQ cleaning
     maxDist = 4; maxLen = 4; numNodes = 25; M = 'mean'; count = 1; show = 1;
     
     for jj = 1:length(hemi)

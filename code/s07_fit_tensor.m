@@ -45,6 +45,7 @@ hemi = {'lh', 'rh'};
 
 %% Fit the Tensor
 % Change the number of fibers extracted
+% TODO: Get #fibers from filename
 numFibers_OR = (1e4);
 numFibers_OT = (1e4); 
 
