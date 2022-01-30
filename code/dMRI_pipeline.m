@@ -61,7 +61,7 @@ for sub_i = 1:length(sub) % loop over subjects
         s05_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OT, numFibers_OR, hemi)
         
         disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
-        s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers, hemi, maxDist, maxLen, numNodes, M, count, show)
+        s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, hemi, maxDist, maxLen, numNodes, M, count, show)
         
         disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
         s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers)
