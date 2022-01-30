@@ -64,7 +64,7 @@ for sub_i = 1:length(sub) % loop over subjects
         s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
         
         disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
-        s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers)
+        s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
 
     end
 
