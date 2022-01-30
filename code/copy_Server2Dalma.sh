@@ -14,14 +14,14 @@ netID=cp3488
 #DATAROOT=/Volumes/Vision/MRI/Sample_dMRI
 DATAROOT=/Users/cp3488/Documents/tractography/Sample_dMRI
 
-for subj in "0228"; do
+for subj in "0201"; do
   for ses in 01; do
 
   echo subject sub-${subj} ses-${ses}
 
   # Copy rawdata from the local PC/server to Dalma
   rsync -av $DATAROOT/derivatives/topup/sub-${subj}/ses-${ses} $netID@dalma.abudhabi.nyu.edu:/scratch/$netID/MRI/Sample_dMRI/derivatives/topup/sub-${subj}/
-  # rsync -av $DATAROOT/acqparams.txt $netID@dalma.abudhabi.nyu.edu:/scratch/$netID/MRI/Sample_dMRI/acqparams.txt
+  rsync -av $DATAROOT/rawdata/acqparams.txt $netID@dalma.abudhabi.nyu.edu:/scratch/$netID/MRI/Sample_dMRI/acqparams.txt
 
   done
 done
