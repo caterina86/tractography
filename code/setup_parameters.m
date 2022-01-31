@@ -4,7 +4,7 @@
 
 %% subject/session/etc:
 sub = {'sub-0152'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
-ses = {'ses-01'}; % ID of the session
+ses = {'ses-01'}; % session id
 hemi = {'lh', 'rh'};
 
 num_dir = {'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
@@ -43,4 +43,5 @@ switch user
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
         toolboxDir = '~/Documents/MATLAB/toolbox';
 end
+projectDir = char(py.os.path.realpath(py.os.path.expanduser(projectDir))); % convert relative to absolute path
 define_paths(projectDir, toolboxDir); % Add all relevant paths
