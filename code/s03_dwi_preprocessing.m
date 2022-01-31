@@ -58,21 +58,25 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     else
 
         for ii = 1:length(myFiles)
+            
+            % write the file used on the command window
+            disp(['denoise of ' myFiles{ii}])
+            
             % copy the original AP and PA dwi images to derivatives/topup
-            copyfile(fullfile(dwiDir, apFile), fullfile(unprocessedTopupDir, myFiles{ii}));
+            copyfile(fullfile(dwiDir, myFiles{ii}), fullfile(unprocessedTopupDir, myFiles{ii}));
 
             % Denoise the data - Correct for warping artifacts due to the phase encoding direction
             % input -> topup/unprocesses/sub-_ses-_AP_dwi.nii.gz
             % output -> topup/sub-_ses-_AP_dwi.nii.gz
-            system(['dwidenoise -force ' fullfile(unprocessedTopupDir, apFile) ' ' fullfile(topupDir, myFiles{ii})]);
+            system(['dwidenoise -force ' fullfile(unprocessedTopupDir, myFiles{ii}) ' ' fullfile(topupDir, myFiles{ii})]);
 
             % Calculate and check the residuals.
             % The lack of anatomy in the residual maps is a marker of accuracy and signal-preservation during denoising
             % original dwi - denoised dwi = residuals
-            system(['mrcalc ' fullfile(unprocessedTopupDir, apFile) ' '  fullfile(topupDir, myFiles{ii}) ' -subtract ' fullfile(topupDir, myResFiles{ii})]);
+            system(['mrcalc ' fullfile(unprocessedTopupDir, myFiles{ii}) ' '  fullfile(topupDir, myFiles{ii}) ' -subtract ' fullfile(topupDir, myResFiles{ii})]);
 
             % correct for Gibbs Ringing Artifacts
-            system(['mrdegibbs -force ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, myFiles{ii})]);
+            system(['mrdegibbs -force ' fullfile(topupDir, myFiles{ii}) ' ' fullfile(topupDir, myFiles{ii})]);
 
         end
     end

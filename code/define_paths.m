@@ -29,4 +29,4 @@ else
 end
 
 %% user code path
-addpath(genpath(fullfile(projectDir, 'code'))); 
+addpath(genpath(fullfile(projectDir, 'code')));
