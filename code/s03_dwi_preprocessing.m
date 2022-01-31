@@ -50,7 +50,9 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
     myFiles = {apFile, paFile};
     myResFiles = {apResFile, paResFile};
-
+    
+    % TODO: When s03 is aborted a zero byte file is created, caussing a
+    % skip
     if exist(fullfile(topupDir, apFile), 'file')
         disp('skipping denoise')
     else
