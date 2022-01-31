@@ -15,7 +15,7 @@ clearvars;
 % This script will then remain static
 
 % Specify user
-user = 'class'; % name of the user
+user = 'caterina'; % name of the user
 projectDir = define_paths(user);
 % edit define_paths to check the location of your projectDir
 

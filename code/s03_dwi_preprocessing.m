@@ -56,6 +56,10 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     else
 
         for ii = 1:length(myFiles)
+            
+            % write the file used on the command window
+            disp(['denoise of ' myFiles{ii}])
+            
             % copy the original AP and PA dwi images to derivatives/topup
             copyfile(fullfile(dwiDir, myFiles{ii}), fullfile(unprocessedTopupDir, myFiles{ii}));
 

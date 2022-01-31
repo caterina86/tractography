@@ -5,23 +5,29 @@ function [projectDir] = define_paths(user)
     switch user
         case {'server'}
             projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
+            toolboxPath = '/Volumes/Vision/Matlab/Toolbox'; % location output
         case {'caterina'}
             projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
+            toolboxPath = '~/Data/Github/Prakash/Toolbox';
         case {'Omnia'}
             projectDir = '~/Documents/GitHub/tractography/code'; % location output
+            toolboxPath = '/Volumes/Vision/Matlab/Toolbox'; % location output
         case {'bas'}
             projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
             toolboxPath = '~/Documents/MATLAB/toolbox';
         case {'Dalia'}
             projectDir = '~/Desktop/Sample_dMRI'; % location output
+            toolboxPath = '/Volumes/Vision/Matlab/Toolbox'; % location output
         case {'hannah'}
             projectDir = '/Users/hannah/Documents/MRI';
+            toolboxPath = '/Volumes/Vision/Matlab/Toolbox'; % location output
         case {'class'}
             projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
             toolboxPath = '~/Documents/MATLAB/toolbox';
     end
     addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
+    
     %% setup fsl and freesurfer paths
     setenv('FSLDIR', '/usr/local/fsl' );
     setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % define fsl output
