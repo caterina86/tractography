@@ -54,7 +54,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     DenoisedFile_AP=dir(fullfile(topupDir, apFile));
     DenoisedFile_PA=dir(fullfile(topupDir, paFile));
         
-    if DenoisedFile_AP.bytes > 0 && DenoisedFile_PA.bytes > 0 % if the files are not empty
+    if ~isempty(DenoisedFile_AP) && ~isempty(DenoisedFile_PA) && DenoisedFile_AP.bytes > 0 && DenoisedFile_PA.bytes > 0 % if the files exist and are not empty
         disp('skipping denoise')
     else  
         for ii = 1:length(myFiles) 
