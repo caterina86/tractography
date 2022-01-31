@@ -23,12 +23,8 @@ else
 end
 
 % Specify user variable
-user = 'server'; % name of the user
+user = 'caterina'; % name of the user
 fmriprep = 1; % 1 -> we performed fmriprep; 0 -> we did not perform fmriprep
-
-% choose 'server' if you are working on the server
-% add your name if you are working on your local PC. In this case you
-% should add your files locations in the following 'switch user'
 
 % Set the path
 switch user
@@ -60,7 +56,7 @@ sub_ses = dir(fullfile(projectDir, 'rawdata',  ['sub-' sub{sub_i}], 'ses-*'));
 
 for ses_i = 1:numel(sub_ses) % for each scan session
 
-    fibDir = fullfile(projectDir, '/derivatives/mrtrix3', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
+    fibDir = fullfile(projectDir, '/derivatives/mrtrix3_OpticNerve', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
     fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
     eddyDir = fullfile(projectDir, 'derivatives/eddy', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
     topupDir = fullfile(projectDir, 'derivatives/topup', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);
@@ -86,8 +82,9 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     end
 
-    
-    
+    mkdir(fibDir);
+
+
     % Create a point for the beginning and end of the optic nerve, in the T1 native space
     system(['fslmaths ' fullfile(anatDir, 't1.nii.gz' ) ' -mul 0 -add 1 -roi 116 1 195 1 181 1 0 1 ' ...
         fullfile(roiDir, 'rhEyePointUp')])
@@ -140,18 +137,22 @@ for ses_i = 1:numel(sub_ses) % for each scan session
 
     end
 
-    % Which mask for the dwi2fod?
     % white matter mask extacted from Freesurfer
-    system(['mri_convert ' fsDir '/mri/wm.seg.mgz ' fsDir '/mri/wm.seg.nii.gz'])
+    system(['mri_convert ' fsDir '/mri/wm.seg.mgz ' fsDir '/mri/wm.seg.nii.gz']);
     system(['flirt -in ' fsDir '/mri/wm.seg.nii.gz -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' fsDir '/mri/wm_seg_diffspace.nii.gz -dof 6']);
-    system(['fslmaths ' fsDir '/mri/wm_seg_diffspace.nii.gz -bin ' fsDir '/mri/wm_seg_diffspace.nii.gz'])
+    system(['fslmaths ' fsDir '/mri/wm_seg_diffspace.nii.gz -bin ' fsDir '/mri/wm_seg_diffspace.nii.gz']);
+
+    % try to use the binarized b0 extracted from the diffusion scans
+    system(['fslmaths ' fullfile(topup, [subject '_'  session '_AP_PA_dwi_b0.nii.gz']) ...
+    ' -bin'  fullfile(topup, [subject '_'  session '_AP_PA_dwi_b0_bin.nii.gz'])]);
 
     % Define paths (convenience for commands below)
     eddy = fullfile(eddyDir, eddyFile);
     bvec = fullfile(eddyDir, [['sub-' sub{sub_i}], ['_ses-' ses{ses_i}], '_dti' ses{ses_i} '_eddy_corrected_data.eddy_rotated_bvecs']);
     bval = fullfile(topupDir, 'bval_combined.txt');
-    mask = fullfile(fsDir, 'mri/wm_seg_diffspace.nii.gz'); % mask of white matter
+    % mask = fullfile(fsDir, 'mri/wm_seg_diffspace.nii.gz'); % mask of white matter
+    mask = fullfile(topup, [subject '_'  session'_AP_PA_dwi_b0_bin.nii.gz']); % mask extracted from the diffusion scan
 
     % Generate normal fiber orientation distribution estimates (FOD) -
     % white matter mask
@@ -163,32 +164,28 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     % Generate normal fiber orientation distribution estimates (FOD) - no
     % mask
     system(['dwi2fod msmt_csd ' eddy ' -fslgrad ' bvec ' ' bval ' ' ...
-        fibDir '/responseEstimate_sfwm.txt ' fibDir '/wmfod_nomask.mif ' ...
-        fibDir '/responseEstimate_gm.txt ' fibDir '/gmfod_nomask.mif ' ...
-        fibDir  '/responseEstimate_csf.txt ' fibDir '/csffod_nomask.mif '])
+        fibDir '/responseEstimate_sfwm.txt ' fibDir '/wmfod.mif ' ...
+        fibDir '/responseEstimate_gm.txt ' fibDir '/gmfod.mif ' ...
+        fibDir  '/responseEstimate_csf.txt ' fibDir '/csffod.mif '])
 
-   
-    
+
+
     % Optic Nerve - less number of fibers for a matter of time
     numFibers_ON = [1e2; 1e2];
 
-    wmfod = fullfile(fibDir, 'wmfod_nomask.mif'); % extracted from eddy_corrected_data.nii.gz aligned to T1-acpc space
+    wmfod = fullfile(fibDir, 'wmfod.mif'); % extracted from eddy_corrected_data.nii.gz aligned to T1-acpc space
 
     for jj = 1:length(hemi)
 
         maxLength = 150; % to avoid having long fibers
         outFile = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_ON_' num2str(numFibers_ON(1)/1000) 'k.tck']);
-        roi1 = fullfile(roiDir, [hemi{jj} 'EyeSphere5Up_bin_T1Reslice_diffspace.nii.gz']); % Eye
-        roi2 = fullfile(roiDir, [hemi{jj} 'EyeSphere5Down_bin_T1Reslice_diffspace.nii.gz']); % Freesurfer Optic Chiasm expanded -> 3dil
+        roi1 = fullfile(roiDir, [hemi{jj} 'EyeSphere5Up_bin_T1Reslice_diffspace.nii.gz']);
+        roi2 = fullfile(roiDir, [hemi{jj} 'EyeSphere5Down_bin_T1Reslice_diffspace.nii.gz']);
 
         % Run tractography
         system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' roi1 ' -seed_image ' roi2 ' -include ' roi1 ' -include ' roi2 ' -stop ' '-select ' num2str(numFibers_ON(1)) ' -seeds 0 ' '-maxlength ' num2str(maxLength)])
 
-        % Convert fibers to DSIStudio format
-        outFileImage = fullfile(fibDir, ['dti' ses{ses_i} '_' hemi{jj} '_fsAnatomical_ACT_ON_' num2str(numFibers_ON(1)/1000) 'k_DSIStudio.tck']);
-        % Convert to DSIStudio format
-        system(['tckconvert -scanner2image ' eddy ' ' outFile ' ' outFileImage])
 
     end
-    
+
 end
