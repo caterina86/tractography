@@ -36,6 +36,7 @@ function [projectDir] = define_paths(user)
     end
     setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); % subject directory for freesurfer
 
+    
     %% setup toolboxes 
     % make sure toolboxes are in ~/Documents/matlab/toolbox
     if isfolder(fullfile(toolboxPath, 'vistasoft'))

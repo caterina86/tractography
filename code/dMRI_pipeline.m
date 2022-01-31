@@ -20,7 +20,8 @@ projectDir = define_paths(user);
 % edit define_paths to check the location of your projectDir
 
 % Parameters to be setup:
-sub = {'sub-0201'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
+sub = {'sub-0201'}; % initials of the subject
+%sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
