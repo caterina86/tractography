@@ -50,14 +50,14 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
     myFiles = {apFile, paFile};
     myResFiles = {apResFile, paResFile};
-    
+
     DenoisedFile_AP=dir(fullfile(topupDir, apFile));
     DenoisedFile_PA=dir(fullfile(topupDir, paFile));
-        
+
     if exist(fullfile(topupDir, apFile), 'file') && exist(fullfile(topupDir, paFile), 'file') && DenoisedFile_AP.bytes > 0 && DenoisedFile_PA.bytes > 0 % if the files are not empty
         disp('skipping denoise')
-    else  
-        for ii = 1:length(myFiles) 
+    else
+        for ii = 1:length(myFiles)
             % write the file used on the command window
             disp(['denoise of ' myFiles{ii}])
             % copy the original AP and PA dwi images to derivatives/topup
@@ -78,7 +78,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
         end
     end
-   
+
 
     %% topup correction
 
@@ -119,8 +119,8 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         acqparams = [0 1 0 0.05; 0 -1 0 0.05];
         writematrix(acqparams,fullfile(projectDir, 'rawdata', 'acqparams.txt'),'Delimiter','space');
     end
-    
-    
+
+
     % Run the Topup correction
     if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
         disp('skipping topup')
