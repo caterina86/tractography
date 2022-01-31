@@ -14,7 +14,7 @@ export BRAIMCORE_ENGINE=hcp_cuda10.0
 # *** Set tmp working dir ***
 #sub=$1
 #ses=$2
-sub=sub-0201
+sub=sub-0152
 ses=ses-01
 
 if [ ! -e /scratch/cp3488/MRI/Sample_dMRI/derivatives/eddy ]; then
