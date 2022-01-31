@@ -14,7 +14,7 @@ netID=cp3488
 #DATAROOT=/Volumes/Vision/MRI/Sample_dMRI
 DATAROOT=/Users/cp3488/Documents/tractography/Sample_dMRI
 
-for subj in "sub-0201"; do
+for subj in "sub-0152"; do
   for ses in "ses-01"; do
 
   echo subject ${subj} ${ses}

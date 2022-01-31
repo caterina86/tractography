@@ -90,6 +90,6 @@ function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, 
 
     end
     
-    disp('All done!')
+    disp('Tractography done!')
     
 end

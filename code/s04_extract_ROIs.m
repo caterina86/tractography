@@ -199,7 +199,7 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
          fullfile(roiDir, 'fs_thalamus_sub_LGNs_diffspace.nii.gz')]);
 
 
-     disp('All done!')
+     disp('ROIs extraction!')
 
 end
 

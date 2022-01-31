@@ -120,9 +120,10 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         writematrix(acqparams,fullfile(projectDir, 'rawdata', 'acqparams.txt'),'Delimiter','space');
     end
 
-
+    
+    TopupFile=dir(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'));
     % Run the Topup correction
-    if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
+    if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file') && TopupFile.bytes > 0
         disp('skipping topup')
     else
         disp('running topup')
@@ -172,4 +173,6 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     end
 
 
+    disp('dwi preprocessing done!')
+    
 end
