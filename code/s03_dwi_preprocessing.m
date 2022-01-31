@@ -19,7 +19,7 @@ else
 end
 
 % Specify user
-user = 'bas'; % name of the user
+user = 'class'; % name of the user
 % choose 'server' if you are working on the server
 % add your name if you are working on your local PC. In this case you
 % should add your files locations in the following 'switch user'
@@ -41,6 +41,8 @@ switch user
         projectDir = '~/Desktop/Sample_dMRI'; % location output
     case {'hannah'}
         projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; %
+    case {'class'}
+        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
 end
 addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
 
