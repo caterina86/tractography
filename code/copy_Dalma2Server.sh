@@ -17,7 +17,7 @@ DATAROOT=/Users/cp3488/Documents/tractography/Sample_dMRI
 for subj in "sub-0201"; do
   for ses in "ses-01"; do
 
-  echo subject sub-${subj} ses-${ses}
+  echo subject ${subj} ${ses}
 
   # Copy rawdata from the local PC/server to Dalma
   rsync -av $netID@dalma.abudhabi.nyu.edu:/scratch/$netID/MRI/Sample_dMRI/derivatives/eddy/${subj}/ $DATAROOT/derivatives/eddy/${subj}/

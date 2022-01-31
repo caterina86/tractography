@@ -51,16 +51,15 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     myFiles = {apFile, paFile};
     myResFiles = {apResFile, paResFile};
     
-    DenoisedFile=dir(fullfile(topupDir, apFile));
-    if DenoisedFile.bytes > 0
+    DenoisedFile_AP=dir(fullfile(topupDir, apFile));
+    DenoisedFile_PA=dir(fullfile(topupDir, paFile));
+        
+    if DenoisedFile_AP.bytes > 0 && DenoisedFile_PA.bytes > 0
         disp('skipping denoise')
-    else
-
-        for ii = 1:length(myFiles)
-            
+    else  
+        for ii = 1:length(myFiles) 
             % write the file used on the command window
             disp(['denoise of ' myFiles{ii}])
-            
             % copy the original AP and PA dwi images to derivatives/topup
             copyfile(fullfile(dwiDir, myFiles{ii}), fullfile(unprocessedTopupDir, myFiles{ii}));
 
@@ -79,7 +78,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
         end
     end
-
+   
 
     %% topup correction
 
