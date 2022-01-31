@@ -57,20 +57,20 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         
         for ii = 1:length(myFiles)
             % copy the original AP and PA dwi images to derivatives/topup
-            copyfile(fullfile(dwiDir, apFile), fullfile(unprocessedTopupDir, myFiles{ii}));
+            copyfile(fullfile(dwiDir, myFiles{ii}), fullfile(unprocessedTopupDir, myFiles{ii}));
 
             % Denoise the data - Correct for warping artifacts due to the phase encoding direction
             % input -> topup/unprocesses/sub-_ses-_AP_dwi.nii.gz
             % output -> topup/sub-_ses-_AP_dwi.nii.gz
-            system(['dwidenoise -force ' fullfile(unprocessedTopupDir, apFile) ' ' fullfile(topupDir, myFiles{ii})]);
+            system(['dwidenoise -force ' fullfile(unprocessedTopupDir, myFiles{ii}) ' ' fullfile(topupDir, myFiles{ii})]);
 
             % Calculate and check the residuals.
             % The lack of anatomy in the residual maps is a marker of accuracy and signal-preservation during denoising
             % original dwi - denoised dwi = residuals
-            system(['mrcalc ' fullfile(unprocessedTopupDir, apFile) ' '  fullfile(topupDir, myFiles{ii}) ' -subtract ' fullfile(topupDir, myResFiles{ii})]);
+            system(['mrcalc ' fullfile(unprocessedTopupDir, myFiles{ii}) ' '  fullfile(topupDir, myFiles{ii}) ' -subtract ' fullfile(topupDir, myResFiles{ii})]);
 
             % correct for Gibbs Ringing Artifacts
-            system(['mrdegibbs -force ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, myFiles{ii})]);
+            system(['mrdegibbs -force ' fullfile(topupDir, myFiles{ii}) ' ' fullfile(topupDir, myFiles{ii})]);
 
         end
     end
@@ -153,19 +153,19 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     system(['bet ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz') ' '  fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ' -m -f 0.2']);
 
 
-    if exist(fullfile(eddyDir, [eddyFile '.nii.gz']), 'file') % if EddyFile does exist, skip the eddy correction
-        disp('skipping eddy correction')
-    else
-        disp('running eddy correction')
-        % run eddy correction
-        system(['eddy --imain=' fullfile(topupDir, appaFile) ' --mask=' fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ...
-            ' --acqp=' fullfile(projectDir, 'rawdata/acqparams.txt') ' --index=' fullfile(topupDir, 'index.txt') ...
-            ' --bvecs=' fullfile(topupDir, 'bvec_combined.txt') ...
-            ' --bvals=' fullfile(topupDir, 'bval_combined.txt') ...
-            ' --topup=' fullfile(topupDir, 'my_topup_results') ...
-            ' --out=' fullfile(eddyDir, eddyFile) ' --repol --verbose'])
-
-    end
+%     if exist(fullfile(eddyDir, [eddyFile '.nii.gz']), 'file') % if EddyFile does exist, skip the eddy correction
+%         disp('skipping eddy correction')
+%     else
+%         disp('running eddy correction')
+%         % run eddy correction
+%         system(['eddy --imain=' fullfile(topupDir, appaFile) ' --mask=' fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ...
+%             ' --acqp=' fullfile(projectDir, 'rawdata/acqparams.txt') ' --index=' fullfile(topupDir, 'index.txt') ...
+%             ' --bvecs=' fullfile(topupDir, 'bvec_combined.txt') ...
+%             ' --bvals=' fullfile(topupDir, 'bval_combined.txt') ...
+%             ' --topup=' fullfile(topupDir, 'my_topup_results') ...
+%             ' --out=' fullfile(eddyDir, eddyFile) ' --repol --verbose'])
+% 
+%     end
 
 
 end
