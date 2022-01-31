@@ -3,7 +3,7 @@
 % for dMRI analysis
 
 %% subject/session/etc:
-sub = {'sub-0201'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
+sub = {'sub-0152'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -22,13 +22,14 @@ count =     1;
 show =      1;
 
 %% data and toolbox locations
-user = 'class'; % name of the user
+user = 'caterina'; % name of the user
 
 switch user
     case {'server'}
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
     case {'caterina'}
         projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
+        toolboxDir = '/Users/cp3488/Documents/MATLAB/toolbox';
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
     case {'bas'}

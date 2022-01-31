@@ -51,9 +51,8 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     myFiles = {apFile, paFile};
     myResFiles = {apResFile, paResFile};
     
-    % TODO: When s03 is aborted a zero byte file is created, caussing a
-    % skip
-    if exist(fullfile(topupDir, apFile), 'file')
+    DenoisedFile=dir(fullfile(topupDir, apFile));
+    if DenoisedFile.bytes > 0
         disp('skipping denoise')
     else
 
@@ -121,10 +120,11 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         acqparams = [0 1 0 0.05; 0 -1 0 0.05];
         writematrix(acqparams,fullfile(projectDir, 'rawdata', 'acqparams.txt'),'Delimiter','space');
     end
-
-
+    
+    
     % Run the Topup correction
-    if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
+    TopupFile=dir(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'));
+    if TopupFile.bytes > 0
         disp('skipping topup')
     else
         disp('running topup')
