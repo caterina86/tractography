@@ -123,8 +123,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     
     
     % Run the Topup correction
-    TopupFile=dir(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'));
-    if TopupFile.bytes > 0
+    if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
         disp('skipping topup')
     else
         disp('running topup')
