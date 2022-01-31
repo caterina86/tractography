@@ -108,7 +108,16 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
     end
     
-    % Topup correction
+    % create the acqparams.txt, if it does not exist
+    if exist(fullfile(projectDir, 'rawdata', 'acqparams.txt'), 'file')
+        disp('acqparams.txt already exists')
+    else
+        acqparams = [0 1 0 0.05; 0 -1 0 0.05];
+        writematrix(acqparams,fullfile(projectDir, 'rawdata', 'acqparams.txt'),'Delimiter','space');
+    end
+      
+    
+    % Run the Topup correction
     if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
         disp('skipping topup')
     else
