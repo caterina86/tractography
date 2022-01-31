@@ -3,8 +3,8 @@
 % for dMRI analysis
 
 %% subject/session/etc:
-sub = {'sub-0152'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
-ses = {'ses-01'}; % session id
+sub = {'sub-0228'}; % sub = {'sub-0201' 'sub-0152' 'sub-0228'}; % initials of the subject
+ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
 num_dir = {'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
