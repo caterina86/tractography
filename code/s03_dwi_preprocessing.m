@@ -54,7 +54,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     if exist(fullfile(topupDir, apFile), 'file')
         disp('skipping denoise')
     else
-        
+
         for ii = 1:length(myFiles)
             % copy the original AP and PA dwi images to derivatives/topup
             copyfile(fullfile(dwiDir, myFiles{ii}), fullfile(unprocessedTopupDir, myFiles{ii}));
@@ -95,7 +95,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     if exist(fullfile(topupDir, appaFile), 'file')
         disp('skipping merging')
     else
-        
+
         % extract the b0 from the AP and PA dwi image
         system(['fslroi ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, apB0File) ' 0 1']);
         system(['fslroi ' fullfile(topupDir, paFile) ' ' fullfile(topupDir, paB0File) ' 0 1']);
@@ -107,7 +107,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         system(['fslmerge -t ' fullfile(topupDir, appaFile) ' ' fullfile(topupDir, apFile) ' ' fullfile(topupDir, paFile)]);
 
     end
-    
+
     % create the acqparams.txt, if it does not exist
     if exist(fullfile(projectDir, 'rawdata', 'acqparams.txt'), 'file')
         disp('acqparams.txt already exists')
@@ -115,8 +115,8 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
         acqparams = [0 1 0 0.05; 0 -1 0 0.05];
         writematrix(acqparams,fullfile(projectDir, 'rawdata', 'acqparams.txt'),'Delimiter','space');
     end
-      
-    
+
+
     % Run the Topup correction
     if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file')
         disp('skipping topup')

@@ -18,10 +18,10 @@ function s02_merge_dwi(projectDir, subject, session, num_dir)
     rawapFile98 = [subses '_dir-APacq' num2str(num_dir{2}) 'vols_dwi'];
     rawpaFile97 = [subses '_dir-PAacq' num2str(num_dir{1}) 'vols_dwi'];
     rawpaFile98 = [subses '_dir-PAacq' num2str(num_dir{2}) 'vols_dwi'];
-    
-    if exist(fullfile(dwiDir, [apFile '.nii.gz']),'file') && exist(fullfile(dwiDir, [paFile '.nii.gz']),'file') 
+
+    if exist(fullfile(dwiDir, [apFile '.nii.gz']),'file') && exist(fullfile(dwiDir, [paFile '.nii.gz']),'file')
         disp('skip merging')
-    
+
     else
 
         % nifti image
@@ -58,10 +58,9 @@ function s02_merge_dwi(projectDir, subject, session, num_dir)
         end
         system(['paste ' fullfile(dwiDir, [rawpaFile97 '.bval ']) fullfile(dwiDir, [rawpaFile98 '.bval ']) ...
             ' >> ' fullfile(dwiDir, [paFile '.bval '])]);
-    
+
     end
 
     disp('Merging done!')
 
 end
-
