@@ -152,7 +152,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     writematrix(bvecs, fullfile(topupDir, 'bvec_combined.txt'), 'Delimiter', 'space');
 
     % Generate a brain mask using the corrected b0 image
-    system(['fslmaths ' fullfile(topupDir, 'my_hifi_b0.nii.gz') ' -Tmean ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz')])
+    system(['fslmaths ' fullfile(topupDir, 'my_hifi_b0.nii.gz') ' -Tmean ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz')]);
 
     % BET the averaged b0 image
     system(['bet ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz') ' '  fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ' -m -f 0.2']);
