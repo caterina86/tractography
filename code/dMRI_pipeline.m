@@ -27,8 +27,10 @@ for sub_i = 1:length(sub) % loop over subjects
 
     for ses_i = 1:numel(sub_ses) % for each scan session
 
-        disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
-        s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
+        if fmriprep == 1 % NYUAD setup
+            disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
+            s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
+        end
 
         disp([sub{sub_i} ' ' ses{ses_i} ' script03'])
         s03_dwi_preprocessing(projectDir, sub{sub_i}, ses{ses_i}, fmriprep)
