@@ -27,6 +27,18 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
         t12dwi = fullfile(anatPrepDir, 't1_2_dwi_xfm.mat');
     end
 
+    % check if fmriprep and freesurfer folders are there, if they aren't
+    % the script will stop with error
+    if ~exist(fullfile(projectDir, 'derivatives/fmriprep', subject,session), 'dir')
+        error(['No fmriprep folder found']);
+        return
+    end
+    
+    if ~exist(fullfile(projectDir, 'derivatives/freesurfer', subject), 'dir')
+        error(['No freesurfer folder found']);
+        return
+    end
+    
     % create the folder for the ROIs
     mkdir(roiDir)
 

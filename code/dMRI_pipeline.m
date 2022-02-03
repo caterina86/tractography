@@ -41,7 +41,7 @@ for sub_i = 1:length(sub) % loop over subjects
         end
 
         disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
-        s04_extract_ROIs_08(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
+        s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
         
         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
         s05_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)

@@ -3,7 +3,7 @@
 % for dMRI analysis
 
 %% subject/session/etc:
-sub = {'sub-0201'}; % initials of the subject
+sub = {'sub-0152'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -22,7 +22,7 @@ count =     1;
 show =      1;
 
 %% data and toolbox locations
-user = 'class'; % name of the user
+user = 'caterina'; % name of the user
 
 switch user
     case {'server'}
