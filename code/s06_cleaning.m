@@ -1,5 +1,5 @@
 function s06_cleaning(projectDir, subject, session, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
-% Cleaning Probabilistic tracts (mrtirx3)
+% Cleaning Probabilistic tracts (mrtrix3)
 
 roiDir = fullfile(projectDir, '/derivatives/ROIs', subject, session);
 fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
@@ -31,6 +31,12 @@ for jj = 1:length(hemi)
     numel(ind); % removed fibers
     fgdump.total_count=numel(fgdump.data);
     fgdump.count=numel(fgdump.data);
+    
+    % TODO: Error, fgdump.commandhistory, fgdump.roi cannot be a cell
+    % Temporary hacky fix
+    fgdump.command_history = fgdump.command_history{1};
+    fgdump.roi = fgdump.roi{1};
+    fgdump.prior_roi = fgdump.prior_roi{1};
     write_mrtrix_tracks(fgdump, afq_cleaned_out_file); % save the output as .tck
 
 
@@ -56,6 +62,12 @@ for jj = 1:length(hemi)
     numel(ind); % removed fibers
     fgdump.total_count=numel(fgdump.data);
     fgdump.count=numel(fgdump.data);
+
+    % TODO: Error, fgdump.commandhistory, fgdump.roi cannot be a cell
+    % Temporary hacky fix
+    fgdump.command_history = fgdump.command_history{1};
+    fgdump.roi = fgdump.roi{1};
+    fgdump.prior_roi = fgdump.prior_roi{1};
     write_mrtrix_tracks(fgdump, afq_cleaned_out_file);
 
 end

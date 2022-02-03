@@ -1,6 +1,5 @@
-% Probabilistic tractography (mrtirx3)
-
 function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
+% Probabilistic tractography (mrtrix3)
 
     fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
     fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', subject, session);
@@ -50,7 +49,6 @@ function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, 
         fibDir '/responseEstimate_gm.txt ' fibDir '/gmfod.mif ' ...
         fibDir  '/responseEstimate_csf.txt ' fibDir '/csffod.mif '])
  
-
     % Whole brain tractography (mrtrix3)
     act = ttFile; % anatomically-constrain tractography
     wmfod = fullfile(fibDir, 'wmfod.mif'); % extracted from eddy_corrected_data.nii.gz aligned to T1-acpc space
@@ -59,8 +57,7 @@ function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, 
     % Run tractography
     system(['tckgen '  wmfod ' '  outFile ' -act ' act ' -seed_image ' act  ' -select ' num2str(numFibers_WB) ' -seeds 0']);
 
-
-
+    
     %% Optic Radiations Tractography
 
     for jj = 1:length(hemi)

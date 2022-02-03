@@ -1,6 +1,5 @@
-% extract LGN, V1, Optic Chiasm and Thalamus to perform the OR and OT tractography
-
 function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
+% extract LGN, V1, Optic Chiasm and Thalamus to perform the OR and OT tractography
 
     roiDir = fullfile(projectDir, '/derivatives/ROIs', subject, session);
     eddyDir = fullfile(projectDir, 'derivatives/eddy', subject, session);
