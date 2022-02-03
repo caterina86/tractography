@@ -3,60 +3,10 @@
 % 
 % Written by Caterina Pedersini
 
-clear all;
+function s03b_t1_preprocessing(projectDir, subject, session)
 
-% Setup the environment
-% FSL - remember to update the location of FSL according to the location on your PC
-setenv('FSLDIR', '/usr/local/fsl' );
-setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % added to tell where to save the fsl outputs
-if isfolder('/Applications/freesurfer/bin')
-    setenv('FREESURFER_HOME', '/Applications/freesurfer');
-    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
-elseif isfolder('/Applications/freesurfer/7.2.0/bin')
-    setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
-    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
-else
-    error('Cannot find freesurfer binary in or near /Applications/freesurfer')
-end
-
-% Specify user 
-user = 'caterina'; % name of the user
-
-% choose 'server' if you are working on the server
-% add your name if you are working on your local PC. In this case you
-% should add your files locations in the following 'switch user'
-
-% Set the path
-switch user
-    case {'server'}
-        projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
-    case {'caterina'}
-        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output    
-    case {'Omnia'}
-        projectDir = '~/Documents/GitHub/tractography/code'; % location output
-    case {'bas'}
-        projectDir = '/Users/rokers/Documents/MRI/Sample_dMRI'; % location output
-    case {'Dalia'}
-        projectDir = '~/Desktop/Sample_dMRI'; % location output
-    case {'hannah'}
-        projectDir = '/Users/hannah/Documents/MRI/Sample_dMRI'; % 
-end
-addpath(genpath(fullfile(projectDir, 'code'))); % add user code to path
-
-% Project variables
-sub = {'ccad0203'}; % initials of the subject
-ses = {'01'}; % ID of the subject
-
-
-%% T1 preprocessing
-
-sub_i = 1:length(sub); % loop over subjects (eventually)
-sub_ses = dir(fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], 'ses-*'));
-
-for ses_i = 1:numel(sub_ses) % for each scan session
-
-    anatPrepDir = fullfile(projectDir, 'derivatives/anat_prep', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}]);        
-    anatDir = fullfile(projectDir, 'rawdata', ['sub-' sub{sub_i}], ['ses-' ses{ses_i}], 'anat');
+    anatPrepDir = fullfile(projectDir, 'derivatives/anat_prep', subject, session);        
+    anatDir = fullfile(projectDir, 'rawdata', subject, session, 'anat');
     fsDir = fullfile(projectDir, 'derivatives/freesurfer/');
 
     fileName = dir(fullfile(anatDir, '*_MPR1.nii.gz'));
@@ -70,15 +20,13 @@ for ses_i = 1:numel(sub_ses) % for each scan session
     
     % FAST 
     system(['fast -B ' fullfile(anatPrepDir, 't1_crop.nii.gz')]);
-
-    % RECON-ALL
-    % Freesurfer -> Note: $SUBJECTS_DIR must be set to fsDir defined above
-    setenv ('SUBJECTS_DIR', fsDir); 
     
-    if exist(fullfile(projectDir, 'derivatives/freesurfer', ['sub-' sub{sub_i}]), 'dir') % if the directory already exists
-        system(['recon-all -subjid sub-' sub{sub_i} ' -all'])
+    % Recon-all
+    if exist(fullfile(projectDir, 'derivatives/freesurfer', subject), 'dir') % if the directory already exists
+        system(['recon-all -subjid ' subject ' -all'])
     else % if it's the first time we run recon-all for this subject
-        system(['recon-all -i ' fullfile(anatPrepDir, 't1_crop_restore.nii.gz') ' -subjid sub-' sub{sub_i} ' -all'])
+        system(['recon-all -i ' fullfile(anatPrepDir, 't1_crop_restore.nii.gz') ' -subjid ' subject ' -all'])
     end
+   
 end
 
