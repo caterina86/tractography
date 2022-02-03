@@ -3,7 +3,32 @@
 % Import FA values of the Optic Radiations
 
 clearvars;
-setup_parameters;
+
+sub = {'sub-0201' 'sub-0152' 'sub-0228' 'sub-ccad0203'}; % initials of the subject
+ses = {'ses-01'}; % ID of the session
+hemi = {'lh', 'rh'};
+
+
+%% project directory
+user = 'server'; % name of the user
+
+switch user
+    case {'server'}
+        projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
+    case {'caterina'}
+        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
+    case {'Omnia'}
+        projectDir = '~/Documents/GitHub/tractography/code'; % location output
+    case {'bas'}
+        projectDir = '/Users/rokers/Dropbox/MRI/Sample_dMRI'; % location output
+    case {'Dalia'}
+        projectDir = '~/Desktop/Sample_dMRI'; % location output
+    case {'hannah'}
+        projectDir = '/Users/hannah/Documents/MRI';
+    case {'class'}
+        projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
+end
+projectDir = char(py.os.path.realpath(py.os.path.expanduser(projectDir))); % convert relative to absolute path
 
 
 %% Plot the FA/MD values extracted from the tract
@@ -32,7 +57,7 @@ end
 
 % Plot the data - left OR - FA values
 figure;
-FA_OR_left = [mean(lh_FA_OR(1).data,1); mean(lh_FA_OR(2).data,1); mean(lh_FA_OR(3).data,1)];
+FA_OR_left = [nanmean(lh_FA_OR(1).data,1); nanmean(lh_FA_OR(2).data,1); nanmean(lh_FA_OR(3).data,1) ; nanmean(lh_FA_OR(4).data,1)];
 plot(FA_OR_left(1,:), 'linewidth',2); hold on;
 plot(FA_OR_left(2,:), 'linewidth',2); hold on;
 plot(FA_OR_left(3,:), 'linewidth',2); hold on;
@@ -42,13 +67,13 @@ ylim([0 1]); xticklabels({'', '10', '', '', '', '', '', '', '', '90'});
 set(gca,'FontSize',24); %set(gca,'xtick',[])
 xline(11,'k--'); xline(90,'k--'); 
 title('Left OR - FA values','FontSize', 28);
-fgNames={'sub-0201', 'sub-0152', 'sub-0228'};
+fgNames={'sub-0201', 'sub-0152', 'sub-0228', 'sub-ccad0203'};
 legend(fgNames,'Location','EastOutside','FontSize',14);
 
    
 % Plot the data - right OR - FA values
 figure;
-FA_OR_right = [mean(rh_FA_OR(1).data,1); mean(rh_FA_OR(2).data,1); mean(rh_FA_OR(3).data,1)];
+FA_OR_right = [nanmean(rh_FA_OR(1).data,1); nanmean(rh_FA_OR(2).data,1); nanmean(rh_FA_OR(3).data,1); nanmean(rh_FA_OR(3).data,1)];
 plot(FA_OR_right(1,:), 'linewidth',2); hold on;
 plot(FA_OR_right(2,:), 'linewidth',2); hold on;
 plot(FA_OR_right(3,:), 'linewidth',2); hold on;
@@ -58,14 +83,14 @@ ylim([0 1]); xticklabels({'', '10', '', '', '', '', '', '', '', '90'});
 set(gca,'FontSize',24); %set(gca,'xtick',[])
 xline(11,'k--'); xline(90,'k--'); 
 title('Right OR - FA values','FontSize', 28);
-fgNames={'sub-0201', 'sub-0152', 'sub-0228'};
+fgNames={'sub-0201', 'sub-0152', 'sub-0228', 'sub-ccad0203'};
 legend(fgNames,'Location','EastOutside','FontSize',14);
     
     
     
 % Plot the data - left OT - FA values
 figure;
-FA_OT_left = [mean(lh_FA_OT(1).data,1); mean(lh_FA_OT(2).data,1); mean(lh_FA_OT(3).data,1)];
+FA_OT_left = [nanmean(lh_FA_OT(1).data,1); nanmean(lh_FA_OT(2).data,1); nanmean(lh_FA_OT(3).data,1); nanmean(lh_FA_OT(4).data,1)];
 plot(FA_OT_left(1,:), 'linewidth',2); hold on;
 plot(FA_OT_left(2,:), 'linewidth',2); hold on;
 plot(FA_OT_left(3,:), 'linewidth',2); hold on;
@@ -75,51 +100,44 @@ ylim([0 1]); xticklabels({'', '10', '', '', '', '', '', '', '', '90'});
 set(gca,'FontSize',24); %set(gca,'xtick',[])
 xline(11,'k--'); xline(90,'k--'); 
 title('Left OT - FA values','FontSize', 28);
-fgNames={'sub-0201', 'sub-0152', 'sub-0228'};
+fgNames={'sub-0201', 'sub-0152', 'sub-0228', 'sub-ccad0203'};
 legend(fgNames,'Location','EastOutside','FontSize',14);
 
    
 % Plot the data - right OT - FA values
 figure;
-FA_OT_right = [mean(rh_FA_OT(1).data,1); mean(rh_FA_OT(2).data,1); mean(rh_FA_OT(3).data,1)];
+FA_OT_right = [nanmean(rh_FA_OT(1).data,1); nanmean(rh_FA_OT(2).data,1); nanmean(rh_FA_OT(3).data,1) ; nanmean(rh_FA_OT(4).data,1)];
 plot(FA_OT_right(1,:), 'linewidth',2); hold on;
 plot(FA_OT_right(2,:), 'linewidth',2); hold on;
-plot(FA_OT_right(3,:), 'linewidth',2); hod on;
+plot(FA_OT_right(3,:), 'linewidth',2); hold on;
 plot(FA_OT_right(4,:), 'linewidth',2);
 xlabel('Location'); ylabel('Fractional Anisotropy'); 
 ylim([0 1]); xticklabels({'', '10', '', '', '', '', '', '', '', '90'});  
 set(gca,'FontSize',24); %set(gca,'xtick',[])
 xline(11,'k--'); xline(90,'k--'); 
 title('Right OT - FA values','FontSize', 28);
-fgNames={'sub-0201', 'sub-0152', 'sub-0228'};
+fgNames={'sub-0201', 'sub-0152', 'sub-0228', 'sub-ccad0203'};
 legend(fgNames,'Location','EastOutside','FontSize',14);
     
     
 
 %% LME 
 % calculate mean FA/MD for OR and OT
-a = mean(lh_FA_OT(2).data,1);
-b = mean(a);
-c = mean(rh_FA_OT(2).data,1);
-d = mean(c);
-
-(b+d)/2
-
-
+% a = nanmean(lh_FA_OR(4).data,1);
+% b = nanmean(a);
+% c = nanmean(rh_FA_OR(4).data,1);
+% d = nanmean(c);
+% 
+% (b+d)/2
 
 
-
-f = readtable('/Users/cp3488/Documents/tractography/Sample_dMRI/derivatives/Measures.xlsx');
+f = readtable(fullfile(projectDir, 'derivatives/Measures.xlsx'));
 
 % LME with Age and group as fixed-effects / Subject as random effect
-for ii = 4:7 % Pulling pathway names from VariableNames
+for ii = 4:5 % Pulling pathway names from VariableNames
     
     disp(f.Properties.VariableNames{ii});
-
-    % lmeResults{ii} = fitlme(d, [d.Properties.VariableNames{ii} ' ~ AgeAtMeasurementDays + LogDaysSinceSurgery + AgeAtSurgeryDays : LogDaysSinceSurgery + (1|Manuscript_NEW)']);
     lmeResults{ii} = fitlme(f, [f.Properties.VariableNames{ii} ' ~ Age + Group + (1|SubjectID)']);
-
-    % lmeResults{ii} = fitlme(d, [d.Properties.VariableNames{ii} ' ~ AgeAtSurgeryDays * LogDaysSinceSurgery + (1|Manuscript_NEW)']);
     anova(lmeResults{ii})
 end
 
