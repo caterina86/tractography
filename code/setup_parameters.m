@@ -22,7 +22,7 @@ count =     1;
 show =      1;
 
 %% data and toolbox locations
-user = 'class'; % name of the user
+user = 'caterina'; % name of the user
 
 switch user
     case {'server'}
