@@ -34,7 +34,7 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
     end
     
     if ~exist(fullfile(projectDir, 'derivatives/freesurfer', subject), 'dir')
-        error(['No freesurfer folder found']);
+        error(['No freesurfer data folder found in ' projectDir '/derivatives/' subject]);
         return
     end
     

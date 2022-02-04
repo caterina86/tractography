@@ -19,7 +19,7 @@ setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); % subject direct
 if isfolder(fullfile(toolboxDir, 'vistasoft'))
     addpath(genpath(fullfile(toolboxDir, 'vistasoft'))); % add vistasoft toolbox -> for AFQ cleaning
 else
-    error(['No vistasoft in ' toolboxDir])
+    error(['No vistasoft folder found in ' toolboxDir])
 end
 
 if isfolder(fullfile(toolboxDir, 'AFQ'))
