@@ -41,7 +41,8 @@ switch user
         projectDir = '/Users/hannah/Documents/MRI';
     case {'class'}
         projectDir = '~/Documents/MRI/Sample_dMRI'; % location output
-        toolboxDir = '~/Documents/MATLAB/toolbox';
+        % toolboxDir = '~/Documents/MATLAB/toolbox';
+        toolboxDir = '~/Documents/GitHub';
 end
 projectDir = char(py.os.path.realpath(py.os.path.expanduser(projectDir))); % convert relative to absolute path
 define_paths(projectDir, toolboxDir); % Add all relevant paths
