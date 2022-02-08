@@ -85,6 +85,14 @@
        }
      },
      {
+        "dataType": "dwi",
+        "modalityLabel": "dir-APacq97vols_dwi",
+        "criteria": {
+          "SidecarFilename": "*dwi_acq-97directions_dir-ap*",
+          "ImageComments": "*Unaliased*"
+        }
+      },
+      {
        "dataType": "dwi",
        "modalityLabel": "dir-APacq97vols_sbref",
        "criteria": {
@@ -93,10 +101,26 @@
        }
      },
      {
+      "dataType": "dwi",
+      "modalityLabel": "dir-APacq97vols_sbref",
+      "criteria": {
+        "SidecarFilename": "*dwi_acq-97directions_dir-ap*",
+        "SeriesDescription": "*SBRef*"
+      }
+    },
+    {
        "dataType": "dwi",
        "modalityLabel": "dir-PAacq97vols_dwi",
        "criteria": {
          "SidecarFilename": "*dwi_acq-97directions_dir-PA*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq97vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-97directions_dir-pa*",
          "ImageComments": "*Unaliased*"
        }
      },
@@ -110,9 +134,25 @@
      },
      {
        "dataType": "dwi",
+       "modalityLabel": "dir-PAacq97vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-97directions_dir-pa*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
        "modalityLabel": "dir-APacq98vols_dwi",
        "criteria": {
          "SidecarFilename": "*dwi_acq-98directions_dir-AP*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-APacq98vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-98directions_dir-ap*",
          "ImageComments": "*Unaliased*"
        }
      },
@@ -126,6 +166,14 @@
      },
      {
        "dataType": "dwi",
+       "modalityLabel": "dir-APacq98vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-98directions_dir-ap*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
        "modalityLabel": "dir-PAacq98vols_dwi",
        "criteria": {
          "SidecarFilename": "*dwi_acq-98directions_dir-PA*",
@@ -134,9 +182,25 @@
      },
      {
        "dataType": "dwi",
+       "modalityLabel": "dir-PAacq98vols_dwi",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-98directions_dir-pa*",
+         "ImageComments": "*Unaliased*"
+       }
+     },
+     {
+       "dataType": "dwi",
        "modalityLabel": "dir-PAacq98vols_sbref",
        "criteria": {
          "SidecarFilename": "*dwi_acq-98directions_dir-PA*",
+         "SeriesDescription": "*SBRef*"
+       }
+     },
+     {
+       "dataType": "dwi",
+       "modalityLabel": "dir-PAacq98vols_sbref",
+       "criteria": {
+         "SidecarFilename": "*dwi_acq-98directions_dir-pa*",
          "SeriesDescription": "*SBRef*"
        }
      },

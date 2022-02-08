@@ -14,7 +14,7 @@ switch user
         projectDir = '/Volumes/NYUAD/Projects/pRF_Cate/AnalyzePRF/fMRIPrep';
 end
 
-sub = {'0228'}; % ID of the subject
+sub = {'0258'}; % ID of the subject
 ses = {'01'}; % session
 num_runs = 9;
 

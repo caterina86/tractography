@@ -1,4 +1,0 @@
-mrconvert /Users/rokers/Documents/MRI/Sample_dMRI/derivatives/eddy/sub-0152/ses-01/sub-0152_ses-01_eddy_corrected_data.nii.gz /Users/rokers/Documents/GitHub/tractography/code/dwi2response-tmp-Z0H1NC/dwi.mif -strides 0,0,0,1 -fslgrad /Users/rokers/Documents/MRI/Sample_dMRI/derivatives/eddy/sub-0152/ses-01/sub-0152_ses-01_eddy_corrected_data.eddy_rotated_bvecs /Users/rokers/Documents/MRI/Sample_dMRI/derivatives/topup/sub-0152/ses-01/bval_combined.txt
-
-mrconvert: [ERROR] input file "/Users/rokers/Documents/MRI/Sample_dMRI/derivatives/eddy/sub-0152/ses-01/sub-0152_ses-01_eddy_corrected_data.eddy_rotated_bvecs" for option "-fslgrad" not found
-
