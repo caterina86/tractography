@@ -72,7 +72,7 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
     % If the fs_install_mcr script is not available in your freesurfer distribution, it can be downloaded by running the following command:
     % cd $FREESURFER_HOME/bin && curl https://raw.githubusercontent.com/freesurfer/freesurfer/dev/scripts/fs_install_mcr -o fs_install_mcr && chmod +x fs_install_mcrsystem(['segmentThalamicNuclei.sh ' sub{ii} ' ' fsDir]);
     % Run without any problem on Mac Catalina (problems with BigSur)
-    % system(['segmentThalamicNuclei.sh sub-' sub{sub_i} ' ' fullfile(projectDir, 'derivatives/freesurfer')]);
+    % system(['segmentThalamicNuclei.sh ' subject ' ' fullfile(projectDir, 'derivatives/freesurfer')]);
 
     % LGN
     % Convert segmented atlas to volume

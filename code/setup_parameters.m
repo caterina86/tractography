@@ -3,7 +3,7 @@
 % for dMRI analysis
 
 %% subject/session/etc:
-sub = {'sub-0202' 'sub-0229' 'sub-0250' 'sub-0258'}; % initials of the subject
+sub = {'sub-0202' 'sub-0229' 'sub-0250' 'sub-0258' 'sub-0201'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 

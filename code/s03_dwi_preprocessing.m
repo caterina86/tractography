@@ -122,6 +122,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
     
     TopupFile=dir(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'));
+    
     % Run the Topup correction
     if exist(fullfile(topupDir, 'my_topup_results_fieldcoef.nii.gz'), 'file') && TopupFile.bytes > 0
         disp('skipping topup')
@@ -144,7 +145,7 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     index = [ones(nDirs,1); 2*ones(nDirs,1)];
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
 
-   % Combine bval and bvec files from the two dMRI scans
+    % Combine bval and bvec files from the two dMRI scans
     bvals = horzcat(load(fullfile(dwiDir, apFileBval)), load(fullfile(dwiDir, paFileBval)));
     writematrix(bvals, fullfile(topupDir, 'bval_combined.txt'), 'Delimiter', 'space');
 

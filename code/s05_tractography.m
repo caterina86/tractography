@@ -62,7 +62,7 @@ function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, 
     outFile = fullfile(fibDir, ['dti_wholeBrain_ACT_' num2str(numFibers_WB/1000000) 'M.tck']);
     outFile_name = dir(fullfile(fibDir, ['dti_wholeBrain_ACT_' num2str(numFibers_WB/1000000) 'M.tck']));
 
-    if exist(outFile, 'file') &&  outFile_name.bytes >0 % assume the wmfod.mif exists and it's not empty
+    if exist(outFile, 'file') &&  outFile_name.bytes > 0 % assume the wmfod.mif exists and it's not empty
         disp('skipping whole brain tractography')
     else        
         % Run tractography
