@@ -1,4 +1,4 @@
-% setup_parameters script
+% setup_user script
 %
 % for dMRI analysis
 % TODO: Change to projectDir = setup_user(username)

@@ -1,9 +1,9 @@
+function s02_merge_dwi(projectDir, subject, session, num_dir)
+
 % dMRI processing pipeline - step 2
 % this step needs to be run only when we have more than 1 file with the
 % same phase encoding directions but a different number of diffusion
 % directions - NYUAD sequence
-
-function s02_merge_dwi(projectDir, subject, session, num_dir)
 
     % folders:
     dwiDir = fullfile(projectDir, 'rawdata', subject, session, 'dwi');
