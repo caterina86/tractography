@@ -53,11 +53,11 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
     else
     end
 
-    % Skull-stripped the T1:
+    % Skull-strip the T1:
     system(['bet ' t1FileCrop ' ' t1FileCropBrain ' -m -f 0.25']);
 
-    % Coregistration of the T1 to dwi space (dwi spatial resolution) 
-    % and extraction of the coregistration matrix
+    % Coregister the T1 to dwi space (dwi spatial resolution) 
+    % and extract the coregistration matrix
     system(['flirt -in ' t1FileCropBrain ' -ref ' fullfile(eddyDir, eddyB0FileBrain) ...
         ' -out ' t1FileCropBrainDiffSpace ...
         ' -omat ' t12dwi ' -dof 6']);
@@ -66,7 +66,7 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
     %% extract ROIs
 
     % Subcortical segmentation
-    % Segment thalamic nuclei (requires that subject has already been processed with recon-all);
+    % Segment thalamic nuclei (requires that subject has been processed with recon-all);
     % fs_install_mcr R2014b
     % download the runtime for FS version 7: fs_install_mcr R2014b
     % If the fs_install_mcr script is not available in your freesurfer distribution, it can be downloaded by running the following command:
@@ -214,6 +214,5 @@ function s04_extract_ROIs(projectDir, subject, session, fmriprep, hemi)
 
 end
 
-% IMPORTANT: Check always the FOV, resolution and location of the ROIs over the
+% IMPORTANT: Check the FOV, resolution and location of the ROIs over the
 % diffusion image and the T1 coregistered to the diffusion.
-
