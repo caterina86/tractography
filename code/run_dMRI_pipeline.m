@@ -83,7 +83,7 @@ for sub_i = 1:length(sub) % loop over subjects
 
         % figures plotting the deterministic and probabilistic tracts
         disp('visualize fibers')
-        s09_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR)
+        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR)
 
     end
 end

@@ -1,4 +1,4 @@
-function s09_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_OR)
+function s08_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_OR)
 
 % Visualize tracts on the t1
 
