@@ -65,12 +65,11 @@ for sub_i = 1:length(sub) % loop over subjects
         disp([sub{sub_i} ' ' ses{ses_i} ' script04a'])
         s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
 
-        % extract ROIs - TODO: use the eddy corrected in ACPC space and
-        % coregister the ROIs to ACPC space
+        % extract ROIs
         disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
         s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
         
-        % probabilistic tractography - TODO: with ROIs in ACPC space
+        % probabilistic tractography
         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
         s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 
@@ -85,7 +84,7 @@ for sub_i = 1:length(sub) % loop over subjects
 
         % figures plotting the deterministic and probabilistic tracts
         disp('visualize fibers')
-        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR)
+        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, fmriprep)
 
     end
 end

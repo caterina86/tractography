@@ -1,4 +1,4 @@
-function s08_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_OR)
+function s08_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_OR, fmriprep)
 
 % Visualize tracts on the t1
 
@@ -8,6 +8,12 @@ t1ACPCFileName = 't1_acpc.nii.gz';
 t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));
 AFQDir = fullfile(projectDir, 'derivatives/AFQ', subject, session);
 
+if fmriprep == 1
+    t1FileCropBrainDiffSpace = fullfile(fmriprepDir, 'anat/', [subject '_' session '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
+else
+    t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
+end
+    
 % load the tracts
 load(fullfile(AFQDir, [subject '_' session '_fg_clean.mat']));
 
@@ -81,7 +87,7 @@ AFQ_AddImageTo3dPlot(t1ACPC,[-10, 0, 0], [], [], 0.5);
 
 
 
-%% MRTrix3 fibers on the T1:
+%% MRTrix3 fibers on the T1 coregistered to diffusion space:
 fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
 
 % from .tck to .pdb
@@ -118,11 +124,11 @@ AFQ_RenderFibers(OR_lh,'numfibers',600,'color',colorstring(13,:));  % left OR
 AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % right OR
 AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % left OT
 AFQ_RenderFibers(OT_rh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % right OT
-AFQ_AddImageTo3dPlot(t1ACPC,[0, 0, -10], [], [], 0.5);
+AFQ_AddImageTo3dPlot(t1FileCropBrainDiffSpace,[0, 0, -10], [], [], 0.5);
 
 % Optic Tracts
 AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:));  % left OT
 AFQ_RenderFibers(OT_rh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % right OT
-AFQ_AddImageTo3dPlot(t1ACPC,[0, 0, -10], [], [], 0.5);
+AFQ_AddImageTo3dPlot(t1FileCropBrainDiffSpace,[0, 0, -10], [], [], 0.5);
 
 end
