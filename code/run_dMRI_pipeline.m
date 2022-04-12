@@ -61,14 +61,16 @@ for sub_i = 1:length(sub) % loop over subjects
             s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
         end
 
-        disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
-        s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
-
-        % deterministic tractography
+        % deterministic tractography - ACPC space
         disp([sub{sub_i} ' ' ses{ses_i} ' script04a'])
         s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
 
-        % probabilistic tractography
+        % extract ROIs - TODO: use the eddy corrected in ACPC space and
+        % coregister the ROIs to ACPC space
+        disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
+        s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
+        
+        % probabilistic tractography - TODO: with ROIs in ACPC space
         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
         s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 

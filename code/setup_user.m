@@ -4,7 +4,7 @@
 % TODO: Change to projectDir = setup_user(username)
 
 %% data and toolbox locations
-user = 'class'; % name of the user
+user = 'caterina'; % name of the user
 
 switch user
     case {'server'}
