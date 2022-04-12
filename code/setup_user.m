@@ -1,29 +1,10 @@
-% setup_parameters script
+% setup_user script
 %
 % for dMRI analysis
-
-%% subject/session/etc:
-sub = {'sub-0201'}; % initials of the subject
-ses = {'ses-01'}; % ID of the session
-hemi = {'lh', 'rh'};
-
-num_dir = {'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
-fmriprep = 1; % 1 -> we performed fmriprep (NYUAD); 0 -> we did not perform fmriprep (CCAD)
-numFibers_WB = 5000000; % number of fibers whole brain
-numFibers_OR = 10000; % number of fibers for optic radiation
-numFibers_OT = 10000; % number of fibers for optic tract
-numFibers_ON = 1000; % number of fibers for optic nerve
-
-%% AFQ cleaning
-maxDist =   4;
-maxLen =    4;
-numNodes =  25;
-M =         'mean';
-count =     1;
-show =      1;
+% TODO: Change to projectDir = setup_user(username)
 
 %% data and toolbox locations
-user = 'caterina'; % name of the user
+user = 'class'; % name of the user
 
 switch user
     case {'server'}
@@ -48,4 +29,3 @@ switch user
 end
 % projectDir = char(py.os.path.realpath(py.os.path.expanduser(projectDir))); % convert relative to absolute path
 define_paths(projectDir, toolboxDir); % Add all relevant paths
-addpath(genpath('~/matlab/spm12'));
