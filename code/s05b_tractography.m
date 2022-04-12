@@ -1,4 +1,4 @@
-function s05_tractography(projectDir, subject, session, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
+function s05b_tractography(projectDir, subject, session, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 
     % Probabilistic tractography (mrtrix3)
 

@@ -27,32 +27,43 @@ for sub_i = 1:length(sub) % loop over subjects
 
     for ses_i = 1:numel(sub_ses) % for each scan session
 
-%         if fmriprep == 1 % NYUAD setup
-%             disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
-%             s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
-%         end
-% 
-%         disp([sub{sub_i} ' ' ses{ses_i} ' script03'])
-%         s03_dwi_preprocessing(projectDir, sub{sub_i}, ses{ses_i}, fmriprep)
-%  
-%         if fmriprep == 0 % CCAD setup
-%             disp([sub{sub_i} ' ' ses{ses_i} ' script03b'])
-%             s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
-%         end
+        if fmriprep == 1 % NYUAD setup
+            disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
+            s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
+        end
 
-        
+        disp([sub{sub_i} ' ' ses{ses_i} ' script03'])
+        s03_dwi_preprocessing(projectDir, sub{sub_i}, ses{ses_i}, fmriprep)
+ 
+        if fmriprep == 0 % CCAD setup
+            disp([sub{sub_i} ' ' ses{ses_i} ' script03b'])
+            s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
+        end
+                
         disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
         s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
-        
+ 
+        % deterministic tractography
+        disp([sub{sub_i} ' ' ses{ses_i} ' script04a'])
+        s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
+
+        % probabilistic tractography
         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
-        s05_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
+        s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 
-%         disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
-%         s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
-% 
-%         disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
-%         s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
+%         s05c_optic_nerve(projectDir, sub{sub_i}, ses{ses_i}, numFibers_ON, hemi)
 
+        disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
+        s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
+        
+        disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
+        s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
+
+        % figures plotting the deterministic and probabilistic tracts
+        disp('visualize fibers')
+        s09_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR)
+    
     end
 end
 
