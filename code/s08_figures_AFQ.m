@@ -7,9 +7,12 @@ t1Dir = fullfile(rawDir, 'anat');
 t1ACPCFileName = 't1_acpc.nii.gz';
 t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));
 AFQDir = fullfile(projectDir, 'derivatives/AFQ', subject, session);
+fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', subject, session);
+eddyDir = fullfile(projectDir, 'derivatives/eddy', subject, session);
+eddyFile = [subject '_' session '_eddy_corrected_data.nii.gz'];
 
 if fmriprep == 1
-    t1FileCropBrainDiffSpace = fullfile(fmriprepDir, 'anat/', [subject '_' session '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']);
+    t1FileCropBrainDiffSpace = niftiRead(fullfile(fmriprepDir, 'anat/', [subject '_' session '_desc-preproc_T1w_crop_brain_diffspace.nii.gz']));
 else
     t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
 end
@@ -120,15 +123,17 @@ OT_rh = fullfile(fibDir, fiberName{4});
 OT_rh = dtiAlignFiberDirection((dtiLoadFiberGroup(OT_rh)),direction);
 
 % Optic Radiations
-AFQ_RenderFibers(OR_lh,'numfibers',600,'color',colorstring(13,:));  % left OR
+AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(7,:));  % right OT
+AFQ_AddImageTo3dPlot(niftiRead(fullfile(eddyDir, eddyFile)), [0,0,40], [], [], 0.5);
+
+AFQ_RenderFibers(OR_lh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % left OR
 AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % right OR
 AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % left OT
-AFQ_RenderFibers(OT_rh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % right OT
-AFQ_AddImageTo3dPlot(t1FileCropBrainDiffSpace,[0, 0, -10], [], [], 0.5);
+AFQ_AddImageTo3dPlot(t1ACPC,[0, 0, -10], [], [], 0.5);
 
-% Optic Tracts
+% Optic Tracts - todo: t1FileCropBrainDiffSpace
 AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:));  % left OT
 AFQ_RenderFibers(OT_rh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % right OT
-AFQ_AddImageTo3dPlot(t1FileCropBrainDiffSpace,[0, 0, -10], [], [], 0.5);
+AFQ_AddImageTo3dPlot(niftiRead(fullfile(eddyDir, eddyFile)), [0,0,40], [], [], 0.5);
 
 end

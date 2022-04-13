@@ -61,7 +61,7 @@ for sub_i = 1:length(sub) % loop over subjects
             s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
         end
 
-        % deterministic tractography - ACPC space
+        % deterministic tractography - ACPC space - needs SPM12 (loaded in define paths)
         disp([sub{sub_i} ' ' ses{ses_i} ' script04a'])
         s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
 
@@ -84,7 +84,7 @@ for sub_i = 1:length(sub) % loop over subjects
 
         % figures plotting the deterministic and probabilistic tracts
         disp('visualize fibers')
-        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, fmriprep)
+        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, 1)
 
     end
 end
