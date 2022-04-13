@@ -3,8 +3,8 @@
 % for dMRI analysis
 % TODO: Change to projectDir = setup_user(username)
 
-%% data and toolbox locations
-user = 'caterina'; % name of the user
+%% user specific data and toolbox locations
+user = 'class'; % name of the user
 
 switch user
     case {'server'}
@@ -24,8 +24,36 @@ switch user
         projectDir = '/Users/hannah/Documents/MRI';
     case {'class'}
         projectDir = '/Users/rokers/Documents/dMRI_Tractography_sub-0201'; % location output
-        % toolboxDir = '~/Documents/MATLAB/toolbox';
         toolboxDir = '/Users/rokers/Documents/GitHub';
 end
-% projectDir = char(py.os.path.realpath(py.os.path.expanduser(projectDir))); % convert relative to absolute path
-define_paths(projectDir, toolboxDir); % Add all relevant paths
+
+%% fsl and freesurfer paths
+setenv('FSLDIR', '/usr/local/fsl' );
+setenv('FSLOUTPUTTYPE','NIFTI_GZ'); % define fsl output
+if isfolder('/Applications/freesurfer/bin')
+    setenv('FREESURFER_HOME', '/Applications/freesurfer');
+    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/bin:' PATH]);
+elseif isfolder('/Applications/freesurfer/7.2.0/bin')
+    setenv('FREESURFER_HOME', '/Applications/freesurfer/7.2.0');
+    PATH = getenv('PATH'); setenv('PATH', ['/opt/anaconda3/bin:/usr/local/bin:/usr/local/fsl/bin:/Applications/freesurfer/7.2.0/bin:' PATH]);
+else
+    error('Cannot find freesurfer binary in or near /Applications/freesurfer')
+end
+setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); % subject directory for freesurfer
+
+%% toolbox paths
+% make sure toolboxes are in toolboxDir
+if isfolder(fullfile(toolboxDir, 'vistasoft'))
+    addpath(genpath(fullfile(toolboxDir, 'vistasoft'))); % add vistasoft toolbox -> for AFQ cleaning
+else
+    error(['No vistasoft folder found in ' toolboxDir]) % download at https://github.com/vistalab/vistasoft
+end
+
+if isfolder(fullfile(toolboxDir, 'AFQ'))
+    addpath(genpath(fullfile(toolboxDir, 'AFQ'))); % add AFQ toolbox -> for AFQ cleaning
+else
+    error(['No AFQ in ' toolboxDir]) % download at https://github.com/yeatmanlab/AFQ
+end
+
+%% add user code path
+addpath(genpath(fullfile(projectDir, 'code')));
