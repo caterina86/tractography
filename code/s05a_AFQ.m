@@ -1,8 +1,8 @@
 function s05a_AFQ(projectDir, subject, session)
 
-    % Run deterministic tractography 
+    % Run deterministic tractography
 
-    %% dtiInit 
+    %% dtiInit
 
     % https://web.stanford.edu/group/vista/cgi-bin/wiki/index.php/DTI_Preprocessing
 
@@ -22,35 +22,37 @@ function s05a_AFQ(projectDir, subject, session)
     topupDir = fullfile(projectDir, 'derivatives/topup', subject, session);
     AFQDir = fullfile(projectDir, 'derivatives/AFQ', subject, session);
 
-    % Define file names 
+    % Define file names
     eddyFile = [subject '_' session '_eddy_corrected_data.nii.gz'];
     t1RawFileName = [subject '_' session '_T1w.nii.gz']; % load the t1 image
 
     % read nifti of the inputs
-    dtiTopCor = niftiRead(fullfile(eddyDir,filesep, eddyFile)); 
+    dtiTopCor = niftiRead(fullfile(eddyDir,filesep, eddyFile));
     t1Raw = niftiRead(fullfile(t1Dir, t1RawFileName));
 
 
-    %% ACPC-ALIGN T1 IMAGE 
+    %% ACPC-ALIGN T1 IMAGE
     % Detect if the t1_acpc exists or create it (if not)
+    % Here you will need to specify the Anterior Commissure, Posterior Commissure and the mid-sagital plane
+    % http://web.stanford.edu/group/vista/cgi-bin/wiki/index.php/Anatomical-Processing#3._Resample_and_Align_to_AcPc
+
     if exist([t1Dir,filesep,'t1_acpc.nii.gz'],'file') % If a t1_acpc.nii.gz file exists already
         warning('Skipping ACPC alignment. Using the existing ACPC-aligned T1...');
         t1ACPCFileName = 't1_acpc.nii.gz';
         t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));
         pause(3);
 
-    else % If no acpc-corrected T1 exits 
+    else % If no acpc-corrected T1 exits
         mrAnatAverageAcpcNifti(t1Raw.fname,[t1Dir,filesep,'t1_acpc.nii.gz']);
         t1ACPCFileName = 't1_acpc.nii.gz';
-        t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));    
+        t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));
     end
 
     close all;
 
     % Define the parameters (dwParams)
-    % Important: Define these parametes according to your study
 
-    dwParams = struct; 
+    dwParams = struct;
     if strcmp(encodingOrientation{1},'AP')
         dwParams.phaseEncodeDir = 2;
     elseif strcmp(encodingOrientation{1},'LR')
@@ -65,10 +67,11 @@ function s05a_AFQ(projectDir, subject, session)
     % load the bvals to extract the number of directions used
     bvals = load(fullfile(topupDir, 'bval_combined.txt'));
 
+    % We need to have some b0, so convert the b=5 to b=0 (for NYUAD protocol)
     for ii = 1:size(bvals,2)
         if bvals(1,ii) == 5
             bvals(1,ii) = 0;
-        end  
+        end
     end
 
     writematrix(bvals, fullfile(topupDir, 'bval_combined_modified.txt'), 'Delimiter', 'space');
@@ -77,7 +80,7 @@ function s05a_AFQ(projectDir, subject, session)
     % define options
     dwParams.bvalue                  = [];
     dwParams.gradDirsCode            = [];
-    dwParams.dt6BaseName             = fullfile(dt6Dir, [subject '_' session '_dti' num2str(size(bvals,2)) 'trilin']); 
+    dwParams.dt6BaseName             = fullfile(dt6Dir, [subject '_' session '_dti' num2str(size(bvals,2)) 'trilin']);
     dwParams.clobber                 = 0; % ask to overwrite existing files
     dwParams.flipLrApFlag            = false;
     dwParams.numBootStrapSamples     = 500;
@@ -136,17 +139,15 @@ function s05a_AFQ(projectDir, subject, session)
     mkdir(AFQDir);
 
     %% Whole brain tractography with AFQ:
-
     if exist(fullfile(AFQDir, [subject '_' session '_WholeBrainTractography_AFQ.mat']),'file')
         load(fullfile(AFQDir, [subject '_' session '_WholeBrainTractography_AFQ.mat']));
     else
-        wholebrainFG = AFQ_WholebrainTractography(dt); 
-        save(fullfile(AFQDir, [subject '_' session '_WholeBrainTractography_AFQ.mat']), 'wholebrainFG', '-v7.3');            
-    end    
+        wholebrainFG = AFQ_WholebrainTractography(dt);
+        save(fullfile(AFQDir, [subject '_' session '_WholeBrainTractography_AFQ.mat']), 'wholebrainFG', '-v7.3');
+    end
 
 
     %% Segment the whole-brain fiber group into 20 fiber tracts
-
     if exist(fullfile(AFQDir, [subject '_' session '_fg_classified.mat']),'file')
         load(fullfile(AFQDir, [subject '_' session '_fg_classified.mat']));
     else
@@ -155,8 +156,8 @@ function s05a_AFQ(projectDir, subject, session)
     end
 
     % fg_classified.subgroup defines the fascicle that each fiber belongs to.
-    % We can convert fg_classified to a 1x20 structured array of fiber groups 
-    % where each entry in the array is a segmented fiber tract. 
+    % We can convert fg_classified to a 1x20 structured array of fiber groups
+    % where each entry in the array is a segmented fiber tract.
     fg_classified = fg2Array(fg_classified);
 
     % Visualization of fibres and save the image:
@@ -198,14 +199,12 @@ function s05a_AFQ(projectDir, subject, session)
 
     % If some fibers have been deleted during the cleaning, create a .txt file to indicate the maintained fibers
     if length(fg_clean) < 20
-        a = sprintf(['Fibers maintained: ' fg_clean.name]) ;      
+        a = sprintf(['Fibers maintained: ' fg_clean.name]) ;
         dlmwrite(fullfile(AFQDir,'Fibers.txt'),a,'delimiter','');
-    end           
+    end
 
-    % If you want to visualize the tracts use the same script as in line 210 
+    % If you want to visualize the tracts use the same script as in line 210
 
     sprintf(['Elapsted time: ', num2str(toc/60), ' minutes'])
 
 end
-
-

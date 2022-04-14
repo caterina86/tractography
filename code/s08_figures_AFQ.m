@@ -16,7 +16,7 @@ if fmriprep == 1
 else
     t1FileCropBrainDiffSpace = fullfile(anatPrepDir, 't1_crop_brain_diffspace.nii.gz');
 end
-    
+
 % load the tracts
 load(fullfile(AFQDir, [subject '_' session '_fg_clean.mat']));
 
@@ -45,9 +45,10 @@ colorstring = [0.3686    0.0667    0.2549; ...
     0    0.9294    0.7490; ...
     1.0000    0.6510    0.7961];
 
-% Late visual pathways
+% Late visual pathways - choose the fibers you want to show
+% the list of fibers can be found in fg_clean.name
 AFQ_RenderFibers(fg_clean(15),'numfibers',600,'color',colorstring(2,:));  % SLF
-AFQ_RenderFibers(fg_clean(13),'numfibers',600,'color',colorstring(3,:),'newfig',false);  % ILF 
+AFQ_RenderFibers(fg_clean(13),'numfibers',600,'color',colorstring(3,:),'newfig',false);  % ILF
 AFQ_RenderFibers(fg_clean(9),'numfibers',600,'color',colorstring(17,:),'newfig',false);  % CFMajor
 AFQ_RenderFibers(fg_clean(11),'numfibers',600,'color',colorstring(8,:),'newfig',false);  % IFOF
 % Then add one slice of the T1 as overlay for the 3d rendering.
@@ -55,7 +56,7 @@ AFQ_AddImageTo3dPlot(t1ACPC,[-2, 0, 0], [], [], 0.5);
 
 % Non-visual pathways
 AFQ_RenderFibers(fg_clean(17),'numfibers',600,'color',colorstring(5,:));  % UF
-AFQ_RenderFibers(fg_clean(5),'numfibers',600,'color',colorstring(19,:),'newfig',false);  % CC 
+AFQ_RenderFibers(fg_clean(5),'numfibers',600,'color',colorstring(19,:),'newfig',false);  % CC
 AFQ_RenderFibers(fg_clean(10),'numfibers',600,'color',colorstring(4,:),'newfig',false);  % CFMinor
 AFQ_RenderFibers(fg_clean(3),'numfibers',600,'color',colorstring(11,:),'newfig',false);  % CST
 % Then add one slice of the T1 as overlay for the 3d rendering.
@@ -63,7 +64,7 @@ AFQ_AddImageTo3dPlot(t1ACPC,[-2, 0, 0], [], [], 0.5);
 
 
 % single tracts
-AFQ_RenderFibers(fg_clean(5),'numfibers',600,'color',colorstring(19,:));  % CC 
+AFQ_RenderFibers(fg_clean(5),'numfibers',600,'color',colorstring(19,:));  % CC
 AFQ_AddImageTo3dPlot(t1ACPC,[-2, 0, 0], [], [], 0.5);
 
 AFQ_RenderFibers(fg_clean(17),'numfibers',600,'color',colorstring(5,:));  % UF
@@ -78,7 +79,7 @@ AFQ_AddImageTo3dPlot(t1ACPC,[-2, 0, 0], [], [], 0.5);
 AFQ_RenderFibers(fg_clean(15),'numfibers',600,'color',colorstring(2,:));  % SLF
 AFQ_AddImageTo3dPlot(t1ACPC,[-10, 0, 0], [], [], 0.5);
 
-AFQ_RenderFibers(fg_clean(13),'numfibers',600,'color',colorstring(3,:));  % ILF 
+AFQ_RenderFibers(fg_clean(13),'numfibers',600,'color',colorstring(3,:));  % ILF
 AFQ_AddImageTo3dPlot(t1ACPC,[-10, 0, 0], [], [], 0.5);
 
 AFQ_RenderFibers(fg_clean(9),'numfibers',600,'color',colorstring(17,:));  % CFMajor
@@ -89,51 +90,45 @@ AFQ_AddImageTo3dPlot(t1ACPC,[-10, 0, 0], [], [], 0.5);
 
 
 
-
 %% MRTrix3 fibers on the T1 coregistered to diffusion space:
-fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
+%fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
 
 % from .tck to .pdb
-mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
-    [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
-mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
-    [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
+%mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
+%    [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
+%mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
+%    [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
 
-mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
-    [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
-mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
-    [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
-    
-    
-fiberName = {['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
-    ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
-    ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'], ...
-    ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb']};
-    
-direction = 'AP';
+%mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
+%    [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
+%mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
+%    [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
 
-OR_lh = fullfile(fibDir, fiberName{1});
-OR_lh = dtiAlignFiberDirection((dtiLoadFiberGroup(OR_lh)),direction);
-OR_rh = fullfile(fibDir, fiberName{2});
-OR_rh = dtiAlignFiberDirection((dtiLoadFiberGroup(OR_rh)),direction);
 
-OT_lh = fullfile(fibDir, fiberName{3});
-OT_lh = dtiAlignFiberDirection((dtiLoadFiberGroup(OT_lh)),direction);
-OT_rh = fullfile(fibDir, fiberName{4});
-OT_rh = dtiAlignFiberDirection((dtiLoadFiberGroup(OT_rh)),direction);
+%fiberName = {['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
+%    ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
+%    ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'], ...
+%    ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb']};
+
+%direction = 'AP';
+
+%OR_lh = fullfile(fibDir, fiberName{1});
+%OR_lh = dtiAlignFiberDirection((dtiLoadFiberGroup(OR_lh)),direction);
+%OR_rh = fullfile(fibDir, fiberName{2});
+%OR_rh = dtiAlignFiberDirection((dtiLoadFiberGroup(OR_rh)),direction);
+
+%OT_lh = fullfile(fibDir, fiberName{3});
+%OT_lh = dtiAlignFiberDirection((dtiLoadFiberGroup(OT_lh)),direction);
+%OT_rh = fullfile(fibDir, fiberName{4});
+%OT_rh = dtiAlignFiberDirection((dtiLoadFiberGroup(OT_rh)),direction);
 
 % Optic Radiations
-AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(7,:));  % right OT
-AFQ_AddImageTo3dPlot(niftiRead(fullfile(eddyDir, eddyFile)), [0,0,40], [], [], 0.5);
+%AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(7,:));  % right OT
+%AFQ_AddImageTo3dPlot(niftiRead(fullfile(eddyDir, eddyFile)), [0,0,40], [], [], 0.5);
 
-AFQ_RenderFibers(OR_lh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % left OR
-AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % right OR
-AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % left OT
-AFQ_AddImageTo3dPlot(t1ACPC,[0, 0, -10], [], [], 0.5);
-
-% Optic Tracts - todo: t1FileCropBrainDiffSpace
-AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:));  % left OT
-AFQ_RenderFibers(OT_rh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % right OT
-AFQ_AddImageTo3dPlot(niftiRead(fullfile(eddyDir, eddyFile)), [0,0,40], [], [], 0.5);
+%AFQ_RenderFibers(OR_lh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % left OR
+%AFQ_RenderFibers(OR_rh,'numfibers',600,'color',colorstring(13,:),'newfig',false);  % right OR
+%AFQ_RenderFibers(OT_lh,'numfibers',600,'color',colorstring(7,:),'newfig',false);  % left OT
+%AFQ_AddImageTo3dPlot(t1FileCropBrainDiffSpace[0, 0, -10], [], [], 0.5);
 
 end

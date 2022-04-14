@@ -30,14 +30,14 @@ count =     1;
 show =      1;
 
 
-%% 
+%%
 for sub_i = 1:length(sub) % loop over sub{sub_i}s
 
     sub_ses = dir(fullfile(projectDir, 'rawdata', sub{sub_i}, 'ses-*'));
 
     for ses_i = 1:numel(sub_ses) % for each scan ses{ses_i}
 
-
+    % define paths
     rawDir = fullfile(projectDir, 'rawdata', sub{sub_i}, ses{ses_i});
     AFQDir = fullfile(projectDir, 'derivatives/AFQ', sub{sub_i}, ses{ses_i});
     dt6Dir = fullfile(projectDir, 'derivatives/dt6', sub{sub_i}, ses{ses_i});
@@ -52,37 +52,36 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
     direction = 'AP'; % same direction for all sub{sub_i}s
     sub_dir = dt6Dir;
 
-            
     % AFQ fibers:
     % Use always the tracts created using the first DTI scan and the dt6.mat of the specific scanning ses{ses_i}
     fg_clean = load(fullfile(AFQDir, 'sub-0201_ses-01_fg_clean.mat')); % use always the clean fibers extracted from the 1st diffusion scan    
 
     for k = 1:numel(fg_clean.fg_clean)
          fg_clean_scan1_align(k,:) = dtiAlignFiberDirection(fg_clean.fg_clean(k),direction); % group alignement of the fibers
-    end    
+    end
     [fa_AFQ, md_AFQ] = AFQ_ComputeTractProperties(fg_clean_scan1_align, dt, numNodes, clip2rois, fullfile(dt6Dir, 'sub-0201_ses-01_dti394trilin/'), weighting); % dt -> use the dt6.mat of each scan
 
     fa_AFQ = fa_AFQ';
     md_AFQ = md_AFQ';
 
-        
+
     % Probabilistic Tractography - from AFQ
     % from .tck to .pdb
 %     mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
 %         [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
 %     mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.tck'])], ...
 %         [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'])]);
-% 
+%
 %     mrtrix_tck2pdb([fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
 %         [fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
 %     mrtrix_tck2pdb([fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck'])], ...
 %         [fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'])]);
-% 
+%
 %     fiberName = {['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
 %         ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb'], ...
 %         ['dti_lh_fsAnatomical_ACT_OT_' num2str(numFibers_OT/1000) 'k_2thalFiltered_AFQ.pdb'], ...
 %         ['dti_rh_fsAnatomical_ACT_OT_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.pdb']};
-% 
+%
 %     for fgNumber=1:numel(fiberName)
 %         fiberGroup = fullfile(fibDir, fiberName{fgNumber});
 %         % Align fibers across sub{sub_i}s
@@ -92,17 +91,17 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
 %         fa_mrtrix_all(:,fgNumber) = fa_mrtrix;
 %         md_mrtrix_all(:,fgNumber) = md_mrtrix;
 %     end
-    
+
     % Probabilistic Tractography = from fit tensor script 07
     lh_FA_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_FA_100sample.txt'));
     lh_FA_OR_mean = nanmean(lh_FA_OR(sub_i).data,1);
-    
+
     rh_FA_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_FA_100sample.txt'));
     rh_FA_OR_mean = nanmean(rh_FA_OR(sub_i).data,1);
-    
+
     lh_MD_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_MD_100sample.txt'));
     lh_MD_OR_mean = nanmean(lh_MD_OR(sub_i).data,1);
-    
+
     rh_MD_OR(sub_i) = importdata(fullfile(fibDir, 'rh_OR_MD_100sample.txt'));
     rh_MD_OR_mean = nanmean(rh_MD_OR(sub_i).data,1);
 
@@ -115,18 +114,18 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
     lh_MD_OT(sub_i) = importdata(fullfile(fibDir, 'lh_OT_MD_100sample.txt'));
     lh_MD_OT_mean = nanmean(lh_MD_OT(sub_i).data,1);
 
-    rh_MD_OT(sub_i) = importdata(fullfile(fibDir, 'rh_OT_MD_100sample.txt'));    
+    rh_MD_OT(sub_i) = importdata(fullfile(fibDir, 'rh_OT_MD_100sample.txt'));
     rh_MD_OT_mean = nanmean(rh_MD_OT(sub_i).data,1);
 
-        
+
     fa = [fa_AFQ; lh_FA_OR_mean; rh_FA_OR_mean; lh_FA_OT_mean; rh_FA_OT_mean];
-    md = [md_AFQ; (lh_MD_OR_mean*1000); (rh_MD_OR_mean*1000); (lh_MD_OT_mean*1000); (rh_MD_OT_mean*1000)]; 
-    
-  
+    md = [md_AFQ; (lh_MD_OR_mean*1000); (rh_MD_OR_mean*1000); (lh_MD_OT_mean*1000); (rh_MD_OT_mean*1000)];
+
+
     end
-    
+
 end
-                
+
 results = {'Left Thalamic Radiation'; 'Right Thalamic Radiation';'Left Corticospinal';...
     'Right Corticospinal';'Left Cingulum Cingulate';'Right Cingulum Cingulate';...
     'Left Cingulum Hippocampus';'Right Cingulum Hippocampus';'Callosum Forceps Major';...
