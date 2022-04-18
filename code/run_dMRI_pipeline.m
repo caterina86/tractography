@@ -4,9 +4,11 @@
 % s02_merge_dwi.m -> merge diffusion files
 % s03_dwi_preprocessing.m -> denoise, de-ring, topup, eddy correction
 % s04_extract_ROIs.m -> extract ROIs for the tractography
+% s05a_AFQ -> Automatic Fiber Quantification
 % s05_tractography.m -> whole brain tractography, OR and OT tractography
 % s06_cleaning.m -> tckedit and AFQ cleaning
 % s07_fit_tensor.m -> fit tensors and extract FA and MD values
+% s08_figures_AFQ -> figures to visualize the AFQ fibers
 
 clearvars;
 setup_user;

@@ -4,7 +4,7 @@
 % TODO: Change to projectDir = setup_user(username)
 
 %% user specific data and toolbox locations
-user = 'class'; % name of the user
+user = 'server'; % name of the user
 
 switch user
     case {'server'}
@@ -47,6 +47,12 @@ if isfolder(fullfile(toolboxDir, 'vistasoft'))
     addpath(genpath(fullfile(toolboxDir, 'vistasoft'))); % add vistasoft toolbox -> for AFQ cleaning
 else
     error(['No vistasoft folder found in ' toolboxDir]) % download at https://github.com/vistalab/vistasoft
+end
+
+if isfolder(fullfile(toolboxDir, 'spm12'))
+    addpath(genpath(fullfile(toolboxDir, 'spm12'))); % add vistasoft toolbox -> for AFQ cleaning
+else
+    error(['No spm12 folder found in ' toolboxDir]) % download at https://github.com/vistalab/vistasoft
 end
 
 if isfolder(fullfile(toolboxDir, 'AFQ'))
