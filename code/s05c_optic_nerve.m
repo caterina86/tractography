@@ -11,6 +11,7 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi)
     
     eddyFile = [subject '_' session '_eddy_corrected_data'];
     eddyB0File = [subject '_' session '_eddy_corrected_data_b0'];
+    eddyB0FileBrain = [subject '_' session '_eddy_corrected_data_b0_brain'];
 
     t1FileCrop = fullfile(fmriprepDir,'anat/',[subject '_' session '_desc-preproc_T1w_crop.nii.gz']);
     t1FileCropDiffSpace = fullfile(fmriprepDir, 'anat/', [subject '_' session '_desc-preproc_T1w_crop_diffspace.nii.gz']);
@@ -20,7 +21,8 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi)
     bvec = fullfile(eddyDir, [subject, '_', session, '_eddy_corrected_data.eddy_rotated_bvecs']);
     bval = fullfile(topupDir, 'bval_combined.txt');
     mask = fullfile(topupDir, [subject, '_', session, '_AP_PA_dwi_b0_bin.nii.gz']);
-    mask_response = fullfile(topupDir, [subject, '_', session, '_AP_PA_dwi_b0_bin_3D.nii.gz']);
+    %mask_response = fullfile(topupDir, [subject, '_', session, '_AP_PA_dwi_b0_bin_3D.nii.gz']);
+    mask_response = fullfile(eddyDir, [eddyB0FileBrain '_mask.nii.gz ']); % brain mask
 
     act = ttFile; % anatomically-constrain tractography
     wmfod = fullfile(fibDir, 'wmfod_on.mif'); 
@@ -29,21 +31,17 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi)
         mkdir(fibDir);
     end
     
-    
-    % Generate 5tt mask (aligned with T1 volume) -> ACT
-    % system(['5ttgen fsl ' t1FileCropBrainDiffSpace ' ' ttFile ' -premasked']);
-    
-    % 
-    
+        
     % Mask for the Optic Nerve Tractography
     system(['fslmaths ' fullfile(topupDir, [subject '_' session '_AP_PA_dwi_b0.nii.gz ']) ...
     ' -bin ' mask]);
 
-    cd(topupDir)
-    % Split the 4D in 3D images and rename the first of them
-    system(['fslsplit ' mask ' -t'])
-    system(['mv vol0000.nii.gz ' mask_response]);
-    system(['rm vol0001.nii.gz']);
+%     cd(topupDir)
+%     
+%     % Split the 4D in 3D images and rename the first of them
+%     system(['fslsplit ' mask ' -t'])
+%     system(['mv vol0000.nii.gz ' mask_response]);
+%     system(['rm vol0001.nii.gz']);
     
     wmfod_file=dir(fullfile(fibDir, 'wmfod_on.mif'));
 
@@ -80,16 +78,16 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi)
     % T1 native space (t1FileCrop)
     % I can't use the T1w_crop_brain image as the optic nerve is removed
     % during the bet.
-    system(['fslmaths ' fullfile(anatPrepDir, [subject '_' session '_desc-preproc_T1w_crop.nii.gz']) ' -mul 0 -add 1 -roi 70 1 217 1 93 1 0 1 ' ...
+    system(['fslmaths ' fullfile(anatPrepDir, [subject '_' session '_desc-preproc_T1w_crop.nii.gz']) ' -mul 0 -add 1 -roi 63 1 232 1 89 1 0 1 ' ...
        fullfile(roiDir, 'lhEyePoint')]);
-    system(['fslmaths ' fullfile(anatPrepDir, [subject '_' session '_desc-preproc_T1w_crop.nii.gz']) ' -mul 0 -add 1 -roi 143 1 217 1 91 1 0 1 ' ...
+    system(['fslmaths ' fullfile(anatPrepDir, [subject '_' session '_desc-preproc_T1w_crop.nii.gz']) ' -mul 0 -add 1 -roi 148 1 229 1 92 1 0 1 ' ...
        fullfile(roiDir, 'rhEyePoint')]);
    
     % extract sphere from the point
     for jj = 1:length(hemi)
 
         % From point to sphere - 5mm
-        system(['fslmaths ' fullfile(roiDir, [hemi{jj} 'EyePoint']) ' -kernel sphere 5 -fmean ' ...
+        system(['fslmaths ' fullfile(roiDir, [hemi{jj} 'EyePoint']) ' -kernel sphere 10 -fmean ' ...
             fullfile(roiDir, [hemi{jj} 'EyeSphere5'])])
         
         % Remove the noise and binarize the mask
@@ -122,7 +120,7 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi)
         outFile = fullfile(fibDir, ['dti_' hemi{jj} '_fsAnatomical_ACT_ON_' num2str(numFibers_ON/1000) 'k.tck']);
         outFile_name = dir(fullfile(fibDir, ['dti_' hemi{jj} '_fsAnatomical_ACT_ON_' num2str(numFibers_ON/1000) 'k.tck']));
         roi1 = fullfile(roiDir, [hemi{jj} 'EyeSphere5_bin_T1Reslice_diffspace.nii.gz']); % ROI for the Eye
-        roi2 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_2dilM.nii.gz'); % Freesurfer Optic Chiasm expanded 
+        roi2 = fullfile(roiDir, 'fs_oc_T1Reslice_diffspace_3dilM.nii.gz'); % Freesurfer Optic Chiasm expanded 
 
         if exist(outFile, 'file') &&  outFile_name.bytes >0 % assume the wmfod.mif exists and it's not empty
             disp('skipping ON tractography')
