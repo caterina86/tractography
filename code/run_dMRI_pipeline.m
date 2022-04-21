@@ -30,6 +30,7 @@ fmriprep = 1; % 1 -> we performed fmriprep (NYUAD); 0 -> we did not perform fmri
 numFibers_WB = 5000000; % number of fibers whole brain
 numFibers_OR = 10000; % number of fibers for optic radiation
 numFibers_OT = 1000; % number of fibers for optic tract
+numFibers_ON = 1000; % number of fibers for optic tract
 
 % AFQ cleaning
 maxDist =   4;
