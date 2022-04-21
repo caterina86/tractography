@@ -21,7 +21,7 @@ setup_user;
 %% Setup parameters
 
 % subject/session/etc:
-sub = {'sub-0201'}; % 'sub-0202' 'sub-0229' 'sub-0250' 'sub-0258' }; % initials of the subject
+sub = {'sub-0229'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -64,29 +64,31 @@ for sub_i = 1:length(sub) % loop over subjects
         end
 
         % deterministic tractography - ACPC space - needs SPM12 (loaded in define paths)
-        disp([sub{sub_i} ' ' ses{ses_i} ' script04a'])
+        disp([sub{sub_i} ' ' ses{ses_i} ' script05a'])
         s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
 
         % extract ROIs
-        disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
-        s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
+%         s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
         
         % probabilistic tractography
-        disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
-        s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
+%         s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 
 %         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
 %         s05c_optic_nerve(projectDir, sub{sub_i}, ses{ses_i}, numFibers_ON, hemi)
 
-        disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
-        s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
-
-        disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
-        s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
+%         s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
+% 
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script07'])
+%         s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
 
         % figures plotting the deterministic and probabilistic tracts
-        disp('visualize fibers')
+        disp('visualize AFQ fibers')
         s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, 1)
 
+        close all;
+        
     end
 end
