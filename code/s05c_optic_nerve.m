@@ -1,8 +1,6 @@
 function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi, maxDist, maxLen, numNodes, M, count, show)
 
     % Probabilistic tractography (mrtrix3)
-
-    %addpath('dicm2nii-master')
     
     fibDir = fullfile(projectDir, '/derivatives/mrtrix3', subject, session);
     fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', subject, session);
@@ -47,19 +45,12 @@ function s05c_optic_nerve(projectDir, subject, session, numFibers_ON, hemi, maxD
             fibDir '/responseEstimate_gm_on.txt ' ...
             fibDir '/responseEstimate_csf_on.txt -mask ' mask])
 
-%         system(['dwi2response tournier ' eddy '.nii.gz -fslgrad ' bvec ' ' bval ' ' ...
-%             fibDir '/responseEstimate.txt ' ...
-%             ' -mask ' mask_response])
-
         % Generate normal fiber orientation distribution estimates (FOD) - mdmt_csd algorithm
         system(['dwi2fod msmt_csd -mask ' mask ' ' eddy '.nii.gz -fslgrad ' bvec ' ' bval ' ' ...
             fibDir '/responseEstimate_sfwm_on.txt ' fibDir '/wmfod_on.mif ' ...
             fibDir '/responseEstimate_gm_on.txt ' fibDir '/gmfod_on.mif ' ...
             fibDir  '/responseEstimate_csf_on.txt ' fibDir '/csffod_on.mif '])
-        
-%         system(['dwi2fod csd -mask ' mask_response ' ' eddy '.nii.gz -fslgrad ' bvec ' ' bval ' ' ...
-%             fibDir '/responseEstimate.txt ' fibDir '/wmfod_on.mif ']) 
-        
+                
     end
  
     % matrix of coregistration without the bet

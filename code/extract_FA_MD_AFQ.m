@@ -11,7 +11,7 @@ setup_user;
 %% Setup parameters
 
 % sub{sub_i}/ses{ses_i}/etc:
-sub = {'sub-0201'}; % initials of the sub{sub_i}
+sub = {'sub-0258'}; % initials of the sub{sub_i}
 ses = {'ses-01'}; % ID of the ses{ses_i}
 hemi = {'lh', 'rh'};
 
