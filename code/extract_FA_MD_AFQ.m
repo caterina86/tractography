@@ -54,7 +54,7 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
 
     % AFQ fibers:
     % Use always the tracts created using the first DTI scan and the dt6.mat of the specific scanning ses{ses_i}
-    fg_clean = load(fullfile(AFQDir, [sub{sub_i} '_' ses{ses_i} '_fg_clean.mat'])); % use always the clean fibers extracted from the 1st diffusion scan    
+    fg_clean = load(fullfile(AFQDir, [sub{sub_i} '_' ses{ses_i} '_fg_clean.mat'])); % use always the clean fibers extracted from the 1st diffusion scan
 
     for k = 1:numel(fg_clean.fg_clean)
          fg_clean_scan1_align(k,:) = dtiAlignFiberDirection(fg_clean.fg_clean(k),direction); % group alignement of the fibers
@@ -96,7 +96,7 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
     lh_FA_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_FA_100sample.txt'));
     lh_FA_OR_mean = nanmean(lh_FA_OR(sub_i).data,1);
 
-    rh_FA_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_FA_100sample.txt'));
+    rh_FA_OR(sub_i) = importdata(fullfile(fibDir, 'rh_OR_FA_100sample.txt'));
     rh_FA_OR_mean = nanmean(rh_FA_OR(sub_i).data,1);
 
     lh_MD_OR(sub_i) = importdata(fullfile(fibDir, 'lh_OR_MD_100sample.txt'));

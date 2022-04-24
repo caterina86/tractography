@@ -21,7 +21,7 @@ setup_user;
 %% Setup parameters
 
 % subject/session/etc:
-sub = {'sub-0229'}; % initials of the subject
+sub = {'sub-0201'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
@@ -30,7 +30,7 @@ fmriprep = 1; % 1 -> we performed fmriprep (NYUAD); 0 -> we did not perform fmri
 numFibers_WB = 5000000; % number of fibers whole brain
 numFibers_OR = 10000; % number of fibers for optic radiation
 numFibers_OT = 1000; % number of fibers for optic tract
-numFibers_ON = 1000; % number of fibers for optic tract
+numFibers_ON = 10000; % number of fibers for optic tract
 
 % AFQ cleaning
 maxDist =   4;
@@ -51,22 +51,22 @@ for sub_i = 1:length(sub) % loop over subjects
 
     for ses_i = 1:numel(sub_ses) % for each scan session
 
-        if fmriprep == 1 % NYUAD setup
-            disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
-            s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
-        end
-
-        disp([sub{sub_i} ' ' ses{ses_i} ' script03'])
-        s03_dwi_preprocessing(projectDir, sub{sub_i}, ses{ses_i}, fmriprep)
-
-        if fmriprep == 0 % CCAD setup
-            disp([sub{sub_i} ' ' ses{ses_i} ' script03b'])
-            s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
-        end
+%         if fmriprep == 1 % NYUAD setup
+%             disp([sub{sub_i} ' ' ses{ses_i} ' script02'])
+%             s02_merge_dwi(projectDir, sub{sub_i}, ses{ses_i}, num_dir)
+%         end
+% 
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script03'])
+%         s03_dwi_preprocessing(projectDir, sub{sub_i}, ses{ses_i}, fmriprep)
+% 
+%         if fmriprep == 0 % CCAD setup
+%             disp([sub{sub_i} ' ' ses{ses_i} ' script03b'])
+%             s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
+%         end
 
         % deterministic tractography - ACPC space - needs SPM12 (loaded in define paths)
-        disp([sub{sub_i} ' ' ses{ses_i} ' script05a'])
-        s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
+%         disp([sub{sub_i} ' ' ses{ses_i} ' script05a'])
+%         s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
 
         % extract ROIs
 %         disp([sub{sub_i} ' ' ses{ses_i} ' script04'])
@@ -76,8 +76,8 @@ for sub_i = 1:length(sub) % loop over subjects
 %         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
 %         s05b_tractography(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, numFibers_WB, numFibers_OR, numFibers_OT, hemi)
 
-%         disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
-%         s05c_optic_nerve(projectDir, sub{sub_i}, ses{ses_i}, numFibers_ON, hemi)
+        disp([sub{sub_i} ' ' ses{ses_i} ' script05'])
+        s05c_optic_nerve(projectDir, sub{sub_i}, ses{ses_i}, numFibers_ON, hemi, maxDist, maxLen, numNodes, M, count, show)
 
 %         disp([sub{sub_i} ' ' ses{ses_i} ' script06'])
 %         s06_cleaning(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT, hemi, maxDist, maxLen, numNodes, M, count, show)
@@ -86,8 +86,8 @@ for sub_i = 1:length(sub) % loop over subjects
 %         s07_fit_tensor(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OR, numFibers_OT)
 
         % figures plotting the deterministic and probabilistic tracts
-        disp('visualize AFQ fibers')
-        s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, 1)
+%         disp('visualize AFQ fibers')
+%         s08_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i}, numFibers_OT, numFibers_OR, 1)
 
         close all;
         
