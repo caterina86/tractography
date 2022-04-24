@@ -27,8 +27,8 @@ font_size = 14;
 set(0, 'DefaultAxesFontSize', font_size);
 
 %% plot sample data
-myrows_lh = startsWith(tract_profiles.Tract, 'Left OR') & startsWith(tract_profiles.Measure, 'MD');
-myrows_rh = startsWith(tract_profiles.Tract, 'Right OR') & startsWith(tract_profiles.Measure, 'MD');
+myrows_lh = startsWith(tract_profiles.Tract, 'Left OR') & startsWith(tract_profiles.Measure, 'FA');
+myrows_rh = startsWith(tract_profiles.Tract, 'Right OR') & startsWith(tract_profiles.Measure, 'FA');
 
 toplot_lh = tract_profiles.Values(myrows_lh,:);
 toplot_rh = tract_profiles.Values(myrows_rh,:);
