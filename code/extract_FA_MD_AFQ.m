@@ -11,7 +11,7 @@ setup_user;
 %% Setup parameters
 
 % sub{sub_i}/ses{ses_i}/etc:
-sub = {'sub-0228' 'sub-0201' 'sub-0202' 'sub-0229' 'sub-0250' 'sub-0258' 'sub-0152'}; % initials of the sub{sub_i}
+sub = {'sub-0201'}; % initials of the sub{sub_i}
 ses = {'ses-01'}; % ID of the ses{ses_i}
 hemi = {'lh', 'rh'};
 
@@ -33,6 +33,8 @@ show =      1;
 %%
 for sub_i = 1:length(sub) % loop over sub{sub_i}s
 
+    disp(['Subject ' sub{sub_i}])
+    
     sub_ses = dir(fullfile(projectDir, 'rawdata', sub{sub_i}, 'ses-*'));
 
     for ses_i = 1:numel(sub_ses) % for each scan ses{ses_i}
@@ -59,11 +61,9 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
     for k = 1:numel(fg_clean.fg_clean)
          fg_clean_scan1_align(k,:) = dtiAlignFiberDirection(fg_clean.fg_clean(k),direction); % group alignement of the fibers
     end
-    [fa_AFQ, md_AFQ] = AFQ_ComputeTractProperties(fg_clean_scan1_align, dt, numNodes, clip2rois, fullfile(dt6Dir, 'sub-0201_ses-01_dti394trilin/'), weighting); % dt -> use the dt6.mat of each scan
-
+    [fa_AFQ, md_AFQ] = AFQ_ComputeTractProperties(fg_clean_scan1_align, dt, numNodes, clip2rois, fullfile(dt6Dir, [sub{sub_i} '_' ses{ses_i} '_dti394trilin/']), weighting); % dt -> use the dt6.mat of each scan
     fa_AFQ = fa_AFQ';
     md_AFQ = md_AFQ';
-
 
     % Probabilistic Tractography - from AFQ
     % from .tck to .pdb
@@ -127,13 +127,21 @@ for sub_i = 1:length(sub) % loop over sub{sub_i}s
         'Callosum Forceps Minor';'Left IFOF';'Right IFOF';'Left ILF';'Right ILF';'Left SLF';...
         'Right SLF';'Left Uncinate';'Right Uncinate';'Left Arcuate';'Right Arcuate'; ...
         'Left OR'; 'Right OR'; 'Left OT'; 'Right OT'};
+    
+    FA = {'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; ...
+        'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'; 'FA'};
+    
+    MD = {'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; ...
+        'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'; 'MD'};
 
-    fa_results = [results num2cell(fa)];
-    md_results = [results num2cell(md)];
+    fa_results = [results FA num2cell(fa)];
+    md_results = [results MD num2cell(md)];
+    results = [fa_results; md_results];
 
     % save the FA/MD values for each sub{sub_i}
     save(fullfile(AFQDir, [sub{sub_i} '_fa_values']), 'fa_results');
     save(fullfile(AFQDir, [sub{sub_i} '_md_values']), 'md_results');
+    save(fullfile(AFQDir, [sub{sub_i} '_fa_md_values']), 'results');
 
 
     end
