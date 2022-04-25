@@ -25,8 +25,8 @@ sub = {'sub-0276'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
-num_dir_AP = {'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
-num_dir_PA = {'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
+num_dir_AP = {'104'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
+num_dir_PA = {'6'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
 fmriprep = 1; % 1 -> we performed fmriprep (NYUAD); 0 -> we did not perform fmriprep (CCAD)
 numFibers_WB = 5000000; % number of fibers whole brain
 numFibers_OR = 10000; % number of fibers for optic radiation

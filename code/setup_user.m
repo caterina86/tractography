@@ -11,7 +11,7 @@ switch user
         projectDir = '/Volumes/Vision/MRI/Sample_dMRI'; % location output
         toolboxDir = '/Volumes/Vision/Matlab/Toolbox'; % location output
     case {'caterina'}
-        projectDir = '/Users/cp3488/Documents/tractography/Sample_dMRI'; % location output
+        projectDir = '/Volumes/NYUAD/Projects/Sample_dMRI'; % location output
         toolboxDir = '/Users/cp3488/Documents/MATLAB/toolbox';
     case {'Omnia'}
         projectDir = '~/Documents/GitHub/tractography/code'; % location output
