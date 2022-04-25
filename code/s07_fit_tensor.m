@@ -21,6 +21,9 @@ function s07_fit_tensor(projectDir, subject, session, numFibers_OR, numFibers_OT
     % Resample the Optic Radiations
     % resample the tract so that diffusion measures can be extracted from 100 evenly spaced points for all fibers
     % TODO: if we will add the AFQ cleaning, change the name of the tracts (2thalFiltered_AFQ.tck)
+
+    % TODO: Loop over hemi, optic tracts, measures (FA/MD), and save to a
+    % single table
     system(['tckresample ' fullfile(fibDir, ['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck ']) ...
         fullfile(fibDir,['dti_lh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_100sample.tck']) ' -num_points 100'])
     system(['tckresample ' fullfile(fibDir, ['dti_rh_fsAnatomical_ACT_OR_' num2str(numFibers_OR/1000) 'k_2thalFiltered_AFQ.tck ']) ...
