@@ -138,11 +138,14 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
     % Create an index file that specifies the phase encoding direction for each volume in the combined dMRI file.
     % Combine bval and bvec files from the two dMRI scans
 
-    nDir = load(fullfile(dwiDir, apFileBval)); % extract the number of directions
-    nDirs = length(nDir); % total # directions
+    nDir_AP = load(fullfile(dwiDir, apFileBval)); % extract the number of directions
+    nDir_PA = load(fullfile(dwiDir, paFileBval)); % extract the number of directions
+    nDirs_AP = length(nDir_AP); % total # directions
+    nDirs_PA = length(nDir_PA); % total # directions
 
     % create the index
-    index = [ones(nDirs,1); 2*ones(nDirs,1)];
+    index = [ones(nDirs_AP,1); 2*ones(nDirs_PA,1)];
+    
     writematrix(index, fullfile(topupDir, 'index.txt'), 'Delimiter', 'space');
 
     % Combine bval and bvec files from the two dMRI scans
@@ -157,7 +160,6 @@ function s03_dwi_preprocessing(projectDir, subject, session, fmriprep)
 
     % BET the averaged b0 image
     system(['bet ' fullfile(topupDir, 'my_hifi_b0_mean.nii.gz') ' '  fullfile(topupDir, 'my_hifi_b0_mean_brain.nii.gz') ' -m -f 0.2']);
-
 
     if exist(fullfile(eddyDir, [eddyFile '.nii.gz']), 'file') % if EddyFile does exist, skip the eddy correction
         disp('skipping eddy correction')

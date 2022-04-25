@@ -54,7 +54,7 @@ function s02_merge_dwi(projectDir, subject, session, num_dir_AP, num_dir_PA)
     end
 
     if length(num_dir_AP) == 1
-        system(['mv ' fullfile(dwiDir, [rawapFile1 '.bvec ']) fullfile(dwiDir, [apFile '.bvec '])])
+        system(['cp ' fullfile(dwiDir, [rawapFile1 '.bvec ']) fullfile(dwiDir, [apFile '.bvec '])])
     else    
         system(['paste ' fullfile(dwiDir, [rawapFile1 '.bvec ']) fullfile(dwiDir, [rawapFile2 '.bvec ']) ...
             ' >> ' fullfile(dwiDir, [apFile '.bvec'])]);
@@ -64,7 +64,7 @@ function s02_merge_dwi(projectDir, subject, session, num_dir_AP, num_dir_PA)
         system(['rm -r ' fullfile(dwiDir, [paFile '.bvec '])]); % remove it
     end
     if length(num_dir_PA) == 1
-        system(['mv ' fullfile(dwiDir, [rawpaFile1 '.bvec ']) fullfile(dwiDir, [paFile '.bvec '])])
+        system(['cp ' fullfile(dwiDir, [rawpaFile1 '.bvec ']) fullfile(dwiDir, [paFile '.bvec '])])
     else    
         system(['paste ' fullfile(dwiDir, [rawpaFile1 '.bvec ']) fullfile(dwiDir, [rawpaFile2 '.bvec ']) ...
          ' >> ' fullfile(dwiDir, [paFile '.bvec'])]);
@@ -76,7 +76,7 @@ function s02_merge_dwi(projectDir, subject, session, num_dir_AP, num_dir_PA)
     end
 
     if length(num_dir_AP) == 1
-        system(['mv ' fullfile(dwiDir, [rawapFile1 '.bval ']) fullfile(dwiDir, [apFile '.bval '])])
+        system(['cp ' fullfile(dwiDir, [rawapFile1 '.bval ']) fullfile(dwiDir, [apFile '.bval '])])
     else
 
         system(['paste ' fullfile(dwiDir, [rawapFile1 '.bval ']) fullfile(dwiDir, [rawapFile2 '.bval ']) ...
@@ -88,7 +88,7 @@ function s02_merge_dwi(projectDir, subject, session, num_dir_AP, num_dir_PA)
         system(['rm -r ' fullfile(dwiDir, [paFile '.bval '])]); % remove it
     end
     if length(num_dir_PA) == 1
-        system(['mv ' fullfile(dwiDir, [rawpaFile1 '.bval ']) fullfile(dwiDir, [paFile '.bval '])])
+        system(['cp ' fullfile(dwiDir, [rawpaFile1 '.bval ']) fullfile(dwiDir, [paFile '.bval '])])
     else
 
         system(['paste ' fullfile(dwiDir, [rawpaFile1 '.bval ']) fullfile(dwiDir, [rawpaFile2 '.bval ']) ...
