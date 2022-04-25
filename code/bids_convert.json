@@ -20,6 +20,14 @@
     },
     {
       "dataType": "func",
+      "modalityLabel": "sbref",
+      "customLabels": "task-prf",
+      "criteria": {
+        "SeriesDescription": "*task-SBref*"
+      }
+    },
+    {
+      "dataType": "func",
       "modalityLabel": "bold",
       "customLabels": "task-prf",
       "criteria": {
@@ -59,10 +67,10 @@
       "modalityLabel": "epi",
       "customLabels": "dir-ap",
       "IntendedFor": [
-        0, 1
+        0,1
       ],
       "criteria": {
-        "SidecarFilename": "*_dir-[aA][pP]_topup*"
+        "SidecarFilename": "*dir-[aA][pP]_topup*"
       }
     },
     {
@@ -73,7 +81,7 @@
         0, 1
       ],
       "criteria": {
-        "SidecarFilename": "*_dir-[pP][aA]_topup*"
+        "SidecarFilename": "*dir-[pP][aA]_topup*"
       }
     },
     {
@@ -85,6 +93,20 @@
        }
      },
      {
+        "dataType": "dwi",
+        "modalityLabel": "dir-APacq104vols_dwi",
+        "criteria": {
+          "SidecarFilename": "*dwi_acq-104directions_dir-AP*",
+          "ProtocolName": "*dwi_acq-104directions_dir-AP*",
+          "ImageType": [
+            "ORIGINAL",
+            "PRIMARY",
+            "DIFFUSION",
+            "NONE"
+          ]
+        }
+      },
+      {
         "dataType": "dwi",
         "modalityLabel": "dir-APacq97vols_dwi",
         "criteria": {
@@ -117,6 +139,20 @@
        }
      },
      {
+        "dataType": "dwi",
+        "modalityLabel": "dir-PAacq6vols_dwi",
+        "criteria": {
+          "SidecarFilename": "*dwi_acq-6directions_dir-PA*",
+          "ProtocolName": "*dwi_acq-6directions_dir-PA*",
+          "ImageType": [
+            "ORIGINAL",
+            "PRIMARY",
+            "DIFFUSION",
+            "NONE"
+          ]
+        }
+      },
+      {
        "dataType": "dwi",
        "modalityLabel": "dir-PAacq97vols_dwi",
        "criteria": {
@@ -268,7 +304,7 @@
           "SeriesDescription": "*SBRef*"
         }
       },
-    {
+     {
       "dataType": "anat",
       "modalityLabel": "T1w",
       "criteria": {
@@ -309,6 +345,20 @@
     },
     {
       "dataType": "anat",
+      "modalityLabel": "T1w",
+      "criteria": {
+        "ProtocolName": "anat-T1[wW]",
+        "SeriesDescription": "anat-T1[wW]_ND",
+        "ImageType": [
+          "ORIGINAL",
+          "PRIMARY",
+          "M",
+          "NONE"
+        ]
+      }
+    },
+    {
+      "dataType": "anat",
       "modalityLabel": "T2w",
       "criteria": {
         "ProtocolName": "*T2w_SPC*",
@@ -330,6 +380,20 @@
             "PRIMARY",
             "M",
             "ND"
+          ]
+        }
+      },
+      {
+        "dataType": "anat",
+        "modalityLabel": "T2w",
+        "criteria": {
+          "ProtocolName": "anat-T2[wW]",
+          "SeriesDescription": "anat-T2[wW]_ND",
+          "ImageType": [
+            "ORIGINAL",
+            "PRIMARY",
+            "M",
+            "NONE"
           ]
         }
       }

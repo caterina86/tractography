@@ -51,7 +51,7 @@ function s05a_AFQ(projectDir, subject, session)
     close all;
 
     % Define the parameters (dwParams)
-
+    
     dwParams = struct;
     if strcmp(encodingOrientation{1},'AP')
         dwParams.phaseEncodeDir = 2;
@@ -105,6 +105,7 @@ function s05a_AFQ(projectDir, subject, session)
             choiceInit = questdlg('Warning: A dt6 directory already exists for this participant. What would you like to do?',...
                 'dt6 directory detected',...
                 'Use existing dt6','Generate new dt6','Abort','Abort');
+            
             switch choiceInit
                 case 'Use existing dt6'
                     warning('Bypassing dtiInit, using existing dt6...')

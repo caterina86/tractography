@@ -1,4 +1,4 @@
-function s08_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_OR, fmriprep)
+function s09_figures_AFQ(projectDir, subject, session)
 
     % Visualize tracts on the t1
 
@@ -7,7 +7,6 @@ function s08_figures_AFQ(projectDir, subject, session, numFibers_OT, numFibers_O
     t1ACPCFileName = 't1_acpc.nii.gz';
     t1ACPC = niftiRead(fullfile(t1Dir,filesep,t1ACPCFileName));
     AFQDir = fullfile(projectDir, 'derivatives/AFQ', subject, session);
-    fmriprepDir = fullfile(projectDir, 'derivatives/fmriprep', subject, session);
 
     % load the tracts
     load(fullfile(AFQDir, [subject '_' session '_fg_clean.mat']));
