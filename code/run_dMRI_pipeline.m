@@ -21,19 +21,23 @@ setup_user;
 %% Setup parameters
 
 % subject/session/etc:
-sub = {'sub-0276'}; % initials of the subject
+sub = {'sub-0201'}; % initials of the subject
 ses = {'ses-01'}; % ID of the session
 hemi = {'lh', 'rh'};
 
 % Specify the number of diffusion gradients for AP and PA encoding direction
 % You need to have both encoding directions to run this pipeline
-num_dir_AP = {'104'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
-num_dir_PA = {'6'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
+num_dir_AP = {'97' '98'}; %{'104'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
+num_dir_PA = {'97' '98'}; %{'6'}; %{'97' '98'}; % number of diffusion gradient directions (should get from bval/bvecs file)
 fmriprep = 1; % 1 -> we performed fmriprep (NYUAD); 0 -> we did not perform fmriprep (CCAD)
 numFibers_WB = 5000000; % number of fibers whole brain
 numFibers_OR = 10000; % number of fibers for optic radiation
 numFibers_OT = 1000; % number of fibers for optic tract
 numFibers_ON = 10000; % number of fibers for optic tract
+
+% Parameters for dtiInit.m
+runDtiInit = 'true';
+encodingOrientation = {'AP'}; % Phase encoding direction for each participant
 
 % AFQ cleaning
 maxDist =   4;
@@ -73,7 +77,7 @@ for sub_i = 1:length(sub) % loop over subjects
 
         % AFQ - deterministic tractography - ACPC space - needs SPM12 (loaded in setup_user)
         disp([sub{sub_i} ' ' ses{ses_i} ' extract AFQ fibers'])
-        s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i})
+        s05a_AFQ(projectDir, sub{sub_i}, ses{ses_i}, runDtiInit, encodingOrientation)
 
         % probabilistic tractography
         disp([sub{sub_i} ' ' ses{ses_i} ' Run Probabilistic Tractography'])

@@ -1,4 +1,4 @@
-function s05a_AFQ(projectDir, subject, session)
+function s05a_AFQ(projectDir, subject, session, runDtiInit, encodingOrientation)
 
     % Run deterministic tractography
 
@@ -10,9 +10,6 @@ function s05a_AFQ(projectDir, subject, session)
     % dt6.mat -> to perform the AFQ Whole Brain Tractography on the diffusion data aligned to the T1 (ACPC)
     % Extract the fa values from the whole brain
     % Output -> folder called ['dti40trilin_'num2str(curScan)]
-
-    runDtiInit = 'true';
-    encodingOrientation = {'AP'}; % Phase encoding direction for each participant
 
     % load the paths
     rawDir = fullfile(projectDir, 'rawdata', subject, session);
@@ -95,35 +92,13 @@ function s05a_AFQ(projectDir, subject, session)
 
     dwParams.bvecsFile = fullfile(topupDir, 'bvec_combined.txt'); % path name
     dwParams.bvalsFile = fullfile(topupDir, 'bval_combined_modified.txt'); % path name
-
+        
     if strcmp(runDtiInit,'true') % If the user indicates they want to run dtiInit
         if ~exist(dwParams.dt6BaseName) % If there isn't an existing dt6 file directory
 
-            dtiInit(dtiTopCor.fname, t1ACPC.fname, dwParams); % run dtiInit
-
-        else
-            choiceInit = questdlg('Warning: A dt6 directory already exists for this participant. What would you like to do?',...
-                'dt6 directory detected',...
-                'Use existing dt6','Generate new dt6','Abort','Abort');
-            
-            switch choiceInit
-                case 'Use existing dt6'
-                    warning('Bypassing dtiInit, using existing dt6...')
-                    pause(3);
-
-                case 'Generate new dt6'
-                    warning('Generating new dt6. This will overwrite existing dt6 directory...')
-                    % run dtiInit
-                    dtiInit(dtiTopCor.fname, t1ACPC.fname, dwParams);
-
-                case 'Abort'
-                    error('Aborting...');
-            end
-
+            dtiInit(dtiTopCor.fname, t1ACPC.fname, dwParams); % run dtiInit only if there is no dt6.mat file            
         end
     end
-
-
 
 
     %% AFQ
