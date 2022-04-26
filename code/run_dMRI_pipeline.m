@@ -6,9 +6,12 @@
 % s04_extract_ROIs.m -> extract ROIs for the tractography
 % s05a_AFQ -> Automatic Fiber Quantification
 % s05_tractography.m -> whole brain tractography, OR and OT tractography
+% s05c_optic_nerve.m -> ON tractography
 % s06_cleaning.m -> tckedit and AFQ cleaning
 % s07_fit_tensor.m -> fit tensors and extract FA and MD values
-% s08_figures_AFQ -> figures to visualize the AFQ fibers
+% s08_extract_FA_MD_AFQ -> extract FA/MD values from AFQ tracts and OR/OT
+% s09_figures_AFQ -> figures to visualize the AFQ fibers
+% s10_AFQ_profiles -> plot FA/MD tract profiles
 
 clearvars;
 setup_user;
