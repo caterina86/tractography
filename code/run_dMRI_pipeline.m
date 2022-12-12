@@ -5,8 +5,8 @@
 % s03_dwi_preprocessing.m -> denoise, de-ring, topup, eddy correction
 % s04_extract_ROIs.m -> extract ROIs for the tractography
 % s05a_AFQ -> Automatic Fiber Quantification
-% s05_tractography.m -> whole brain tractography, OR and OT tractography
-% s05c_optic_nerve.m -> ON tractography
+% s05b_tractography.m -> whole brain tractography, OR and OT tractography
+% s05c_optic_nerve.m -> ON tractography (to be checked)
 % s06_cleaning.m -> tckedit and AFQ cleaning
 % s07_fit_tensor.m -> fit tensors and extract FA and MD values
 % s08_extract_FA_MD_AFQ -> extract FA/MD values from AFQ tracts and OR/OT
@@ -73,7 +73,7 @@ for sub_i = 1:length(sub) % loop over subjects
             disp([sub{sub_i} ' ' ses{ses_i} ' T1 preprocessing'])
             s03b_t1_preprocessing(projectDir, sub{sub_i}, ses{ses_i})
         end
-        
+
         % extract ROIs
         disp([sub{sub_i} ' ' ses{ses_i} ' extract ROIs'])
         s04_extract_ROIs(projectDir, sub{sub_i}, ses{ses_i}, fmriprep, hemi)
@@ -97,7 +97,7 @@ for sub_i = 1:length(sub) % loop over subjects
 
         disp(['Extract AFQ measures subject ' sub{sub_i} ' ' ses{ses_i}])
         s08_extract_FA_MD_AFQ(projectDir, sub{sub_i}, ses{ses_i}, hemi)
-        
+
         % figures plotting the deterministic and probabilistic tracts
         disp('Plot AFQ fibers')
         s09_figures_AFQ(projectDir, sub{sub_i}, ses{ses_i})
@@ -106,6 +106,6 @@ for sub_i = 1:length(sub) % loop over subjects
         s10_AFQ_profiles(projectDir, sub{sub_i}, ses{ses_i})
 
         close all;
-        
+
     end
 end
