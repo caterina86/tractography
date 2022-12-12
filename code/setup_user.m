@@ -4,7 +4,7 @@
 % TODO: Change to projectDir = setup_user(username)
 
 %% user specific data and toolbox locations
-user = 'caterina'; % name of the user
+user = 'server'; % name of the user
 
 switch user
     case {'server'}
@@ -43,6 +43,7 @@ end
 setenv('SUBJECTS_DIR', [projectDir '/derivatives/freesurfer']); % subject directory for freesurfer
 
 %% toolbox paths
+% Might be replaced with https://github.com/ToolboxHub/ToolboxToolbox
 % make sure toolboxes are in toolboxDir
 if isfolder(fullfile(toolboxDir, 'vistasoft'))
     addpath(genpath(fullfile(toolboxDir, 'vistasoft'))); % add vistasoft toolbox -> for AFQ cleaning
