@@ -1,4 +1,4 @@
-Copy the folders containing the sourcedata, the nifti images and the derivatives from smb://it-nfs.abudhabi.nyu.edu/Vision/MRI/Sample_dMRI to your local PC. This GitHub Repository contains the analysis code only.
+Copy the folders containing the sourcedata to your local PC. This GitHub Repository contains the analysis code only.
 
 Organization of the folders:
 - sourcedata: dicoms of the Diffusion and Structural session
